@@ -23,7 +23,12 @@ const PROBLEMS = [
   {
     level: "err" as const,
     ts: "i · 08:14:02",
-    text: <>Three bank accounts, no unified picture.</>,
+    text: (
+      <>
+        Three bank accounts. Some apps see them all. None tell you{" "}
+        <em>what your numbers mean</em>.
+      </>
+    ),
   },
   {
     level: "warn" as const,
@@ -126,7 +131,7 @@ const AUDIENCES = [
 const LEDGER = [
   { them: "They earn commissions.", us: <>We earn <em>only</em> from subscriptions.</> },
   { them: "They recommend ULIPs.", us: <>We <em>flag</em> them. Out loud.</> },
-  { them: "They show charts.", us: <>We show financial health.</> },
+  { them: "They show health scores.", us: <>We show <em>why</em> your score is that.</> },
   { them: "They guess narrations.", us: <>We read <em>every</em> UPI string.</> },
   { them: "They ignore family transfers.", us: <>We treat them as <em>fixed</em> commitments.</> },
 ];
@@ -289,6 +294,10 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
   }, []);
 
   useEffect(() => {
+    let io: IntersectionObserver | null = null;
+    let idleHandle: ReturnType<typeof setTimeout> | number | undefined;
+    let reportRaf = 0;
+
     function animateCount(node: HTMLElement) {
       if (node.dataset.done) return;
       node.dataset.done = "1";
@@ -312,44 +321,94 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
       requestAnimationFrame(step);
     }
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((en) => {
-          if (!en.isIntersecting) return;
-          en.target.classList.add("in");
-          en.target
-            .querySelectorAll<HTMLElement>("[data-count]")
-            .forEach(animateCount);
-          en.target
-            .querySelectorAll<HTMLElement>("[data-w]")
-            .forEach((b) => {
-              b.style.width = (b.dataset.w ?? "0") + "%";
-            });
-          io.unobserve(en.target);
-        });
-      },
-      { threshold: 0.15, rootMargin: "-30px 0px" },
-    );
-
-    document
-      .querySelectorAll(".reveal, .reveal-stagger, .report, .dim-grid")
-      .forEach((el) => io.observe(el));
-
-    const timer = window.setTimeout(() => {
+    function runHeroReportMetrics() {
       document
         .querySelectorAll<HTMLElement>(".report [data-count], .report [data-w]")
         .forEach((n) => {
           const r = n.getBoundingClientRect();
           if (r.top < window.innerHeight) {
-            if (n.dataset.w) n.style.width = n.dataset.w + "%";
+            if (n.dataset.w) n.style.width = `${n.dataset.w}%`;
             if (n.dataset.count) animateCount(n);
           }
         });
-    }, 300);
+    }
+
+    function isBelowFold(el: Element) {
+      return el.getBoundingClientRect().top > window.innerHeight * 0.85;
+    }
+
+    function setupScrollAnimations() {
+      const reduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      if (reduced) {
+        document
+          .querySelectorAll(".reveal, .reveal-stagger, .dim-grid")
+          .forEach((el) => el.classList.add("in"));
+        runHeroReportMetrics();
+        return;
+      }
+
+      reportRaf = requestAnimationFrame(runHeroReportMetrics);
+
+      io = new IntersectionObserver(
+        (entries) => {
+          for (const en of entries) {
+            if (!en.isIntersecting) continue;
+            en.target.classList.add("in");
+            en.target
+              .querySelectorAll<HTMLElement>("[data-count]")
+              .forEach(animateCount);
+            en.target
+              .querySelectorAll<HTMLElement>("[data-w]")
+              .forEach((b) => {
+                b.style.width = `${b.dataset.w ?? "0"}%`;
+              });
+            io?.unobserve(en.target);
+          }
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
+      );
+
+      document
+        .querySelectorAll(".reveal, .reveal-stagger, .dim-grid")
+        .forEach((el) => {
+          if (isBelowFold(el)) {
+            io?.observe(el);
+          } else {
+            el.classList.add("in");
+          }
+        });
+    }
+
+    function scheduleSetup() {
+      if (typeof requestIdleCallback === "function") {
+        idleHandle = requestIdleCallback(() => setupScrollAnimations(), {
+          timeout: 2000,
+        });
+      } else {
+        idleHandle = setTimeout(setupScrollAnimations, 1);
+      }
+    }
+
+    if (document.readyState === "complete") {
+      scheduleSetup();
+    } else {
+      window.addEventListener("load", scheduleSetup, { once: true });
+    }
 
     return () => {
-      io.disconnect();
-      window.clearTimeout(timer);
+      window.removeEventListener("load", scheduleSetup);
+      if (idleHandle !== undefined) {
+        if (typeof cancelIdleCallback === "function") {
+          cancelIdleCallback(idleHandle as number);
+        } else {
+          clearTimeout(idleHandle);
+        }
+      }
+      cancelAnimationFrame(reportRaf);
+      io?.disconnect();
     };
   }, []);
 
@@ -614,8 +673,8 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
                   </div>
                   <p>
                     Drop PDFs, XLS, or CSVs from{" "}
-                    <b>HDFC, SBI, ICICI, IDFC, Kotak, Axis</b>. We never ask for
-                    your net-banking password. Ever.
+                    <b>HDFC, SBI, ICICI, IDFC, Kotak, Axis</b>. Full history,
+                    including years before any aggregator existed.
                   </p>
                 </div>
                 <div className="console">
@@ -857,8 +916,8 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
             For Indians who want to understand their money, <em>honestly</em>.
           </h2>
           <p className="ps reveal">
-            Built by a small team in India. Funded entirely by our users. Nothing
-            else.
+            Built by a small team in India. Funded by subscriptions, not by what
+            we sell you.
           </p>
           <WaitlistForm
             source="footer"
