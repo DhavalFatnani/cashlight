@@ -1,8 +1,13 @@
 import type { Config } from "tailwindcss";
+import defaultTheme from "tailwindcss/defaultTheme";
 
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
+    screens: {
+      ...defaultTheme.screens,
+      mba: { min: "1200px", max: "1500px" },
+    },
     extend: {
       colors: {
         background: "#080808",

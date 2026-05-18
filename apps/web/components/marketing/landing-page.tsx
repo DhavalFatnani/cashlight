@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { BenchmarkSection } from "@/components/marketing/benchmark-section";
+import { ProcessSection } from "@/components/marketing/process-section";
 import { SurveyModal } from "@/components/marketing/survey-modal";
 import { ThankYouModal } from "@/components/marketing/thank-you-modal";
 
@@ -81,52 +83,98 @@ const PROBLEMS = [
 ];
 
 const DIMENSIONS = [
-  { tone: "warn", nm: "Coverage ratio", badge: "⚠ TIGHT", count: "4.2", suffix: " mo", placeholder: "0", sub: "months of essential outflows" },
-  { tone: "err", nm: "Real savings rate", badge: "✕ LOW", count: "11.6", suffix: "%", placeholder: "0%", sub: "net of EMIs & transfers" },
-  { tone: "warn", nm: "Emergency buffer", badge: "⚠ THIN", prefix: "₹", count: "1.84", suffix: "L", placeholder: "₹0", sub: "liquid in 48 hours" },
-  { tone: "err", nm: "Insurance adequacy", badge: "✕ GAP", literal: "Under", sub: "term cover vs. obligations" },
-  { tone: "warn", nm: "Equity exposure", badge: "⚠ LOW", count: "17", suffix: "%", placeholder: "0%", sub: "of net worth in growth" },
-  { tone: "ok", nm: "Debt-to-income", badge: "✓ OK", count: "38", suffix: "%", placeholder: "0%", sub: "EMIs / monthly inflow" },
-  { tone: "warn", nm: "Irregular income", badge: "⚠ HIGH", count: "23", suffix: "%", placeholder: "0%", sub: "share variable / annual" },
-  { tone: "warn", nm: "Tax efficiency", badge: "⚠ UNUSED", count: "42", suffix: "%", placeholder: "0%", sub: "80C · 80D · NPS · HRA" },
+  {
+    tone: "warn",
+    nm: "Coverage ratio",
+    badge: "⚠ TIGHT",
+    count: "73",
+    suffix: "%",
+    placeholder: "73%",
+    sub: "0.9 months of essential outflows",
+  },
+  {
+    tone: "err",
+    nm: "Real savings rate",
+    badge: "✕ LOW",
+    count: "9.2",
+    suffix: "%",
+    placeholder: "9.2%",
+    sub: "net of EMIs & transfers",
+  },
+  {
+    tone: "warn",
+    nm: "Emergency buffer",
+    badge: "⚠ THIN",
+    literal: "₹54,000",
+    sub: "liquid in 48 hours (about 1.8 months)",
+  },
+  {
+    tone: "err",
+    nm: "Insurance adequacy",
+    badge: "✕ GAP",
+    literal: "Under",
+    sub: "₹25L cover vs ₹1.45Cr obligations",
+  },
+  {
+    tone: "warn",
+    nm: "Equity exposure",
+    badge: "⚠ LOW",
+    count: "4",
+    suffix: "%",
+    placeholder: "4%",
+    sub: "of net worth in growth assets",
+  },
+  {
+    tone: "ok",
+    nm: "Debt-to-income",
+    badge: "✓ OK",
+    count: "31",
+    suffix: "%",
+    placeholder: "31%",
+    sub: "EMIs / monthly inflow",
+  },
+  {
+    tone: "warn",
+    nm: "Irregular income",
+    badge: "⚠ HIGH",
+    count: "22",
+    suffix: "%",
+    placeholder: "22%",
+    sub: "share variable / annual",
+  },
+  {
+    tone: "warn",
+    nm: "Tax efficiency",
+    badge: "⚠ UNUSED 80C",
+    count: "40",
+    suffix: "%",
+    placeholder: "40%",
+    sub: "80C: ₹60k used of ₹1.5L limit",
+  },
 ] as const;
+
+const TOTAL_FOUNDING_SPOTS = 200;
+/** Update manually each week until wired to Supabase. */
+const SPOTS_CLAIMED = 64;
 
 const AUDIENCES = [
   {
-    initial: "S",
-    title: "Salaried professional",
-    stats: [
-      ["Accounts", "3–4"],
-      ["Income", "fixed + RSU"],
-      ["Pain", "bonus drift"],
-    ],
-  },
-  {
-    initial: "F",
-    title: "Freelancer",
-    stats: [
-      ["Accounts", "2–3"],
-      ["Income", "lumpy + GST"],
-      ["Pain", "advance tax"],
-    ],
-  },
-  {
-    initial: "P",
-    title: "Supporting family",
-    stats: [
-      ["Accounts", "3+"],
-      ["Outflows", "fixed transfers"],
-      ["Pain", "hidden costs"],
-    ],
+    initial: "L",
+    variant: "lost" as const,
+    title: "Financially lost",
+    copy: "You earn decently. You pay your bills. But at the end of the month, there's nothing left — and you have no idea where it went. It's not a discipline problem. It's a visibility problem.",
   },
   {
     initial: "D",
-    title: "Dual-income couple",
-    stats: [
-      ["Accounts", "4–6"],
-      ["Income", "two salaries"],
-      ["Pain", "shared EMIs"],
-    ],
+    variant: "drowning" as const,
+    title: "Financially drowning",
+    copy: "A LIC policy you didn't understand. A credit card balance that won't go to zero. Decisions that made sense at the time, compounding quietly. You know something is wrong. You just can't see what.",
+  },
+  {
+    initial: "C",
+    variant: "curious" as const,
+    title: "Financially curious",
+    copy: "You're doing okay. But you want to know what 'okay' really means — what people at your income globally are actually doing, saving, investing. You want a number, not a vague sense that you should be doing more.",
   },
 ] as const;
 
@@ -328,19 +376,53 @@ function WaitlistForm({
   );
 }
 
-type LandingPageProps = {
-  initialSpots: number;
-};
+function FoundingCounter() {
+  const [progressPct, setProgressPct] = useState(0);
+  const targetPct = (SPOTS_CLAIMED / TOTAL_FOUNDING_SPOTS) * 100;
 
-export function LandingPage({ initialSpots }: LandingPageProps) {
+  useEffect(() => {
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reduced) {
+      setProgressPct(targetPct);
+      return;
+    }
+    const id = requestAnimationFrame(() => setProgressPct(targetPct));
+    return () => cancelAnimationFrame(id);
+  }, [targetPct]);
+
+  return (
+    <div className="founding-stats">
+      <div className="count">
+        spots claimed
+        <b>
+          {SPOTS_CLAIMED} / {TOTAL_FOUNDING_SPOTS}
+        </b>
+      </div>
+      <div
+        className="founding-progress"
+        role="progressbar"
+        aria-valuenow={SPOTS_CLAIMED}
+        aria-valuemin={0}
+        aria-valuemax={TOTAL_FOUNDING_SPOTS}
+        aria-label="Founding spots claimed"
+      >
+        <div
+          className="founding-progress-fill"
+          style={{ width: `${progressPct}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
-  const [spots, setSpots] = useState(initialSpots);
   const [modal, setModal] = useState<PostSignupModal | null>(null);
   const [surveyBySource, setSurveyBySource] = useState<
     Record<"hero" | "footer", SurveyState>
   >({ hero: "default", footer: "default" });
-
-  const decrementSpot = () => setSpots((n) => Math.max(0, n - 1));
 
   function handleWaitlistSuccess(payload: WaitlistSuccessPayload) {
     if (payload.surveyCompleted) {
@@ -398,16 +480,24 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
       requestAnimationFrame(step);
     }
 
+    function animateMetricBars(root: ParentNode = document) {
+      root.querySelectorAll<HTMLElement>(".report .bar > i[data-w]").forEach((bar) => {
+        const delay = bar.dataset.delay ?? "0";
+        bar.style.transitionDelay = `${delay}s`;
+        bar.style.width = `${bar.dataset.w ?? "0"}%`;
+      });
+    }
+
     function runHeroReportMetrics() {
       document
-        .querySelectorAll<HTMLElement>(".report [data-count], .report [data-w]")
+        .querySelectorAll<HTMLElement>(".report [data-count]")
         .forEach((n) => {
           const r = n.getBoundingClientRect();
-          if (r.top < window.innerHeight) {
-            if (n.dataset.w) n.style.width = `${n.dataset.w}%`;
-            if (n.dataset.count) animateCount(n);
+          if (r.top < window.innerHeight && n.dataset.count) {
+            animateCount(n);
           }
         });
+      animateMetricBars();
     }
 
     function isBelowFold(el: Element) {
@@ -421,7 +511,9 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
 
       if (reduced) {
         document
-          .querySelectorAll(".reveal, .reveal-stagger, .dim-grid")
+          .querySelectorAll(
+            ".reveal, .reveal-stagger, .dim-grid, .benchmark-stack",
+          )
           .forEach((el) => el.classList.add("in"));
         runHeroReportMetrics();
         return;
@@ -437,19 +529,15 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
             en.target
               .querySelectorAll<HTMLElement>("[data-count]")
               .forEach(animateCount);
-            en.target
-              .querySelectorAll<HTMLElement>("[data-w]")
-              .forEach((b) => {
-                b.style.width = `${b.dataset.w ?? "0"}%`;
-              });
+            animateMetricBars(en.target);
             io?.unobserve(en.target);
           }
         },
-        { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
+        { threshold: 0.1, rootMargin: "0px" },
       );
 
       document
-        .querySelectorAll(".reveal, .reveal-stagger, .dim-grid")
+        .querySelectorAll(".reveal, .reveal-stagger, .dim-grid, .benchmark-stack")
         .forEach((el) => {
           if (isBelowFold(el)) {
             io?.observe(el);
@@ -513,21 +601,34 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
           <div className="hero-left">
             <div className="ses reveal">Live · v0.4 · Indian markets · IST 09:47</div>
             <h1 className="reveal">
-              Your money is more complicated than any app <em>admits</em>.
+              Most people at your income are still <em>guessing</em> with their
+              money.
             </h1>
+            <p className="hero-descriptor reveal">
+              Cashlight shows you where you stand — and what the financially
+              sorted do differently.
+            </p>
             <p className="hero-sub reveal">
               You juggle multiple accounts, support family, get lumpy bonuses, and
-              pay EMIs across banks. Most tools show you charts.{" "}
-              <b>Cashlight reads your actual statements</b> and shows you where you
-              really stand. And what your options are.
+              pay EMIs across banks. Somewhere between your salary and your
+              savings, something is going wrong — and no app has been honest
+              enough to show you what.
+              <br />
+              <br />
+              Cashlight reads your actual statements,{" "}
+              <b>
+                benchmarks you against what people at your income globally are
+                actually doing
+              </b>
+              , and shows you exactly where the gap is. Not charts. Not guesses.
+              A real picture.
             </p>
 
             <WaitlistForm
               source="hero"
-              label="So, want in?"
+              label="Want to know where you actually stand?"
               noteSuffix=", locked for life"
               surveyState={surveyBySource.hero}
-              onSignup={decrementSpot}
               onWaitlistSuccess={handleWaitlistSuccess}
             />
           </div>
@@ -546,15 +647,15 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
             <div className="report-body">
               <div className="summary-row">
                 <div className="left">
-                  <div className="who">Subject · 32, Bengaluru, salaried</div>
-                  <div className="name">A. Kumar</div>
+                  <div className="who">Subject · 34, Bengaluru · salaried ₹14.5L/yr</div>
+                  <div className="name">Arjun K.</div>
                 </div>
                 <div className="right">
-                  <div className="score" data-count="62">
-                    0<span className="of"> / 100</span>
+                  <div className="score" data-count="51">
+                    51<span className="of"> / 100</span>
                   </div>
                   <div className="grade">
-                    Grade B · <em>room to fix</em>
+                    Grade C+ · <em>needs attention</em>
                   </div>
                 </div>
               </div>
@@ -566,12 +667,16 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
                     <div className="st">⚠ TIGHT</div>
                   </div>
                   <div className="row">
-                    <div className="val" data-count="4.2" data-suffix=" mo">
-                      0 mo
+                    <div className="val" data-count="73" data-suffix="%">
+                      73%
                     </div>
                   </div>
                   <div className="bar">
-                    <i data-w="70" />
+                    <i
+                      data-w="73"
+                      data-delay="0"
+                      className="metric-bar-fill--danger"
+                    />
                   </div>
                 </div>
                 <div className="metric err">
@@ -580,12 +685,16 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
                     <div className="st">✕ LOW</div>
                   </div>
                   <div className="row">
-                    <div className="val" data-count="11.6" data-suffix="%">
-                      0%
+                    <div className="val" data-count="9.2" data-suffix="%">
+                      9.2%
                     </div>
                   </div>
                   <div className="bar">
-                    <i data-w="11.6" />
+                    <i
+                      data-w="46"
+                      data-delay="0.1"
+                      className="metric-bar-fill--danger"
+                    />
                   </div>
                 </div>
                 <div className="metric warn">
@@ -594,17 +703,16 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
                     <div className="st">⚠ THIN</div>
                   </div>
                   <div className="row">
-                    <div
-                      className="val"
-                      data-prefix="₹"
-                      data-count="1.84"
-                      data-suffix="L"
-                    >
-                      ₹0L
+                    <div className="val" data-count="1.8" data-suffix=" mo">
+                      1.8 mo
                     </div>
                   </div>
                   <div className="bar">
-                    <i data-w="31" />
+                    <i
+                      data-w="22"
+                      data-delay="0.2"
+                      className="metric-bar-fill--danger"
+                    />
                   </div>
                 </div>
                 <div className="metric err">
@@ -616,7 +724,11 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
                     <div className="val">2 LIC · 0 term</div>
                   </div>
                   <div className="bar">
-                    <i data-w="8" />
+                    <i
+                      data-w="8"
+                      data-delay="0.3"
+                      className="metric-bar-fill--muted"
+                    />
                   </div>
                 </div>
                 <div className="metric ok">
@@ -625,12 +737,16 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
                     <div className="st">✓ OK</div>
                   </div>
                   <div className="row">
-                    <div className="val" data-count="38" data-suffix="%">
-                      0%
+                    <div className="val" data-count="31" data-suffix="%">
+                      31%
                     </div>
                   </div>
                   <div className="bar">
-                    <i data-w="38" />
+                    <i
+                      data-w="31"
+                      data-delay="0.4"
+                      className="metric-bar-fill--ok"
+                    />
                   </div>
                 </div>
                 <div className="metric warn">
@@ -639,12 +755,14 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
                     <div className="st">⚠ UNUSED 80C</div>
                   </div>
                   <div className="row">
-                    <div className="val" data-count="42" data-suffix="%">
-                      0%
-                    </div>
+                    <div className="val">₹60k / ₹1.5L used</div>
                   </div>
                   <div className="bar">
-                    <i data-w="42" />
+                    <i
+                      data-w="40"
+                      data-delay="0.5"
+                      className="metric-bar-fill--amber"
+                    />
                   </div>
                 </div>
               </div>
@@ -701,129 +819,7 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
         </div>
       </section>
 
-      <section className="block" id="how">
-        <div className="wrap">
-          <div className="how-grid">
-            <div className="how-side reveal">
-              <div
-                className="ses"
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: 11,
-                  color: "var(--gold)",
-                  letterSpacing: ".16em",
-                  textTransform: "uppercase",
-                  marginBottom: 14,
-                }}
-              >
-                {"// process"}
-              </div>
-              <h2
-                style={{
-                  fontFamily: "var(--display)",
-                  fontWeight: 500,
-                  fontSize: "clamp(30px, 3.8vw, 46px)",
-                  lineHeight: 1.1,
-                  letterSpacing: "-.02em",
-                }}
-              >
-                You drop your statements. <em>We read every line.</em>
-              </h2>
-              <p
-                style={{
-                  marginTop: 20,
-                  color: "var(--ink-dim)",
-                  fontFamily: "var(--serif)",
-                  fontStyle: "italic",
-                  fontSize: 17,
-                  lineHeight: 1.65,
-                }}
-              >
-                Three steps, in plain English. No magic, no &ldquo;patent-pending
-                AI engine.&rdquo; Just careful reading. And a little arithmetic.
-              </p>
-            </div>
-            <div className="steps reveal-stagger">
-              <div className="step">
-                <div className="copy">
-                  <div className="head">
-                    <div className="num">i.</div>
-                    <h3>You upload</h3>
-                  </div>
-                  <p>
-                    Drop PDFs, XLS, or CSVs from{" "}
-                    <b>HDFC, SBI, ICICI, IDFC, Kotak, Axis</b>. Full history,
-                    including years before any aggregator existed.
-                  </p>
-                </div>
-                <div className="console">
-                  <div>
-                    <span className="prompt">$</span> ingest hdfc_oct.pdf
-                  </div>
-                  <div>
-                    <span className="prompt">$</span> ingest icici_oct.xls
-                  </div>
-                  <div>
-                    <span className="prompt">$</span> ingest kotak_oct.csv
-                  </div>
-                  <div className="ok">✓ 3 files · 1,284 rows</div>
-                </div>
-              </div>
-              <div className="step">
-                <div className="copy">
-                  <div className="head">
-                    <div className="num">ii.</div>
-                    <h3>We read every line</h3>
-                  </div>
-                  <p>
-                    Every UPI string, every standing instruction, every
-                    &ldquo;ZOMATOXX&rdquo; narration. We separate{" "}
-                    <b>family transfers from discretionary</b>, EMIs from rent.
-                  </p>
-                </div>
-                <div className="console">
-                  <div>
-                    <span className="prompt">$</span> classify --narrations
-                  </div>
-                  <div>
-                    matched <span className="ok">1,217 / 1,284</span>{" "}
-                    <span className="muted">(94.7%)</span>
-                  </div>
-                  <div>
-                    flagged <span className="warn">67 anomalies</span>
-                  </div>
-                  <div className="ok">✓ 8-dim health report ready</div>
-                </div>
-              </div>
-              <div className="step">
-                <div className="copy">
-                  <div className="head">
-                    <div className="num">iii.</div>
-                    <h3>You explore. We don&apos;t prescribe.</h3>
-                  </div>
-                  <p>
-                    Run <b>&ldquo;what if I shift ₹20k from LIC to NPS?&rdquo;</b>{" "}
-                    Run <b>&ldquo;what if my parents need ₹5k more?&rdquo;</b> A
-                    diagnosis, never a sales pitch.
-                  </p>
-                </div>
-                <div className="console">
-                  <div>
-                    <span className="prompt">$</span> simulate --lic→nps
-                  </div>
-                  <div>
-                    coverage: 4.2 → <span className="ok">5.1 mo</span>
-                  </div>
-                  <div>
-                    tax eff: 42 → <span className="ok">71 %</span>
-                  </div>
-                  <div className="ok">✓ scenario saved</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ProcessSection />
 
       <section className="block" id="dimensions">
         <div className="wrap">
@@ -863,8 +859,14 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
               </div>
             ))}
           </div>
+          <p className="dim-illustrative-note reveal">
+            Numbers shown are illustrative. Yours will be computed from your
+            actual statements.
+          </p>
         </div>
       </section>
+
+      <BenchmarkSection />
 
       <section className="block" id="who">
         <div className="wrap">
@@ -872,27 +874,46 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
             <div className="left">
               <div className="ses">Who it&apos;s for</div>
               <h2>
-                For lives that are <em>actually</em> complicated.
+                You&apos;re not bad with money.{" "}
+                <em>You just never had the full picture.</em>
               </h2>
             </div>
-            <div className="right">4 profiles · v1</div>
+            <div className="right">3 states · v1</div>
           </div>
           <div className="aud-grid reveal-stagger">
             {AUDIENCES.map((a) => (
-              <div key={a.title} className="aud">
+              <div key={a.title} className={`aud aud--${a.variant}`}>
                 <div className="ic">{a.initial}</div>
                 <h4>{a.title}</h4>
-                <div className="stats">
-                  {a.stats.map(([label, value]) => (
-                    <div key={label} className="stat">
-                      <span>{label}</span>
-                      <b>{value}</b>
-                    </div>
-                  ))}
-                </div>
+                <p className="aud-copy">{a.copy}</p>
               </div>
             ))}
           </div>
+
+          <aside className="rescue-callout reveal">
+            <div className="ses">{"// a note"}</div>
+            <h3 className="rescue-callout-head">
+              If you earn well and still feel broke —
+            </h3>
+            <p className="rescue-callout-sub">
+              it&apos;s not you. It&apos;s that nobody ever showed you the full
+              picture.
+            </p>
+            <p className="rescue-callout-body">
+              Most Indians who are struggling financially aren&apos;t struggling
+              because they earn too little. They&apos;re struggling because
+              their money is split across accounts, committed to family before
+              it&apos;s counted, disappearing into products they were sold rather
+              than ones they chose — and no tool has ever mapped the whole
+              picture honestly.
+              <br />
+              <br />
+              That&apos;s what Cashlight is for.
+            </p>
+            <a className="rescue-callout-link" href="#how">
+              See how it works ↓
+            </a>
+          </aside>
         </div>
       </section>
 
@@ -900,7 +921,7 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
         <div className="wrap-narrow">
           <div
             className="section-head reveal"
-            style={{ display: "block", marginBottom: 36 }}
+            style={{ display: "block" }}
           >
             <div className="ses">An open memo</div>
             <h2>
@@ -981,10 +1002,7 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
             <div className="copy">
               <b>₹29 / month</b>, locked for life. First 200 users only.
             </div>
-            <div className="count">
-              spots remaining
-              <b>{spots} / 200</b>
-            </div>
+            <FoundingCounter />
           </div>
         </div>
       </section>
@@ -998,11 +1016,17 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
             Built by a small team in India. Funded by subscriptions, not by what
             we sell you.
           </p>
+          <div className="founding founding--cta reveal">
+            <div className="lbl">{"// founding"}</div>
+            <div className="copy">
+              <b>₹29 / month</b>, locked for life. First 200 users only.
+            </div>
+            <FoundingCounter />
+          </div>
           <WaitlistForm
             source="footer"
             label="Get on the list"
             surveyState={surveyBySource.footer}
-            onSignup={decrementSpot}
             onWaitlistSuccess={handleWaitlistSuccess}
           />
         </div>
