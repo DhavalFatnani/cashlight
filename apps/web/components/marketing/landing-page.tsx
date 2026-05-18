@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { SurveyPanel } from "@/components/marketing/survey-panel";
 
 const TICKER_ITEMS = [
   "Multiple bank accounts",
@@ -175,6 +176,8 @@ const PRICING = [
 
 type FormState = "idle" | "loading" | "done" | "error";
 
+type SurveyState = "filling" | "submitted" | "skipped";
+
 type WaitlistFormProps = {
   source: "hero" | "footer";
   label: string;
@@ -188,6 +191,8 @@ function WaitlistForm({ source, label, noteSuffix = "", onSignup }: WaitlistForm
   const [state, setState] = useState<FormState>("idle");
   const [position, setPosition] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
+  const [surveyState, setSurveyState] = useState<SurveyState>("filling");
 
   function shake() {
     const f = formRef.current;
@@ -225,6 +230,8 @@ function WaitlistForm({ source, label, noteSuffix = "", onSignup }: WaitlistForm
         return;
       }
       setPosition(data.position ?? null);
+      setSubmittedEmail(v);
+      setSurveyState("filling");
       setState("done");
       if (data.isNew) onSignup?.();
     } catch {
@@ -271,8 +278,24 @@ function WaitlistForm({ source, label, noteSuffix = "", onSignup }: WaitlistForm
         </div>
       )}
       <div className="form-success" role="status" aria-live="polite">
-        You&apos;re <b>#{position ?? 64}</b> on the list. We&apos;ll be in touch.
+        {surveyState === "skipped" || surveyState === "submitted" ? (
+          <>
+            You&apos;re <b>#{position ?? 64}</b> on the list. We&apos;ll be in touch.
+          </>
+        ) : (
+          <>
+            You&apos;re <b>#{position ?? 64}</b> on the list.
+          </>
+        )}
       </div>
+      {state === "done" && surveyState === "filling" && submittedEmail && (
+        <SurveyPanel
+          email={submittedEmail}
+          source={source}
+          onSubmitted={() => setSurveyState("submitted")}
+          onSkipped={() => setSurveyState("skipped")}
+        />
+      )}
     </form>
   );
 }
