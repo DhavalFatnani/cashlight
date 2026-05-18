@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+/* Metric/code glyphs only — 0-9 % ₹ . L m o */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&text=0123456789%25%E2%82%B9.Lmo&display=swap');
 
 :root {
   --bg: #0B0A07;
@@ -15,10 +16,10 @@
   --gold-deep: #b87a1c;
   --green: #7FCB7A;
   --red: #E37874;
-  --display: 'Space Grotesk', system-ui, sans-serif;
-  --serif: 'Lora', Georgia, serif;
+  --display: var(--font-instrument-serif), Georgia, serif;
+  --serif: var(--font-instrument-serif), Georgia, serif;
   --mono: 'JetBrains Mono', ui-monospace, monospace;
-  --sans: 'Inter', system-ui, sans-serif;
+  --sans: var(--font-dm-sans), system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
