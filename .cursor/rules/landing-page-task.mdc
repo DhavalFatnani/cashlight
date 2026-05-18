@@ -1,0 +1,25 @@
+---
+description: Active task — marketing landing page (Prompt 1)
+globs: apps/web/app/(marketing)/**/*,apps/web/components/marketing/**/*
+alwaysApply: false
+---
+
+# Landing page task
+
+**Spec:** `docs/Prompt_1_Landing_page.md` (authoritative)
+
+**Deliverables:**
+1. `apps/web/app/(marketing)/page.tsx` — all 12 sections in order
+2. `apps/web/app/api/waitlist/route.ts` — already scaffolded; wire `WaitlistForm` twice (hero + footer)
+3. Migration applied: `packages/db/migrations/000_waitlist.sql`
+
+**Checklist before done:**
+- [ ] All copy matches spec (no invented positioning)
+- [ ] Framer Motion: hero word stagger, section fade-up, problem card stagger
+- [ ] CSS ticker (no JS library)
+- [ ] Nav: fixed, blur on scroll, amber CTA
+- [ ] Waitlist: loading → success with position number
+- [ ] Responsive at 375px and 1440px
+- [ ] `pnpm typecheck` and `pnpm lint` pass
+
+**Quality:** Should feel senior-designed Indian fintech — not AI-generic. Every line specific to Indian financial complexity.

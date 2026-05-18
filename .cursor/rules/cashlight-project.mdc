@@ -1,0 +1,24 @@
+---
+description: Cashlight monorepo conventions and quality bar
+alwaysApply: true
+---
+
+# Cashlight project
+
+- Turborepo: `apps/web` (Next.js 14), `packages/db` (Supabase)
+- Package manager: **pnpm** only
+- Read `AGENTS.md` and `docs/Prompt_1_Landing_page.md` before implementing features
+- Strict TypeScript — no `any`, enable `noUncheckedIndexedAccess` patterns
+- Run `pnpm typecheck` after substantive changes
+
+## File placement
+
+- Marketing UI: `apps/web/app/(marketing)/` and `apps/web/components/marketing/`
+- Shared DB logic: `packages/db` — never query Supabase directly from components
+- API routes: thin handlers; business logic in `packages/db`
+
+## Do not
+
+- Add shadcn, MUI, Chakra, or other UI kits unless explicitly requested
+- Use purple/blue fintech gradients or generic "dashboard" copy
+- Put `SUPABASE_SECRET_KEY` in client code or `NEXT_PUBLIC_*` (publishable key only on the client)

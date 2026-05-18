@@ -1,0 +1,35 @@
+---
+description: Next.js 14 App Router patterns for apps/web
+globs: apps/web/**/*
+alwaysApply: false
+---
+
+# Next.js (apps/web)
+
+## Architecture
+
+- Default **Server Components** in `app/` routes
+- `"use client"` only for: Framer Motion, forms, scroll listeners, browser APIs
+- Reuse `WaitlistForm`, `Section`, `lib/animations.ts`, Tailwind tokens
+
+## Data & API
+
+```typescript
+// ✅ Route handler — validate, delegate to @cashlight/db
+export async function POST(req: Request) {
+  const body = await req.json();
+  // validate email
+  const result = await addToWaitlist(email, source);
+  return NextResponse.json({ success: true, position: result.position });
+}
+```
+
+## Fonts & styles
+
+- Display: `font-display` (Instrument Serif)
+- Body: `font-body` (DM Sans)
+- Use `@layer` utilities from `globals.css` (`.section-label`, `.card-surface`, `.btn-primary`)
+
+## Landing page
+
+Implement per `docs/Prompt_1_Landing_page.md`. Prefer single `page.tsx`; extract sections to `components/marketing/` only when file exceeds ~400 lines.

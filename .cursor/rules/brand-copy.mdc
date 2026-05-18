@@ -1,0 +1,30 @@
+---
+description: Cashlight brand voice and regulatory positioning for all copy
+globs: apps/web/**/*.{tsx,ts,md}
+alwaysApply: false
+---
+
+# Brand & copy
+
+**Positioning:** Financial health platform — NOT financial advisor. No SEBI RIA-style advice.
+
+## Voice
+
+Sharp, confident, warm — like a brilliant CA friend. Not a bank, not startup bro, not robo-advisor.
+
+## Frame outputs as
+
+- "Here is what your numbers say" / diagnosis / scenarios
+- NOT "here is what you must do" / prescriptions / product picks
+
+## Never write
+
+- Specific fund/stock/insurance product recommendations
+- "We'll tell you exactly what to do"
+- Dashboard clichés: "insights", "analytics", "data-driven"
+- Walnut/MoneyView/robo-advisor tone
+
+## Always
+
+- Honesty of relationship: no commissions, no conflicts, no products to sell
+- ₹ in copy naturally; accent amber `#F5A623` for emphasis in UI only

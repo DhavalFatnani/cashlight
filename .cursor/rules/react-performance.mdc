@@ -1,0 +1,30 @@
+---
+description: React/Next performance patterns (Vercel-aligned)
+globs: apps/web/**/*.{tsx,ts}
+alwaysApply: false
+---
+
+# React performance
+
+## Bundle
+
+- Import Framer Motion only in client components that animate
+- No barrel `index.ts` re-exports — import from concrete files
+- `next/dynamic` for below-fold heavy blocks if needed
+
+## Renders
+
+- Colocate state in leaf components (e.g. `WaitlistForm` owns submit state)
+- Do not lift scroll/nav blur state to page root unnecessarily
+- Memoize only when profiling shows benefit — avoid premature `memo`
+
+## Motion
+
+- Use `viewport={{ once: true }}` for scroll reveals
+- Respect `prefers-reduced-motion`: disable stagger/ticker animation in CSS
+- Ticker strip: **CSS only** (`ticker-track` in globals.css), no JS marquee lib
+
+## Images
+
+- Landing has no hero image per spec — do not add stock photos
+- If icons needed later: inline SVG or emoji per spec, not icon font bundles

@@ -1,0 +1,32 @@
+---
+description: Cashlight visual design tokens and layout rules
+globs: apps/web/**/*.{tsx,css}
+alwaysApply: false
+---
+
+# Design system
+
+Dark theme only. Use Tailwind tokens from `tailwind.config.ts`:
+
+| Token | Value / class |
+|-------|----------------|
+| Background | `bg-background` (#080808) |
+| Cards | `card-surface` or `bg-surface border-border` |
+| Accent | `text-accent` / `bg-accent` (#F5A623) |
+| Body text | `text-foreground`, `text-muted`, `text-subtle` |
+
+## Typography
+
+- Section labels: `.section-label` (11px, bold, uppercase, amber, 2px tracking)
+- Headlines: `font-display` — italic + amber for emphasis phrases
+- Body: `font-body` font-light, leading relaxed
+
+## Layout
+
+- Section spacing: `py-section` (100px desktop target)
+- Mobile-first: verify 375px and 1440px
+- Full-width CTAs on mobile
+
+## Forbidden
+
+Purple, blue, generic fintech gradients, light mode toggle
