@@ -278,7 +278,9 @@ function WaitlistForm({ source, label, noteSuffix = "", onSignup }: WaitlistForm
         </div>
       )}
       <div className="form-success" role="status" aria-live="polite">
-        {surveyState === "skipped" || surveyState === "submitted" ? (
+        {surveyState === "submitted" ? (
+          <>Thanks — your input shapes what we build.</>
+        ) : surveyState === "skipped" ? (
           <>
             You&apos;re <b>#{position ?? 64}</b> on the list. We&apos;ll be in touch.
           </>

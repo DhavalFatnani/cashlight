@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   CURRENT_TOOL_OPTIONS,
@@ -82,7 +82,12 @@ export function SurveyPanel({
   const [answers, setAnswers] = useState<AnswerState>(EMPTY);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [done, setDone] = useState(false);
+
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    panelRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, []);
 
   const remainingRequired = useMemo(() => {
     let n = 0;
@@ -130,7 +135,6 @@ export function SurveyPanel({
         setSubmitting(false);
         return;
       }
-      setDone(true);
       onSubmitted();
     } catch {
       setError("Network error. Try again.");
@@ -138,20 +142,10 @@ export function SurveyPanel({
     }
   }
 
-  if (done) {
-    return (
-      <div className="survey-panel" role="status" aria-live="polite">
-        <p className="survey-thanks">
-          Thanks — your input shapes what we build.
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <div className="survey-panel">
+    <div className="survey-panel" ref={panelRef}>
       <p className="survey-intro">
-        <b>6 quick questions</b> while you&apos;re here. They shape what we build.
+        <b>7 quick questions</b> while you&apos;re here. They shape what we build.
       </p>
 
       <fieldset>
@@ -292,7 +286,11 @@ export function SurveyPanel({
       </fieldset>
 
       <div className="survey-actions">
-        <span className={`survey-status${error ? " error" : ""}`}>
+        <span
+          className={`survey-status${error ? " error" : ""}`}
+          aria-live="polite"
+          aria-atomic="true"
+        >
           {error
             ? error
             : remainingRequired > 0
@@ -316,6 +314,9 @@ export function SurveyPanel({
           {submitting ? "Sending…" : "Submit"}
         </button>
       </div>
+      <p className="survey-privacy">
+        Your responses help us build the right thing. We won&apos;t share them.
+      </p>
     </div>
   );
 }
