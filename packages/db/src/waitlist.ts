@@ -1,8 +1,10 @@
 import { getSupabaseServer } from "./client";
+import { hasSurveyForEmail } from "./survey";
 
 export type WaitlistResult = {
   position: number;
   isNew: boolean;
+  surveyCompleted: boolean;
 };
 
 export async function getWaitlistCount(): Promise<number> {
@@ -58,8 +60,11 @@ export async function addToWaitlist(
     throw positionError;
   }
 
+  const surveyCompleted = await hasSurveyForEmail(email);
+
   return {
     position: count ?? 1,
     isNew: !existing,
+    surveyCompleted,
   };
 }

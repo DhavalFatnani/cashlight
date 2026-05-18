@@ -36,6 +36,7 @@ export async function POST(request: Request) {
       success: true,
       position: result.position,
       isNew: result.isNew,
+      surveyCompleted: result.surveyCompleted,
     });
   } catch (error) {
     console.error("[waitlist]", error);

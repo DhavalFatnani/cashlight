@@ -13,8 +13,32 @@ export type SurveyPayload = {
   feedback: string | null;
 };
 
-export async function submitSurvey(payload: SurveyPayload): Promise<void> {
+export async function hasSurveyForEmail(email: string): Promise<boolean> {
   const supabase = getSupabaseServer();
+
+  const { data, error } = await supabase
+    .from("survey_responses")
+    .select("id")
+    .eq("email", email)
+    .limit(1)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data !== null;
+}
+
+export type SubmitSurveyResult = {
+  alreadySubmitted: boolean;
+};
+
+export async function submitSurvey(
+  payload: SurveyPayload,
+): Promise<SubmitSurveyResult> {
+  const supabase = getSupabaseServer();
+
+  if (await hasSurveyForEmail(payload.email)) {
+    return { alreadySubmitted: true };
+  }
 
   const { error } = await supabase.from("survey_responses").insert({
     email: payload.email,
@@ -30,4 +54,5 @@ export async function submitSurvey(payload: SurveyPayload): Promise<void> {
   });
 
   if (error) throw error;
+  return { alreadySubmitted: false };
 }

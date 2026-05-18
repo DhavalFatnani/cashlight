@@ -17,8 +17,11 @@ export async function POST(request: Request) {
   }
 
   try {
-    await submitSurvey(result.value);
-    return NextResponse.json({ success: true });
+    const submitResult = await submitSurvey(result.value);
+    return NextResponse.json({
+      success: true,
+      alreadySubmitted: submitResult.alreadySubmitted,
+    });
   } catch (error) {
     console.error("[survey]", error);
     return NextResponse.json(

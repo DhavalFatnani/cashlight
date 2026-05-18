@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { SurveyPanel } from "@/components/marketing/survey-panel";
+import { SurveyModal } from "@/components/marketing/survey-modal";
+import { ThankYouModal } from "@/components/marketing/thank-you-modal";
 
 const TICKER_ITEMS = [
   "Multiple bank accounts",
@@ -176,23 +177,50 @@ const PRICING = [
 
 type FormState = "idle" | "loading" | "done" | "error";
 
-type SurveyState = "filling" | "submitted" | "skipped";
+type SurveyState = "default" | "submitted" | "skipped";
+
+export type WaitlistSuccessPayload = {
+  email: string;
+  source: "hero" | "footer";
+  position: number;
+  surveyCompleted: boolean;
+};
+
+export type PostSignupModal =
+  | {
+      kind: "survey";
+      email: string;
+      source: "hero" | "footer";
+      position: number;
+    }
+  | {
+      kind: "thanks";
+      position: number;
+      variant: "returning";
+    };
 
 type WaitlistFormProps = {
   source: "hero" | "footer";
   label: string;
   noteSuffix?: string;
+  surveyState: SurveyState;
   onSignup?: () => void;
+  onWaitlistSuccess: (payload: WaitlistSuccessPayload) => void;
 };
 
-function WaitlistForm({ source, label, noteSuffix = "", onSignup }: WaitlistFormProps) {
+function WaitlistForm({
+  source,
+  label,
+  noteSuffix = "",
+  surveyState,
+  onSignup,
+  onWaitlistSuccess,
+}: WaitlistFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [email, setEmail] = useState("");
   const [state, setState] = useState<FormState>("idle");
   const [position, setPosition] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
-  const [surveyState, setSurveyState] = useState<SurveyState>("filling");
 
   function shake() {
     const f = formRef.current;
@@ -221,6 +249,7 @@ function WaitlistForm({ source, label, noteSuffix = "", onSignup }: WaitlistForm
         success?: boolean;
         position?: number;
         isNew?: boolean;
+        surveyCompleted?: boolean;
         error?: string;
       };
       if (!res.ok || !data.success) {
@@ -229,11 +258,16 @@ function WaitlistForm({ source, label, noteSuffix = "", onSignup }: WaitlistForm
         setErrorMessage(data.error ?? "Something went wrong. Try again.");
         return;
       }
-      setPosition(data.position ?? null);
-      setSubmittedEmail(v);
-      setSurveyState("filling");
+      const pos = data.position ?? null;
+      setPosition(pos);
       setState("done");
       if (data.isNew) onSignup?.();
+      onWaitlistSuccess({
+        email: v,
+        source,
+        position: pos ?? 0,
+        surveyCompleted: data.surveyCompleted === true,
+      });
     } catch {
       shake();
       setState("idle");
@@ -286,18 +320,10 @@ function WaitlistForm({ source, label, noteSuffix = "", onSignup }: WaitlistForm
           </>
         ) : (
           <>
-            You&apos;re <b>#{position ?? 64}</b> on the list.
+            You&apos;re <b>#{position ?? 64}</b> on the list. We&apos;ll be in touch.
           </>
         )}
       </div>
-      {state === "done" && surveyState === "filling" && submittedEmail && (
-        <SurveyPanel
-          email={submittedEmail}
-          source={source}
-          onSubmitted={() => setSurveyState("submitted")}
-          onSkipped={() => setSurveyState("skipped")}
-        />
-      )}
     </form>
   );
 }
@@ -309,7 +335,33 @@ type LandingPageProps = {
 export function LandingPage({ initialSpots }: LandingPageProps) {
   const [scrolled, setScrolled] = useState(false);
   const [spots, setSpots] = useState(initialSpots);
+  const [modal, setModal] = useState<PostSignupModal | null>(null);
+  const [surveyBySource, setSurveyBySource] = useState<
+    Record<"hero" | "footer", SurveyState>
+  >({ hero: "default", footer: "default" });
+
   const decrementSpot = () => setSpots((n) => Math.max(0, n - 1));
+
+  function handleWaitlistSuccess(payload: WaitlistSuccessPayload) {
+    if (payload.surveyCompleted) {
+      setModal({
+        kind: "thanks",
+        position: payload.position,
+        variant: "returning",
+      });
+    } else {
+      setModal({
+        kind: "survey",
+        email: payload.email,
+        source: payload.source,
+        position: payload.position,
+      });
+    }
+  }
+
+  function closeModal() {
+    setModal(null);
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -474,7 +526,9 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
               source="hero"
               label="So, want in?"
               noteSuffix=", locked for life"
+              surveyState={surveyBySource.hero}
               onSignup={decrementSpot}
+              onWaitlistSuccess={handleWaitlistSuccess}
             />
           </div>
 
@@ -947,10 +1001,38 @@ export function LandingPage({ initialSpots }: LandingPageProps) {
           <WaitlistForm
             source="footer"
             label="Get on the list"
+            surveyState={surveyBySource.footer}
             onSignup={decrementSpot}
+            onWaitlistSuccess={handleWaitlistSuccess}
           />
         </div>
       </section>
+
+      {modal?.kind === "survey" && (
+        <SurveyModal
+          open
+          email={modal.email}
+          source={modal.source}
+          position={modal.position}
+          onSubmitted={() => {
+            setSurveyBySource((s) => ({ ...s, [modal.source]: "submitted" }));
+            closeModal();
+          }}
+          onSkipped={() => {
+            setSurveyBySource((s) => ({ ...s, [modal.source]: "skipped" }));
+            closeModal();
+          }}
+          onClose={closeModal}
+        />
+      )}
+      {modal?.kind === "thanks" && (
+        <ThankYouModal
+          open
+          position={modal.position}
+          variant="returning"
+          onClose={closeModal}
+        />
+      )}
 
       <footer>
         <div className="wrap">
