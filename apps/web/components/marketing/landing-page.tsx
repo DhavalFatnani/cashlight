@@ -516,11 +516,13 @@ export function LandingPage() {
     <>
       <nav className={`top${scrolled ? " scrolled" : ""}`} id="topnav">
         <div className="inner">
-          <a href="#" className="logo">
-            <span className="dot" />
-            Cashlight
-          </a>
-          <SoundToggle />
+          <div className="nav-brand">
+            <a href="#" className="logo">
+              <span className="dot" />
+              Cashlight
+            </a>
+            <SoundToggle />
+          </div>
           <div className="nav-links">
             <a href="#how">How it works</a>
             <a href="#pricing">Pricing</a>

@@ -197,6 +197,15 @@ nav.top .inner {
 }
 @media (max-width: 780px) { .nav-links { display: none; } }
 
+/* Brand cluster (logo + chime) sits as one nav unit so the parent's
+   justify-content: space-between keeps logo on the left and nav-links
+   centered. */
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 /* Sound toggle (hero chime affordance) */
 .sound-toggle {
   display: inline-flex;
@@ -204,8 +213,6 @@ nav.top .inner {
   justify-content: center;
   width: 32px;
   height: 32px;
-  margin-right: auto;
-  margin-left: 12px;
   background: transparent;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -236,7 +243,8 @@ nav.top .inner {
   .sound-toggle.is-pulsing { animation: none; }
 }
 @media (max-width: 640px) {
-  .sound-toggle { margin-left: 8px; width: 30px; height: 30px; }
+  .nav-brand { gap: 8px; }
+  .sound-toggle { width: 30px; height: 30px; }
 }
 
 /* hero */
