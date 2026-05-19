@@ -73,9 +73,9 @@ const PROCESS_STEPS: ProcessStep[] = [
     title: "You explore. We don't prescribe.",
     body: (
       <>
-        Run <b>&ldquo;what if I shift ₹20k from LIC to NPS?&rdquo;</b> Run{" "}
-        <b>&ldquo;what if my parents need ₹5k more?&rdquo;</b> A diagnosis, never a
-        sales pitch.
+        Ask <b>&ldquo;what if I move ₹20k from my LIC to NPS?&rdquo;</b> Or{" "}
+        <b>&ldquo;what if my parents need ₹5k more next month?&rdquo;</b> A diagnosis.
+        Never a sales pitch.
       </>
     ),
     terminal: (
@@ -128,9 +128,9 @@ function ProcessStacked() {
     <section className="block process-section">
       <div className="wrap">
         <div className="process-outer process-outer--static">
-          <div id="how" className="process-sticky process-sticky--static">
+          <div className="process-sticky process-sticky--static">
             <div className="process-left reveal">
-              <div className="process-label ses">{"// process"}</div>
+              <div id="how" className="process-label ses">{"// process"}</div>
               <h2 className="process-headline">
                 You drop your statements. <em>We read every line.</em>
               </h2>
@@ -210,10 +210,10 @@ function ProcessStickyScroll() {
       aria-labelledby="process-heading"
     >
       <div ref={sectionRef} className="process-outer">
-        <div id="how" className="process-sticky">
+        <div className="process-sticky">
           <div className="wrap process-sticky-inner">
             <motion.div className="process-left" style={{ opacity: leftOpacity }}>
-              <div className="process-label ses">{"// process"}</div>
+              <div id="how" className="process-label ses">{"// process"}</div>
               <div className="process-step-counter" aria-live="polite">
                 {STEP_LABELS.map((label, i) => (
                   <span key={label} className={i === activeStep ? "is-active" : ""}>

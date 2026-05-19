@@ -385,7 +385,7 @@ export function SurveyModal({
               the list.
             </h2>
             <p className="survey-thanks-body">
-              Thanks — your input shapes what we build.
+              Thanks. Your input shapes what we build.
             </p>
             <button
               type="button"

@@ -63,7 +63,7 @@ export function ThankYouModal({
               mind. We&apos;ll be in touch.
             </>
           ) : (
-            <>Thanks — your input shapes what we build. We&apos;ll be in touch.</>
+            <>Thanks. Your input shapes what we build. We&apos;ll be in touch.</>
           )}
         </p>
         <button type="button" className="btn-primary thank-you-done" onClick={onClose}>

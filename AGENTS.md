@@ -36,6 +36,7 @@ Run `packages/db/migrations/000_waitlist.sql` in Supabase before testing signups
 
 ## Landing page implementation
 
+- **Responsive:** One system in `globals.css` (see “Responsive system” comment). Reference pattern: `#problems` / `.obs` — rem + clamp in base, layout changes at 768px, no per-section MacBook typography overrides (only `html { font-size: 14.5px }` + layout exceptions).
 - **Primary file:** `apps/web/app/(marketing)/page.tsx` (single file unless > ~400 lines)
 - **Reuse:** `WaitlistForm`, `Section`, tokens in `tailwind.config.ts`, `lib/animations.ts`
 - **Do not add** external UI libraries — Tailwind + Framer Motion only

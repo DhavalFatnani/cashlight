@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BenchmarkSection } from "@/components/marketing/benchmark-section";
 import { ProcessSection } from "@/components/marketing/process-section";
 import { SurveyModal } from "@/components/marketing/survey-modal";
 import { ThankYouModal } from "@/components/marketing/thank-you-modal";
+import { isAnchorId, scrollToAnchor } from "@/lib/anchor-scroll";
 
 const TICKER_ITEMS = [
   "Multiple bank accounts",
@@ -36,26 +36,17 @@ const PROBLEMS = [
   },
   {
     level: "warn" as const,
-    ts: "ii · 08:14:08",
+    ts: "ii · 08:14:09",
     text: (
       <>
-        Your family commitments aren&apos;t optional, but every app treats them as{" "}
-        <em>discretionary</em>.
-      </>
-    ),
-  },
-  {
-    level: "warn" as const,
-    ts: "iii · 08:14:15",
-    text: (
-      <>
-        A <b>₹2,00,000</b> bonus arrived. Six months later, it&apos;s gone.
+        Your family commitments aren&apos;t optional. Every app treats them like they
+        are.
       </>
     ),
   },
   {
     level: "err" as const,
-    ts: "iv · 08:14:22",
+    ts: "iii · 08:14:17",
     text: (
       <>
         Two LIC policies. Zero term insurance. <em>Fully mis-sold.</em>
@@ -64,92 +55,12 @@ const PROBLEMS = [
   },
   {
     level: "warn" as const,
-    ts: "v · 08:14:29",
+    ts: "iv · 08:14:24",
     text: (
       <>
-        80C: <b>₹1.5L</b> limit, <b>₹60,000</b> used. <em>Every year.</em>
+        80C: <b>₹1.5L</b> limit. <b>₹60,000</b> used. <em>Every year.</em>
       </>
     ),
-  },
-  {
-    level: "warn" as const,
-    ts: "vi · 08:14:36",
-    text: (
-      <>
-        You know you should start a SIP. <em>Next month.</em>
-      </>
-    ),
-  },
-];
-
-const DIMENSIONS = [
-  {
-    tone: "warn",
-    nm: "Coverage ratio",
-    badge: "⚠ TIGHT",
-    count: "73",
-    suffix: "%",
-    placeholder: "73%",
-    sub: "0.9 months of essential outflows",
-  },
-  {
-    tone: "err",
-    nm: "Real savings rate",
-    badge: "✕ LOW",
-    count: "9.2",
-    suffix: "%",
-    placeholder: "9.2%",
-    sub: "net of EMIs & transfers",
-  },
-  {
-    tone: "warn",
-    nm: "Emergency buffer",
-    badge: "⚠ THIN",
-    literal: "₹54,000",
-    sub: "liquid in 48 hours (about 1.8 months)",
-  },
-  {
-    tone: "err",
-    nm: "Insurance adequacy",
-    badge: "✕ GAP",
-    literal: "Under",
-    sub: "₹25L cover vs ₹1.45Cr obligations",
-  },
-  {
-    tone: "warn",
-    nm: "Equity exposure",
-    badge: "⚠ LOW",
-    count: "4",
-    suffix: "%",
-    placeholder: "4%",
-    sub: "of net worth in growth assets",
-  },
-  {
-    tone: "ok",
-    nm: "Debt-to-income",
-    badge: "✓ OK",
-    count: "31",
-    suffix: "%",
-    placeholder: "31%",
-    sub: "EMIs / monthly inflow",
-  },
-  {
-    tone: "warn",
-    nm: "Irregular income",
-    badge: "⚠ HIGH",
-    count: "22",
-    suffix: "%",
-    placeholder: "22%",
-    sub: "share variable / annual",
-  },
-  {
-    tone: "warn",
-    nm: "Tax efficiency",
-    badge: "⚠ UNUSED 80C",
-    count: "40",
-    suffix: "%",
-    placeholder: "40%",
-    sub: "80C: ₹60k used of ₹1.5L limit",
   },
 ] as const;
 
@@ -157,41 +68,26 @@ const TOTAL_FOUNDING_SPOTS = 200;
 /** Update manually each week until wired to Supabase. */
 const SPOTS_CLAIMED = 64;
 
-const AUDIENCES = [
+const LEDGER = [
+  { them: "They earn commissions.", us: "We earn only from you." },
+  { them: "They recommend ULIPs.", us: <>We flag them. <em>Out loud.</em></> },
   {
-    initial: "L",
-    variant: "lost" as const,
-    title: "Financially lost",
-    copy: "You earn decently. You pay your bills. But at the end of the month, there's nothing left — and you have no idea where it went. It's not a discipline problem. It's a visibility problem.",
+    them: "They show health scores.",
+    us: "We show you why your score is what it is.",
   },
+  { them: "They guess transaction narrations.", us: <>We read <em>every</em> UPI string.</> },
   {
-    initial: "D",
-    variant: "drowning" as const,
-    title: "Financially drowning",
-    copy: "A LIC policy you didn't understand. A credit card balance that won't go to zero. Decisions that made sense at the time, compounding quietly. You know something is wrong. You just can't see what.",
-  },
-  {
-    initial: "C",
-    variant: "curious" as const,
-    title: "Financially curious",
-    copy: "You're doing okay. But you want to know what 'okay' really means — what people at your income globally are actually doing, saving, investing. You want a number, not a vague sense that you should be doing more.",
+    them: "They ignore family transfers.",
+    us: "We treat them as fixed commitments.",
   },
 ] as const;
-
-const LEDGER = [
-  { them: "They earn commissions.", us: <>We earn <em>only</em> from subscriptions.</> },
-  { them: "They recommend ULIPs.", us: <>We <em>flag</em> them. Out loud.</> },
-  { them: "They show health scores.", us: <>We show <em>why</em> your score is that.</> },
-  { them: "They guess narrations.", us: <>We read <em>every</em> UPI string.</> },
-  { them: "They ignore family transfers.", us: <>We treat them as <em>fixed</em> commitments.</> },
-];
 
 const PRICING = [
   {
     tier: "Free",
     amount: "₹0",
     period: " / forever",
-    features: ["One bank statement", "Three of eight dimensions", "No scenario explorer"],
+    features: ["One bank statement", "Three of eight dimensions", "Snapshot only"],
     cta: "Start free",
     popular: false,
   },
@@ -361,7 +257,7 @@ function WaitlistForm({
       )}
       <div className="form-success" role="status" aria-live="polite">
         {surveyState === "submitted" ? (
-          <>Thanks — your input shapes what we build.</>
+          <>Thanks. Your input shapes what we build.</>
         ) : surveyState === "skipped" ? (
           <>
             You&apos;re <b>#{position ?? 64}</b> on the list. We&apos;ll be in touch.
@@ -453,6 +349,44 @@ export function LandingPage() {
   }, []);
 
   useEffect(() => {
+    const scrollRestoration = history.scrollRestoration;
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    function scrollFromHash(behavior: ScrollBehavior = "smooth") {
+      const id = window.location.hash.slice(1);
+      if (!isAnchorId(id)) return;
+      scrollToAnchor(id, behavior);
+    }
+
+    function onAnchorClick(e: MouseEvent) {
+      const anchor = (e.target as Element).closest('a[href^="#"]');
+      if (!(anchor instanceof HTMLAnchorElement)) return;
+      const href = anchor.getAttribute("href");
+      if (!href || href === "#") return;
+      const id = href.slice(1);
+      if (!isAnchorId(id)) return;
+      e.preventDefault();
+      scrollToAnchor(id);
+      window.history.pushState(null, "", href);
+    }
+
+    function onHashChange() {
+      scrollFromHash();
+    }
+
+    scrollFromHash("instant");
+    document.addEventListener("click", onAnchorClick);
+    window.addEventListener("hashchange", onHashChange);
+    return () => {
+      document.removeEventListener("click", onAnchorClick);
+      window.removeEventListener("hashchange", onHashChange);
+      history.scrollRestoration = scrollRestoration;
+    };
+  }, []);
+
+  useEffect(() => {
     let io: IntersectionObserver | null = null;
     let idleHandle: ReturnType<typeof setTimeout> | number | undefined;
     let reportRaf = 0;
@@ -512,7 +446,7 @@ export function LandingPage() {
       if (reduced) {
         document
           .querySelectorAll(
-            ".reveal, .reveal-stagger, .dim-grid, .benchmark-stack",
+            ".reveal, .reveal-stagger",
           )
           .forEach((el) => el.classList.add("in"));
         runHeroReportMetrics();
@@ -537,7 +471,7 @@ export function LandingPage() {
       );
 
       document
-        .querySelectorAll(".reveal, .reveal-stagger, .dim-grid, .benchmark-stack")
+        .querySelectorAll(".reveal, .reveal-stagger")
         .forEach((el) => {
           if (isBelowFold(el)) {
             io?.observe(el);
@@ -587,7 +521,6 @@ export function LandingPage() {
           </a>
           <div className="nav-links">
             <a href="#how">How it works</a>
-            <a href="#who">Who it&apos;s for</a>
             <a href="#pricing">Pricing</a>
           </div>
           <a href="#cta" className="nav-cta">
@@ -599,29 +532,24 @@ export function LandingPage() {
       <header className="hero">
         <div className="wrap hero-grid">
           <div className="hero-left">
-            <div className="ses reveal">Live · v0.4 · Indian markets · IST 09:47</div>
             <h1 className="reveal">
               Most people at your income are still <em>guessing</em> with their
               money.
             </h1>
             <p className="hero-descriptor reveal">
-              Cashlight shows you where you stand — and what the financially
-              sorted do differently.
+              Cashlight shows you where you stand, and what the financially sorted
+              do differently.
             </p>
             <p className="hero-sub reveal">
               You juggle multiple accounts, support family, get lumpy bonuses, and
               pay EMIs across banks. Somewhere between your salary and your
-              savings, something is going wrong — and no app has been honest
-              enough to show you what.
+              savings, something is going wrong. No app has been honest enough
+              to show you what. Until now.
               <br />
               <br />
-              Cashlight reads your actual statements,{" "}
-              <b>
-                benchmarks you against what people at your income globally are
-                actually doing
-              </b>
-              , and shows you exactly where the gap is. Not charts. Not guesses.
-              A real picture.
+              Cashlight reads your actual statements and shows you where you
+              actually stand — compared to what people at your income around the
+              world are doing. Not charts. Not guesses. A real picture.
             </p>
 
             <WaitlistForm
@@ -778,7 +706,7 @@ export function LandingPage() {
         </div>
 
         <div className="ticker reveal">
-          <div className="ticker-label">Built for Indians managing</div>
+          <div className="ticker-label">{"// BUILT FOR INDIANS MANAGING"}</div>
           <div className="ticker-viewport">
             <div className="ticker-track">
               {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
@@ -795,15 +723,14 @@ export function LandingPage() {
         <div className="wrap-narrow">
           <div
             className="section-head reveal"
-            style={{ display: "block", marginBottom: 42 }}
           >
-            <div className="ses">Things we noticed</div>
+            <div className="ses">{"// THINGS WE NOTICED"}</div>
             <h2>
-              Six things every app pretends <em>aren&apos;t</em> happening.
+              Four things every app pretends <em>aren&apos;t</em> happening.
             </h2>
             <p className="lede">
-              Open any Indian money app. Then open your statements. The gap between
-              them is what we built Cashlight to close.
+              Open any Indian finance app. Then open your actual bank statements.
+              The gap is what Cashlight exists to close.
             </p>
           </div>
 
@@ -821,111 +748,12 @@ export function LandingPage() {
 
       <ProcessSection />
 
-      <section className="block" id="dimensions">
-        <div className="wrap">
-          <div className="section-head reveal">
-            <div className="left">
-              <div className="ses">Eight dimensions</div>
-              <h2>
-                Your financial health, <em>actually</em> measured.
-              </h2>
-              <p className="lede">
-                Every number is computed from your real transactions. No surveys,
-                no estimates, no &ldquo;rate yourself out of 10.&rdquo;
-              </p>
-            </div>
-            <div className="right">8 / 8 readings · sample</div>
-          </div>
-          <div className="dim-grid reveal-stagger">
-            {DIMENSIONS.map((d) => (
-              <div key={d.nm} className={`dim ${d.tone}`}>
-                <div className="top">
-                  <div className="nm">{d.nm}</div>
-                  <div className="badge">{d.badge}</div>
-                </div>
-                {"literal" in d ? (
-                  <div className="val">{d.literal}</div>
-                ) : (
-                  <div
-                    className="val"
-                    data-count={d.count}
-                    data-suffix={d.suffix}
-                    {...("prefix" in d && d.prefix ? { "data-prefix": d.prefix } : {})}
-                  >
-                    {d.placeholder}
-                  </div>
-                )}
-                <div className="sub">{d.sub}</div>
-              </div>
-            ))}
-          </div>
-          <p className="dim-illustrative-note reveal">
-            Numbers shown are illustrative. Yours will be computed from your
-            actual statements.
-          </p>
-        </div>
-      </section>
-
-      <BenchmarkSection />
-
-      <section className="block" id="who">
-        <div className="wrap">
-          <div className="section-head reveal">
-            <div className="left">
-              <div className="ses">Who it&apos;s for</div>
-              <h2>
-                You&apos;re not bad with money.{" "}
-                <em>You just never had the full picture.</em>
-              </h2>
-            </div>
-            <div className="right">3 states · v1</div>
-          </div>
-          <div className="aud-grid reveal-stagger">
-            {AUDIENCES.map((a) => (
-              <div key={a.title} className={`aud aud--${a.variant}`}>
-                <div className="ic">{a.initial}</div>
-                <h4>{a.title}</h4>
-                <p className="aud-copy">{a.copy}</p>
-              </div>
-            ))}
-          </div>
-
-          <aside className="rescue-callout reveal">
-            <div className="ses">{"// a note"}</div>
-            <h3 className="rescue-callout-head">
-              If you earn well and still feel broke —
-            </h3>
-            <p className="rescue-callout-sub">
-              it&apos;s not you. It&apos;s that nobody ever showed you the full
-              picture.
-            </p>
-            <p className="rescue-callout-body">
-              Most Indians who are struggling financially aren&apos;t struggling
-              because they earn too little. They&apos;re struggling because
-              their money is split across accounts, committed to family before
-              it&apos;s counted, disappearing into products they were sold rather
-              than ones they chose — and no tool has ever mapped the whole
-              picture honestly.
-              <br />
-              <br />
-              That&apos;s what Cashlight is for.
-            </p>
-            <a className="rescue-callout-link" href="#how">
-              See how it works ↓
-            </a>
-          </aside>
-        </div>
-      </section>
-
       <section className="block" id="difference">
         <div className="wrap-narrow">
-          <div
-            className="section-head reveal"
-            style={{ display: "block" }}
-          >
+          <div className="section-head reveal">
             <div className="ses">An open memo</div>
             <h2>
-              Why we can <em>tell you the truth.</em>
+              Why we&apos;ll always <em>tell you the truth.</em>
             </h2>
           </div>
           <div className="memo reveal">
@@ -941,10 +769,10 @@ export function LandingPage() {
               The <em>honest</em> part.
             </h3>
             <p className="intro">
-              Most &ldquo;free&rdquo; Indian money apps are funded by the products
-              they push. ULIPs. Endowments. &ldquo;Tax-saving&rdquo; insurance.
-              Every recommendation comes with a commission.{" "}
-              <b>We can&apos;t compete with that on price. But we can on truth.</b>
+              Most free Indian money apps are paid by the products they push on
+              you. Every recommendation comes with a commission baked in. We
+              charge you a subscription instead. That means the only thing we get
+              paid for is being useful to you.
             </p>
 
             <div className="ledger">
@@ -958,8 +786,7 @@ export function LandingPage() {
             </div>
 
             <div className="signoff">
-              Sincerely,
-              <b>The Cashlight team</b>
+              — <b>The Cashlight team</b>
             </div>
           </div>
         </div>
@@ -971,7 +798,7 @@ export function LandingPage() {
             <div className="left">
               <div className="ses">Pricing</div>
               <h2>
-                Pay us. So <em>nobody else has to buy us.</em>
+                Pay us. So <em>no one else can.</em>
               </h2>
               <p className="lede">
                 One revenue source: yours. No ads. No commissions. No conflicts
@@ -1007,14 +834,13 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="final" id="cta">
-        <div className="wrap-narrow">
+      <footer className="site-footer" id="cta">
+        <div className="footer-cta wrap-narrow">
           <h2 className="reveal">
-            For Indians who want to understand their money, <em>honestly</em>.
+            Your money, <em>finally</em> understood.
           </h2>
           <p className="ps reveal">
-            Built by a small team in India. Funded by subscriptions, not by what
-            we sell you.
+            Built in India. Funded by the people who use it. Nothing else.
           </p>
           <div className="founding founding--cta reveal">
             <div className="lbl">{"// founding"}</div>
@@ -1030,7 +856,27 @@ export function LandingPage() {
             onWaitlistSuccess={handleWaitlistSuccess}
           />
         </div>
-      </section>
+        <div className="wrap footer-meta">
+          <div className="row">
+            <a href="#" className="logo" style={{ fontSize: 17 }}>
+              <span className="dot" />
+              Cashlight
+            </a>
+            <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
+              <a href="#how">How it works</a>
+              <a href="#pricing">Pricing</a>
+              <a href="#">Privacy</a>
+              <a href="#">Security</a>
+              <a href="#">Contact</a>
+            </div>
+            <div>© 2026 Cashlight · Built in India</div>
+          </div>
+          <div className="disclaimer">
+            Cashlight is a financial health platform, not a SEBI-registered
+            investment advisor. Content is for informational purposes only.
+          </div>
+        </div>
+      </footer>
 
       {modal?.kind === "survey" && (
         <SurveyModal
@@ -1057,29 +903,6 @@ export function LandingPage() {
           onClose={closeModal}
         />
       )}
-
-      <footer>
-        <div className="wrap">
-          <div className="row">
-            <a href="#" className="logo" style={{ fontSize: 17 }}>
-              <span className="dot" />
-              Cashlight
-            </a>
-            <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
-              <a href="#how">How it works</a>
-              <a href="#pricing">Pricing</a>
-              <a href="#">Privacy</a>
-              <a href="#">Security</a>
-              <a href="#">Contact</a>
-            </div>
-            <div>© 2026 Cashlight · Built in India</div>
-          </div>
-          <div className="disclaimer">
-            Cashlight is a financial health platform, not a SEBI-registered
-            investment advisor. Content is for informational purposes only.
-          </div>
-        </div>
-      </footer>
     </>
   );
 }
