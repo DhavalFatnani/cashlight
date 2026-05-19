@@ -197,6 +197,48 @@ nav.top .inner {
 }
 @media (max-width: 780px) { .nav-links { display: none; } }
 
+/* Sound toggle (hero chime affordance) */
+.sound-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-right: auto;
+  margin-left: 12px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink-dim);
+  cursor: pointer;
+  position: relative;
+  transition: color .2s, border-color .2s, background .2s;
+}
+.sound-toggle:hover {
+  color: var(--gold);
+  border-color: var(--line-2);
+  background: rgba(232, 170, 80, .06);
+}
+.sound-toggle:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+.sound-toggle.is-pulsing {
+  color: var(--gold);
+  border-color: rgba(232, 170, 80, .35);
+  animation: soundTogglePulse 2.4s ease-in-out infinite;
+}
+@keyframes soundTogglePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 170, 80, .35); }
+  50% { box-shadow: 0 0 0 8px rgba(232, 170, 80, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sound-toggle.is-pulsing { animation: none; }
+}
+@media (max-width: 640px) {
+  .sound-toggle { margin-left: 8px; width: 30px; height: 30px; }
+}
+
 /* hero */
 .hero { padding: 8.25rem 0 5rem; position: relative; }   /* nav clearance + breathing room below nav */
 .hero-grid {

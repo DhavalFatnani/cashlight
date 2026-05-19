@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ProcessSection } from "@/components/marketing/process-section";
+import { SoundToggle } from "@/components/marketing/sound-toggle";
 import { SurveyModal } from "@/components/marketing/survey-modal";
 import { ThankYouModal } from "@/components/marketing/thank-you-modal";
 import { isAnchorId, scrollToAnchor } from "@/lib/anchor-scroll";
@@ -519,6 +520,7 @@ export function LandingPage() {
             <span className="dot" />
             Cashlight
           </a>
+          <SoundToggle />
           <div className="nav-links">
             <a href="#how">How it works</a>
             <a href="#pricing">Pricing</a>
