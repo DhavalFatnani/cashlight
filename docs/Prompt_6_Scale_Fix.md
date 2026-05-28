@@ -353,3 +353,295 @@ After applying all three fixes, click each nav link and confirm:
 
 Target viewport for verification: 1280×832px (MacBook Air M4 default).
 ```
+
+# Cashlight — Remove Hero Status Bar
+
+---
+
+## PROMPT 14 — Remove the "Live · v0.4 · Indian markets · IST 09:47" bar
+
+```
+In apps/web/app/(marketing)/page.tsx, remove the status bar 
+that sits above the hero headline.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT TO REMOVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Delete the element containing:
+  "Live · v0.4 · Indian markets · IST 09:47"
+
+This includes:
+  - The amber dot / live indicator
+  - The text content
+  - Any live clock logic or useEffect updating the time
+  - Any interval or setTimeout tied to the clock
+  - The wrapper element and all its styles
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT TO KEEP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Everything else in the hero section stays exactly as-is:
+  - Hero headline
+  - Subline and body paragraphs
+  - Email input + CTA button
+  - Founding tier note
+  - The floating health report card on the right
+  - The scrolling ticker below the hero
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+AFTER REMOVING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The hero headline becomes the first visible element in the 
+hero section below the nav. Ensure the top padding/margin 
+above the headline looks balanced without the status bar — 
+adjust by a maximum of 16px if needed. Do not over-pad.
+```
+
+# Cashlight — Content Reduction + Copy Humanisation
+# Two changes in one prompt. Simpler page, warmer language.
+
+---
+
+## PROMPT 15 — Cut the clutter, fix the copy
+
+```
+Two passes on apps/web/app/(marketing)/page.tsx:
+1. Remove three sections to reduce cognitive load
+2. Replace em dashes and flatten formal phrasing throughout
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS 1 — SECTION CUTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Remove these three sections entirely from the page:
+
+REMOVE 1: "Eight dimensions" section
+  The section labelled "EIGHT DIMENSIONS" with the 2×4 card grid
+  showing Coverage ratio, Real savings rate, Emergency buffer etc.
+  Delete the entire section — component, data, styles.
+  Reason: product-level detail on a waitlist page. 
+  The hero health report card already shows the concept visually.
+  This will come back in the product itself.
+
+REMOVE 2: "// WHERE YOU STAND" benchmark bars section
+  The new section added with 3 benchmark bars (Emergency buffer, 
+  Real savings rate, Equity exposure) and the left/right split layout.
+  Delete the entire section — component, data, styles.
+  Reason: adds significant cognitive load before the user has 
+  even decided they trust the product. 
+  The concept survives in the honest memo and the hero card.
+
+REMOVE 3: "WHO IT'S FOR" section
+  The section with the 3 psychographic cards (Financially lost, 
+  Financially drowning, Financially curious) and the rescue 
+  callout ("// a note — If you earn well and still feel broke").
+  Delete the entire section — component, data, styles.
+  Reason: the hero copy already speaks directly to this person. 
+  Restating it mid-page interrupts the argument.
+
+NEW PAGE FLOW AFTER CUTS:
+  1. Nav
+  2. Hero (headline + body + CTA + health report card)
+  3. Ticker (// BUILT FOR INDIANS MANAGING)
+  4. Six things (condensed — see Pass 2 below)
+  5. Process (// PROCESS — 3 steps, keep as-is)
+  6. Honest memo (Why we can tell you the truth)
+  7. Pricing
+  8. Footer CTA
+  9. Footer
+
+Also remove "Who it's for" from the nav links since the section 
+no longer exists. Nav becomes:
+  How it works | Pricing
+(Two links. Cleaner.)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS 2 — COPY HUMANISATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Replace every em dash (—) in the page copy with warmer, 
+more conversational alternatives. Also fix specific phrases 
+that feel stiff or editorial for a first-time visitor.
+
+HERO SECTION:
+
+Current body text:
+"You juggle multiple accounts, support family, get lumpy bonuses, 
+and pay EMIs across banks. Somewhere between your salary and your 
+savings, something is going wrong — and no app has been honest 
+enough to show you what."
+
+Replace with:
+"You juggle multiple accounts, support family, get lumpy bonuses, 
+and pay EMIs across banks. Somewhere between your salary and your 
+savings, something is going wrong. No app has been honest enough 
+to show you what. Until now."
+
+Current second paragraph:
+"Cashlight reads your actual statements, benchmarks you against 
+what people at your income globally are actually doing, and shows 
+you exactly where the gap is. Not charts. Not guesses. A real picture."
+
+Replace with:
+"Cashlight reads your actual statements and shows you where you 
+actually stand — compared to what people at your income around 
+the world are doing. Not charts. Not guesses. A real picture."
+
+SIX THINGS SECTION:
+
+Condense from 6 items to 4. Remove items iii and vi 
+(bonus drift and SIP procrastination — these are less 
+visceral than the others). Keep:
+
+  i  · Three bank accounts. Some apps see them all. 
+       None tell you what your numbers mean.          ERROR
+
+  ii · Your family commitments aren't optional.
+       Every app treats them like they are.           WARN
+
+  iii· Two LIC policies. Zero term insurance.
+       Fully mis-sold.                                ERROR
+
+  iv · 80C: ₹1.5L limit. ₹60,000 used.
+       Every year.                                    WARN
+
+Update the timestamps so they still feel sequential:
+  i   · 08:14:02
+  ii  · 08:14:09
+  iii · 08:14:17
+  iv  · 08:14:24
+
+Section headline — replace:
+  Current: "Six things every app pretends aren't happening."
+  New: "Four things every app pretends aren't happening."
+
+Section label — replace:
+  Current: "THINGS WE NOTICED"
+  New: "// THINGS WE NOTICED"
+  (add the // prefix to match other section label style)
+
+Section body — replace:
+  Current: "Open any Indian money app. Then open your statements. 
+  The gap between them is what we built Cashlight to close."
+  New: "Open any Indian finance app. Then open your actual 
+  bank statements. The gap is what Cashlight exists to close."
+
+PROCESS SECTION:
+
+Step iii copy — replace:
+  Current: 'Run "what if I shift ₹20k from LIC to NPS?" 
+  Run "what if my parents need ₹5k more?" 
+  A diagnosis, never a sales pitch.'
+  
+  New: 'Ask "what if I move ₹20k from my LIC to NPS?" 
+  Or "what if my parents need ₹5k more next month?" 
+  A diagnosis. Never a sales pitch.'
+
+HONEST MEMO SECTION:
+
+Section headline — replace:
+  Current: "Why we can tell you the truth."
+  New: "Why we'll always tell you the truth."
+  (more confident, forward-looking)
+
+Body paragraph — replace:
+  Current: 'Most "free" Indian money apps are funded by the 
+  products they push. ULIPs. Endowments. "Tax-saving" insurance. 
+  Every recommendation comes with a commission. We can't compete 
+  with that on price. But we can on truth.'
+  
+  New: 'Most free Indian money apps are paid by the products 
+  they push on you. Every recommendation comes with a commission 
+  baked in. We charge you a subscription instead. That means 
+  the only thing we get paid for is being useful to you.'
+
+Contrast rows — minor edits for flow:
+
+  Row 1:
+    Left:  "They earn commissions."        (remove strikethrough styling — 
+    Right: "We earn only from you."         keep it cleaner)
+  
+  Row 2:
+    Left:  "They recommend ULIPs."
+    Right: "We flag them. Out loud."
+  
+  Row 3:
+    Left:  "They show health scores."
+    Right: "We show you why your score is what it is."
+  
+  Row 4:
+    Left:  "They guess transaction narrations."
+    Right: "We read every UPI string."
+  
+  Row 5:
+    Left:  "They ignore family transfers."
+    Right: "We treat them as fixed commitments."
+
+  Note: remove the strikethrough on the left column items. 
+  The muted grey colour already signals "that's them not us."
+  Strikethrough adds visual noise on a dark background.
+
+Sign-off — replace:
+  Current: "Sincerely, The Cashlight team"
+  New: "— The Cashlight team"
+  (the em dash here is intentional and correct — 
+  it's a signature convention, keep it)
+
+PRICING SECTION:
+
+Headline — replace:
+  Current: "Pay us. So nobody else has to buy us."
+  New: "Pay us. So no one else can."
+  (tighter, same meaning, more memorable)
+
+Free tier — replace "No scenario explorer" with:
+  "Snapshot only"
+  (more descriptive of what you get, not what you don't)
+
+FOOTER CTA:
+
+Current headline:
+  "For Indians who want to understand their money, honestly."
+
+Replace with:
+  "Your money, finally understood."
+  (this is the tagline — use it here as the closing statement,
+  Instrument Serif, large, with "finally" in amber italic)
+
+Current subline:
+  "Built by a small team in India. Funded entirely by our users. 
+  Nothing else."
+
+Replace with:
+  "Built in India. Funded by the people who use it. Nothing else."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GLOBAL EM DASH RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After all the above, do a final pass:
+
+Search for all remaining — (em dash) characters in the JSX copy.
+For each one, make a judgment call:
+
+  · If it's mid-sentence creating a clause → replace with a 
+    full stop and start a new sentence instead.
+    Example: "we read it — all of it" → "We read all of it."
+
+  · If it's a list separator or label → replace with a colon.
+    Example: "Coverage ratio — TIGHT" → already handled by the 
+    badge system, no em dash needed in copy.
+
+  · If it's a signature or attribution → keep it.
+    Example: "— The Cashlight team" → correct, keep.
+
+  · If it's in a "before/after" contrast → replace with →
+    Example: "They earn commissions — we don't" → already 
+    handled by the row layout with → arrows.
+
+The goal: zero em dashes in flowing copy. 
+Only permitted in signatures and the contrast row arrows (→).
+```

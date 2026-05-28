@@ -50,7 +50,7 @@ const PROBLEMS = [
     ts: "iii · 08:14:17",
     text: (
       <>
-        Two LIC policies. Zero term insurance. <em>Fully mis-sold.</em>
+        A <b>₹2L</b> bonus arrived. Six months later, it&apos;s gone.
       </>
     ),
   },
@@ -59,7 +59,25 @@ const PROBLEMS = [
     ts: "iv · 08:14:24",
     text: (
       <>
+        Two LIC policies. Zero term insurance. <em>Fully mis-sold.</em>
+      </>
+    ),
+  },
+  {
+    level: "warn" as const,
+    ts: "v · 08:14:31",
+    text: (
+      <>
         80C: <b>₹1.5L</b> limit. <b>₹60,000</b> used. <em>Every year.</em>
+      </>
+    ),
+  },
+  {
+    level: "err" as const,
+    ts: "vi · 08:14:38",
+    text: (
+      <>
+        You know you should start a SIP. <em>Next month.</em>
       </>
     ),
   },
@@ -80,6 +98,76 @@ const LEDGER = [
   {
     them: "They ignore family transfers.",
     us: "We treat them as fixed commitments.",
+  },
+] as const;
+
+const HEALTH_DIMENSIONS = [
+  {
+    name: "Coverage ratio",
+    description: "What % of your income is already spoken for before you spend a rupee.",
+    example: "Your fixed obligations use 68% of income. Danger zone.",
+  },
+  {
+    name: "Real savings rate",
+    description: "What actually compounds — not what you think you save.",
+    example: "4.2% of take-home is compounding. Indian average. Not enough.",
+  },
+  {
+    name: "Emergency buffer",
+    description: "How many months you can survive on liquid savings alone.",
+    example: "1.3 months. Target: 6.",
+  },
+  {
+    name: "Insurance adequacy",
+    description: "Term cover as a multiple of your annual income.",
+    example: "You have ₹0 of term cover. Your family is unprotected.",
+  },
+  {
+    name: "Equity exposure",
+    description: "What % of your wealth is in growth assets.",
+    example: "92% in gold and FD. Inflation is eroding it.",
+  },
+  {
+    name: "Debt-to-income ratio",
+    description: "Total EMIs as a % of monthly take-home.",
+    example: "34%. Within range. Watch if it crosses 40%.",
+  },
+  {
+    name: "Irregular income rate",
+    description: "What % of your bonuses and reimbursements gets invested.",
+    example: "Last 3 bonuses: 0% invested. All spent within 60 days.",
+  },
+  {
+    name: "Tax efficiency",
+    description: "80C utilisation + regime optimisation.",
+    example: "₹62,000 of 80C headroom unused. Old regime likely better for you.",
+  },
+] as const;
+
+const ARCHETYPES = [
+  {
+    icon: "🏢",
+    name: "Salaried professional",
+    situation: "HDFC salary, Kotak savings, ICICI joint account.",
+    healthGap: "Cashlight shows you your real savings rate across all three and where the gaps are.",
+  },
+  {
+    icon: "💼",
+    name: "Freelancer / consultant",
+    situation: "Great months, rough months. TDS deducted everywhere.",
+    healthGap: "Cashlight builds a health picture that accounts for income volatility — not one that assumes a fixed salary.",
+  },
+  {
+    icon: "👨‍👩‍👧",
+    name: "Supporting family",
+    situation: "₹25,000 to parents every month. ₹10,000 for a sibling's fees.",
+    healthGap: "Cashlight treats your commitments as non-negotiable and measures your health around them.",
+  },
+  {
+    icon: "🏠",
+    name: "Dual-income household",
+    situation: "Two salaries, shared EMIs, separate accounts.",
+    healthGap: "Cashlight gives you a single household health view both partners can see.",
   },
 ] as const;
 
@@ -537,8 +625,9 @@ export function LandingPage() {
         <div className="wrap hero-grid">
           <div className="hero-left">
             <h1 className="reveal">
-              Most people at your income are still <em>guessing</em> with their
-              money.
+              Your money is
+              <br />
+              <em>more complicated than any app admits.</em>
             </h1>
             <p className="hero-descriptor reveal">
               Cashlight shows you where you stand, and what the financially sorted
@@ -546,14 +635,9 @@ export function LandingPage() {
             </p>
             <p className="hero-sub reveal">
               You juggle multiple accounts, support family, get lumpy bonuses, and
-              pay EMIs across banks. Somewhere between your salary and your
-              savings, something is going wrong. No app has been honest enough
-              to show you what. Until now.
-              <br />
-              <br />
-              Cashlight reads your actual statements and shows you where you
-              actually stand — compared to what people at your income around the
-              world are doing. Not charts. Not guesses. A real picture.
+              pay EMIs across banks. Most tools show you charts.
+              Cashlight reads your actual statements and shows you
+              where you really stand — and what your options are.
             </p>
 
             <WaitlistForm
@@ -752,6 +836,51 @@ export function LandingPage() {
 
       <ProcessSection />
 
+      <section className="block" id="health">
+        <div className="wrap-narrow">
+          <div className="section-head reveal">
+            <div className="ses">{"// YOUR FINANCIAL HEALTH"}</div>
+            <h2>
+              Eight dimensions. <em>One honest picture.</em>
+            </h2>
+          </div>
+          <div className="health-grid reveal-stagger">
+            {HEALTH_DIMENSIONS.map((dim, i) => (
+              <div key={i} className="health-card">
+                <div className="health-card-name">{dim.name}</div>
+                <div className="health-card-desc">{dim.description}</div>
+                <div className="health-card-example">
+                  <span className="health-card-example-label">Example:</span> {dim.example}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="block" id="who">
+        <div className="wrap-narrow">
+          <div className="section-head reveal">
+            <div className="ses">{"// WHO IT'S FOR"}</div>
+            <h2>
+              One platform. <em>Every kind of Indian earner.</em>
+            </h2>
+          </div>
+          <div className="archetype-grid reveal-stagger">
+            {ARCHETYPES.map((archetype, i) => (
+              <div key={i} className="archetype-card">
+                <div className="archetype-icon">{archetype.icon}</div>
+                <div className="archetype-name">{archetype.name}</div>
+                <div className="archetype-situation">{archetype.situation}</div>
+                <div className="archetype-health-gap">
+                  <span className="archetype-health-gap-label">Cashlight surfaces:</span> {archetype.healthGap}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="block" id="difference">
         <div className="wrap-narrow">
           <div className="section-head reveal">
@@ -796,6 +925,14 @@ export function LandingPage() {
         </div>
       </section>
 
+      <section className="block" id="important">
+        <div className="wrap-narrow">
+          <div className="important-text reveal">
+            Cashlight is a financial health platform — not a financial advisor. We read your statements, compute your health metrics, and show you what your numbers mean. We show you scenarios, not prescriptions. For specific investment or tax decisions, we&apos;ll always tell you when you need a qualified professional.
+          </div>
+        </div>
+      </section>
+
       <section className="block" id="pricing">
         <div className="wrap">
           <div className="section-head reveal">
@@ -827,13 +964,6 @@ export function LandingPage() {
                 <button type="button">{tier.cta}</button>
               </div>
             ))}
-          </div>
-          <div className="founding reveal">
-            <div className="lbl">{"// founding"}</div>
-            <div className="copy">
-              <b>₹29 / month</b>, locked for life. First 200 users only.
-            </div>
-            <FoundingCounter />
           </div>
         </div>
       </section>

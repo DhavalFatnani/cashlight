@@ -18,7 +18,12 @@ export default function RootLayout({
       lang="en"
       className={`${instrumentSerif.variable} ${dmSans.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <a href="#main" className="skip-link">
+          Skip to main content
+        </a>
+        <main id="main">{children}</main>
+      </body>
     </html>
   );
 }

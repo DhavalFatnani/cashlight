@@ -9,14 +9,14 @@ export type AnchorId = (typeof ANCHOR_IDS)[number];
 
 /** Added to offset so we don't scroll past the label (corrects slight overshoot). */
 const OFFSET_CORRECTION_PX: Record<AnchorId, number> = {
-  how: 22,
-  pricing: 22,
+  how: 0,
+  pricing: -25,
   cta: 6,
 };
 
 const LABEL_SELECTORS: Record<AnchorId, string> = {
   how: "#how",
-  pricing: "#pricing .section-head .ses",
+  pricing: "#pricing",
   cta: "#cta .footer-cta h2",
 };
 
@@ -51,7 +51,10 @@ function getHowScrollTop(): number | null {
   const label = document.getElementById("how");
   const anchor = outer ?? label;
   if (!anchor) return null;
-  return getDocumentY(anchor) - getScrollOffsetPx("how");
+  // Scroll to ~20% into the process section to reveal step 1
+  const outerHeight = outer?.getBoundingClientRect().height || 0;
+  const revealOffset = outerHeight * 0.1;
+  return getDocumentY(anchor) - getScrollOffsetPx("how") + revealOffset;
 }
 
 function scrollToY(top: number, behavior: ScrollBehavior): void {

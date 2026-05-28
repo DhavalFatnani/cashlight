@@ -14,6 +14,7 @@ type ProcessStep = {
   title: string;
   body: ReactNode;
   terminal: ReactNode;
+  banks?: string[];
 };
 
 const PROCESS_STEPS: ProcessStep[] = [
@@ -41,6 +42,7 @@ const PROCESS_STEPS: ProcessStep[] = [
         <div className="ok">✓ 3 files · 1,284 rows</div>
       </>
     ),
+    banks: ["HDFC", "SBI", "ICICI", "Kotak", "IDFC", "Axis", "Yes Bank"],
   },
   {
     num: "ii.",
@@ -117,6 +119,15 @@ function ProcessCard({
           <h3 className="process-card-title">{step.title}</h3>
         </div>
         <p className="process-card-body">{step.body}</p>
+        {step.banks && (
+          <div className="bank-chips">
+            {step.banks.map((bank) => (
+              <span key={bank} className="bank-chip">
+                {bank}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
       <div className="process-terminal console">{step.terminal}</div>
     </motion.article>
@@ -149,6 +160,15 @@ function ProcessStacked() {
                         <h3 className="process-card-title">{step.title}</h3>
                       </div>
                       <p className="process-card-body">{step.body}</p>
+                      {step.banks && (
+                        <div className="bank-chips">
+                          {step.banks.map((bank) => (
+                            <span key={bank} className="bank-chip">
+                              {bank}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                     <div className="process-terminal console">{step.terminal}</div>
                   </article>
