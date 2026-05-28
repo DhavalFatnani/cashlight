@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ProcessSection } from "@/components/marketing/process-section";
-import { SoundToggle } from "@/components/marketing/sound-toggle";
+import { CoinBurst } from "@/components/marketing/coin-burst";
+import { ComplexityVisualization } from "@/components/marketing/complexity-visualization";
 import { SurveyModal } from "@/components/marketing/survey-modal";
 import { ThankYouModal } from "@/components/marketing/thank-you-modal";
 import { isAnchorId, scrollToAnchor } from "@/lib/anchor-scroll";
+import { useGlobalSound } from "@/lib/use-global-sound";
 
 const TICKER_ITEMS = [
   "Multiple bank accounts",
@@ -408,6 +410,8 @@ export function LandingPage() {
   const [surveyBySource, setSurveyBySource] = useState<
     Record<"hero" | "footer", SurveyState>
   >({ hero: "default", footer: "default" });
+  const [clickBursts, setClickBursts] = useState<Array<{ id: number; x: number; y: number }>>([]);
+  const { isEnabled, toggleSound, playChime } = useGlobalSound();
 
   function handleWaitlistSuccess(payload: WaitlistSuccessPayload) {
     if (payload.surveyCompleted) {
@@ -436,6 +440,42 @@ export function LandingPage() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    let burstId = 0;
+
+    function handleClick(e: MouseEvent) {
+      playChime();
+
+      // Offset to position burst at cursor tip (pointed end of arrow)
+      const cursorTipOffsetY = 12;
+      const cursorTipOffsetX = 8;
+      const newBurst = {
+        id: ++burstId,
+        x: e.clientX - cursorTipOffsetX,
+        y: e.clientY - cursorTipOffsetY,
+      };
+      setClickBursts((prev) => [...prev, newBurst]);
+
+      setTimeout(() => {
+        setClickBursts((prev) => prev.filter((b) => b.id !== newBurst.id));
+      }, 1500);
+    }
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'm' || e.key === 'M') {
+        toggleSound();
+      }
+    }
+
+    document.addEventListener('click', handleClick);
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [playChime, toggleSound]);
 
   useEffect(() => {
     const scrollRestoration = history.scrollRestoration;
@@ -602,6 +642,7 @@ export function LandingPage() {
 
   return (
     <>
+      <ComplexityVisualization />
       <nav className={`top${scrolled ? " scrolled" : ""}`} id="topnav">
         <div className="inner">
           <div className="nav-brand">
@@ -609,7 +650,6 @@ export function LandingPage() {
               <span className="dot" />
               Cashlight
             </a>
-            <SoundToggle />
           </div>
           <div className="nav-links">
             <a href="#how">How it works</a>
@@ -638,6 +678,9 @@ export function LandingPage() {
               pay EMIs across banks. Most tools show you charts.
               Cashlight reads your actual statements and shows you
               where you really stand — and what your options are.
+            </p>
+            <p className="hero-hint reveal">
+              <em>Try clicking the nodes in the background to make payments</em>
             </p>
 
             <WaitlistForm
@@ -1037,6 +1080,9 @@ export function LandingPage() {
           onClose={closeModal}
         />
       )}
+      {clickBursts.map((burst) => (
+        <CoinBurst key={burst.id} x={burst.x} y={burst.y} />
+      ))}
     </>
   );
 }
