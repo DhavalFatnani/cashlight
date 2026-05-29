@@ -6,7 +6,7 @@ export type SurveyPayload = {
   situation: string[];
   current_tool: string;
   pain_hours: string;
-  pain_gap: string;
+  pain_gap: string[];
   pain_gap_other: string | null;
   wtp_band: string;
   feature_priorities: string[];

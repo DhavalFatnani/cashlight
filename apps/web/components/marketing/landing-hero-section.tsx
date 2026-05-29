@@ -41,7 +41,6 @@ export function LandingHeroSection({
           <WaitlistForm
             source="hero"
             label="Want to know where you actually stand?"
-            noteSuffix=", locked for life"
             surveyState={surveyState}
             onWaitlistSuccess={onWaitlistSuccess}
           />

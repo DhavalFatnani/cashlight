@@ -6,10 +6,7 @@ import {
   type SurveyState,
   type WaitlistSuccessPayload,
 } from "@/components/marketing/waitlist-form";
-import {
-  FOUNDING_PRICE_LABEL,
-  WAITLIST_DISPLAY_POSITION,
-} from "@/lib/marketing-content";
+import { WAITLIST_DISPLAY_POSITION } from "@/lib/marketing-content";
 
 type LandingCtaSectionProps = {
   surveyState: SurveyState;
@@ -26,11 +23,11 @@ export function LandingCtaSection({
         <h2 className="reveal">
           Want to know where you <em>actually</em> stand?
         </h2>
-        <p className="ps reveal">Founding list · we&apos;ll tell you when it&apos;s ready.</p>
+        <p className="ps reveal">Join the waitlist — we&apos;ll tell you when it&apos;s ready.</p>
         <WaitlistForm
           source="cta"
-          label="Get on the founding list"
-          submitLabel={`Get founding access — ${FOUNDING_PRICE_LABEL}`}
+          label="Join the waitlist"
+          submitLabel="Join the waitlist"
           listPosition={WAITLIST_DISPLAY_POSITION}
           surveyState={surveyState}
           onWaitlistSuccess={onWaitlistSuccess}

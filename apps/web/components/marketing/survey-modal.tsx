@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import {
@@ -64,8 +64,8 @@ function stepIsValid(step: SurveyStep, answers: SurveyAnswers): boolean {
     case "pain_hours":
       return answers.pain_hours !== null;
     case "pain_gap":
-      if (answers.pain_gap === null) return false;
-      if (answers.pain_gap === "Other") {
+      if (answers.pain_gap.length === 0) return false;
+      if (answers.pain_gap.includes("Other")) {
         return answers.pain_gap_other.trim().length > 0;
       }
       return true;
@@ -94,7 +94,7 @@ export function SurveyModal({
   const [phase, setPhase] = useState<Phase>("questions");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
+  const otherInputRef = useRef<HTMLInputElement>(null);
   const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const step = SURVEY_STEPS[stepIndex];
@@ -128,7 +128,6 @@ export function SurveyModal({
     if (!open) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    dialogRef.current?.focus();
 
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") handleSkip();
@@ -141,11 +140,19 @@ export function SurveyModal({
     };
   }, [open, handleSkip]);
 
-  useEffect(() => {
-    if (open && phase === "questions") {
-      dialogRef.current?.focus();
+  const painGapIncludesOther = answers.pain_gap.includes("Other");
+
+  useLayoutEffect(() => {
+    if (
+      !open ||
+      phase !== "questions" ||
+      step?.id !== "pain_gap" ||
+      !painGapIncludesOther
+    ) {
+      return;
     }
-  }, [open, phase, stepIndex]);
+    otherInputRef.current?.focus({ preventScroll: true });
+  }, [open, phase, step?.id, painGapIncludesOther]);
 
   function goNext() {
     if (!canContinue || !step) return;
@@ -180,8 +187,9 @@ export function SurveyModal({
       current_tool: answers.current_tool as SurveyResponse["current_tool"],
       pain_hours: answers.pain_hours as SurveyResponse["pain_hours"],
       pain_gap: answers.pain_gap as SurveyResponse["pain_gap"],
-      pain_gap_other:
-        answers.pain_gap === "Other" ? answers.pain_gap_other.trim() : null,
+      pain_gap_other: answers.pain_gap.includes("Other")
+        ? answers.pain_gap_other.trim()
+        : null,
       wtp_band: answers.wtp_band as SurveyResponse["wtp_band"],
       feature_priorities:
         answers.feature_priorities as SurveyResponse["feature_priorities"],
@@ -215,7 +223,11 @@ export function SurveyModal({
   }
 
   function chipRowClass(stepType: SurveyStep["type"]): string {
-    if (stepType === "multi" || stepType === "multi_cap") {
+    if (
+      stepType === "multi" ||
+      stepType === "multi_cap" ||
+      stepType === "multi_with_other"
+    ) {
       return "survey-chip-row";
     }
     return "survey-chip-row survey-chip-row--stacked";
@@ -229,7 +241,7 @@ export function SurveyModal({
     if (step.type === "text" && step.hint) {
       return step.hint;
     }
-    if (step.type === "multi") {
+    if (step.type === "multi" || step.type === "multi_with_other") {
       return "Select all that apply";
     }
     return null;
@@ -281,7 +293,7 @@ export function SurveyModal({
             })}
           </div>
         );
-      case "single_with_other":
+      case "multi_with_other":
         return (
           <div className="survey-answers-stack">
             <div className={chipRowClass(step.type)} role="group" aria-labelledby="survey-q">
@@ -289,24 +301,39 @@ export function SurveyModal({
                 <Chip
                   key={opt}
                   label={opt}
-                  selected={answers.pain_gap === opt}
-                  onClick={() =>
-                    setAnswers((a) => ({
-                      ...a,
-                      pain_gap: opt,
-                      pain_gap_other: opt === "Other" ? a.pain_gap_other : "",
-                    }))
-                  }
+                  selected={answers.pain_gap.includes(opt)}
+                  onClick={() => {
+                    const selectingOther =
+                      opt === "Other" && !answers.pain_gap.includes("Other");
+                    setAnswers((a) => {
+                      const next = toggleIn(a.pain_gap, opt);
+                      return {
+                        ...a,
+                        pain_gap: next,
+                        pain_gap_other: next.includes("Other")
+                          ? a.pain_gap_other
+                          : "",
+                      };
+                    });
+                    if (selectingOther) {
+                      requestAnimationFrame(() => {
+                        otherInputRef.current?.focus({ preventScroll: true });
+                      });
+                    }
+                  }}
                 />
               ))}
             </div>
-            {answers.pain_gap === "Other" && (
+            {painGapIncludesOther && (
               <input
+                ref={otherInputRef}
                 type="text"
                 className="survey-text-input"
                 placeholder="Briefly describe…"
                 maxLength={PAIN_GAP_OTHER_MAX}
                 value={answers.pain_gap_other}
+                autoComplete="off"
+                aria-label="Describe your other concern"
                 onChange={(e) =>
                   setAnswers((a) => ({ ...a, pain_gap_other: e.target.value }))
                 }
@@ -371,12 +398,10 @@ export function SurveyModal({
       }}
     >
       <div
-        ref={dialogRef}
         className="modal-dialog survey-modal"
         role="dialog"
         aria-modal="true"
         aria-labelledby={phase === "questions" ? "survey-q" : "survey-thanks-title"}
-        tabIndex={-1}
       >
         {phase === "thanks" ? (
           <>

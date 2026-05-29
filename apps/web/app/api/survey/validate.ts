@@ -67,12 +67,15 @@ export function validateSurveyPayload(input: unknown): ValidateResult {
     return { ok: false, error: "Invalid pain_hours" };
   }
 
-  if (!isStringFrom(body.pain_gap, PAIN_GAP_OPTIONS)) {
-    return { ok: false, error: "Invalid pain_gap" };
+  if (
+    !isStringArrayFrom(body.pain_gap, PAIN_GAP_OPTIONS) ||
+    body.pain_gap.length === 0
+  ) {
+    return { ok: false, error: "Pick at least one pain point" };
   }
 
   let painGapOther: string | null = null;
-  if (body.pain_gap === "Other") {
+  if (body.pain_gap.includes("Other")) {
     if (typeof body.pain_gap_other !== "string") {
       return { ok: false, error: "Please describe your other gap" };
     }

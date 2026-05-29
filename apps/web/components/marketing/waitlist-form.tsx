@@ -1,10 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import {
-  FOUNDING_PRICE_LABEL,
-  WAITLIST_DISPLAY_POSITION,
-} from "@/lib/marketing-content";
+import { WAITLIST_DISPLAY_POSITION } from "@/lib/marketing-content";
 
 type FormState = "idle" | "loading" | "done" | "error";
 
@@ -23,8 +20,8 @@ type WaitlistFormProps = {
   source: WaitlistSource;
   label: string;
   submitLabel?: string;
+  eyebrow?: string;
   listPosition?: number;
-  noteSuffix?: string;
   surveyState: SurveyState;
   onSignup?: () => void;
   onWaitlistSuccess: (payload: WaitlistSuccessPayload) => void;
@@ -33,9 +30,9 @@ type WaitlistFormProps = {
 export function WaitlistForm({
   source,
   label,
-  submitLabel = `Get founding access — ${FOUNDING_PRICE_LABEL}`,
+  submitLabel = "Join the waitlist",
+  eyebrow = "// waitlist",
   listPosition = WAITLIST_DISPLAY_POSITION,
-  noteSuffix = "",
   surveyState,
   onSignup,
   onWaitlistSuccess,
@@ -109,7 +106,7 @@ export function WaitlistForm({
       aria-label="Join waitlist"
     >
       <div className="form-label">
-        {label} <small>{"// founding · 200 spots"}</small>
+        {label} <small>{eyebrow}</small>
       </div>
       <div className="form-row">
         <input
@@ -129,11 +126,8 @@ export function WaitlistForm({
         </button>
       </div>
       <div className="form-note">
-        No credit card. No spam. Locked at {FOUNDING_PRICE_LABEL} for life.{" "}
-        <em>
-          You&apos;re #{listPosition} on the list.
-        </em>
-        {noteSuffix}
+        No credit card. No payment now.{" "}
+        <em>You&apos;re #{listPosition} on the list — we&apos;ll email when it&apos;s ready.</em>
       </div>
       {errorMessage ? (
         <div className="form-error" role="alert">

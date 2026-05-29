@@ -95,12 +95,11 @@ export type SurveyStepSingle = SurveyStepBase & {
   autoAdvance: true;
 };
 
-export type SurveyStepSingleWithOther = SurveyStepBase & {
-  type: "single_with_other";
+export type SurveyStepMultiWithOther = SurveyStepBase & {
+  type: "multi_with_other";
   options: readonly string[];
   otherOption: "Other";
   required: true;
-  autoAdvance: false;
 };
 
 export type SurveyStepMultiCap = SurveyStepBase & {
@@ -119,7 +118,7 @@ export type SurveyStepText = SurveyStepBase & {
 export type SurveyStep =
   | SurveyStepMulti
   | SurveyStepSingle
-  | SurveyStepSingleWithOther
+  | SurveyStepMultiWithOther
   | SurveyStepMultiCap
   | SurveyStepText;
 
@@ -150,12 +149,11 @@ export const SURVEY_STEPS: SurveyStep[] = [
   },
   {
     id: "pain_gap",
-    type: "single_with_other",
+    type: "multi_with_other",
     question: "What bothers you most about the financial tools you've tried?",
     options: PAIN_GAP_OPTIONS,
     otherOption: "Other",
     required: true,
-    autoAdvance: false,
   },
   {
     id: "wtp_band",
@@ -189,7 +187,7 @@ export type SurveyAnswers = {
   situation: string[];
   current_tool: string | null;
   pain_hours: string | null;
-  pain_gap: string | null;
+  pain_gap: string[];
   pain_gap_other: string;
   wtp_band: string | null;
   feature_priorities: string[];
@@ -200,7 +198,7 @@ export const EMPTY_SURVEY_ANSWERS: SurveyAnswers = {
   situation: [],
   current_tool: null,
   pain_hours: null,
-  pain_gap: null,
+  pain_gap: [],
   pain_gap_other: "",
   wtp_band: null,
   feature_priorities: [],
@@ -213,7 +211,7 @@ export type SurveyResponse = {
   situation: Array<(typeof SITUATION_OPTIONS)[number]>;
   current_tool: (typeof CURRENT_TOOL_OPTIONS)[number];
   pain_hours: (typeof PAIN_HOURS_OPTIONS)[number];
-  pain_gap: (typeof PAIN_GAP_OPTIONS)[number];
+  pain_gap: Array<(typeof PAIN_GAP_OPTIONS)[number]>;
   pain_gap_other: string | null;
   wtp_band: (typeof WTP_OPTIONS)[number];
   feature_priorities: Array<(typeof FEATURE_OPTIONS)[number]>;

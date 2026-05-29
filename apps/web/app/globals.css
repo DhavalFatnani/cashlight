@@ -3735,6 +3735,9 @@ footer.site-footer--compact::before {
   border-radius: 8px;
   transition: border-color .18s;
   width: 100%;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
 }
 
 .survey-textarea {
