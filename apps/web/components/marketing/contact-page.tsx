@@ -25,7 +25,7 @@ export function ContactPage() {
           <div className="wrap-narrow">
             <div className="section-head">
               <div className="left">
-                <div className="ses">// CONTACT</div>
+                <div className="ses">{"// CONTACT"}</div>
                 <h2>
                   Talk to the people building <em>Cashlight.</em>
                 </h2>
