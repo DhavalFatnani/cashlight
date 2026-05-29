@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { dmSans, instrumentSerif } from "@/lib/fonts";
 import { rootRobotsMetadata } from "@/lib/seo/metadata";
+import { getDefaultOgImageUrl } from "@/lib/seo/og-image-url";
+import { OG_IMAGE_ALT, OG_IMAGE_SIZE } from "@/lib/seo/og-image";
 import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
@@ -8,6 +10,7 @@ const siteUrl = getSiteUrl();
 const defaultTitle = "Cashlight | Your money, finally understood.";
 const defaultDescription =
   "AI-powered financial health for Indians. Read your statements, see where you stand, explore scenarios. No commissions, no products to sell.";
+const defaultOgImageUrl = getDefaultOgImageUrl().href;
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
@@ -25,10 +28,11 @@ export const metadata: Metadata = {
     description: defaultDescription,
     images: [
       {
-        url: "/api/og",
-        width: 1200,
-        height: 630,
-        alt: "Cashlight — Your money, finally understood.",
+        url: defaultOgImageUrl,
+        secureUrl: defaultOgImageUrl,
+        width: OG_IMAGE_SIZE.width,
+        height: OG_IMAGE_SIZE.height,
+        alt: OG_IMAGE_ALT,
         type: "image/png",
       },
     ],
@@ -39,12 +43,20 @@ export const metadata: Metadata = {
     description: defaultDescription,
     images: [
       {
-        url: "/api/og",
-        width: 1200,
-        height: 630,
-        alt: "Cashlight — Your money, finally understood.",
+        url: defaultOgImageUrl,
+        width: OG_IMAGE_SIZE.width,
+        height: OG_IMAGE_SIZE.height,
+        alt: OG_IMAGE_ALT,
       },
     ],
+  },
+  other: {
+    "og:image": defaultOgImageUrl,
+    "og:image:secure_url": defaultOgImageUrl,
+    "og:image:width": String(OG_IMAGE_SIZE.width),
+    "og:image:height": String(OG_IMAGE_SIZE.height),
+    "og:image:type": "image/png",
+    "og:image:alt": OG_IMAGE_ALT,
   },
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],

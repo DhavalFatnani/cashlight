@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getDefaultOgImageUrl } from "@/lib/seo/og-image-url";
+import { OG_IMAGE_ALT, OG_IMAGE_SIZE } from "@/lib/seo/og-image";
 import { getSiteUrl, shouldIndexSite } from "@/lib/site-url";
 
 export type MarketingPath =
@@ -8,8 +10,6 @@ export type MarketingPath =
   | "/why"
   | "/contact";
 
-const DEFAULT_OG_ALT = "Cashlight — Your money, finally understood.";
-
 type BuildPageMetadataInput = {
   path: MarketingPath;
   title: string;
@@ -17,15 +17,29 @@ type BuildPageMetadataInput = {
   ogImageAlt?: string;
 };
 
+function openGraphImages(ogImageAlt: string): NonNullable<Metadata["openGraph"]>["images"] {
+  const ogImageUrl = getDefaultOgImageUrl().href;
+  return [
+    {
+      url: ogImageUrl,
+      secureUrl: ogImageUrl,
+      width: OG_IMAGE_SIZE.width,
+      height: OG_IMAGE_SIZE.height,
+      alt: ogImageAlt,
+      type: "image/png",
+    },
+  ];
+}
+
 export function buildPageMetadata({
   path,
   title,
   description,
-  ogImageAlt = DEFAULT_OG_ALT,
+  ogImageAlt = OG_IMAGE_ALT,
 }: BuildPageMetadataInput): Metadata {
   const siteUrl = getSiteUrl();
   const canonicalUrl = new URL(path, siteUrl);
-  const ogImageUrl = new URL("/api/og", siteUrl);
+  const ogImageUrl = getDefaultOgImageUrl().href;
 
   return {
     title: { absolute: title },
@@ -40,15 +54,7 @@ export function buildPageMetadata({
       siteName: "Cashlight",
       title,
       description,
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: ogImageAlt,
-          type: "image/png",
-        },
-      ],
+      images: openGraphImages(ogImageAlt),
     },
     twitter: {
       card: "summary_large_image",
@@ -57,11 +63,19 @@ export function buildPageMetadata({
       images: [
         {
           url: ogImageUrl,
-          width: 1200,
-          height: 630,
+          width: OG_IMAGE_SIZE.width,
+          height: OG_IMAGE_SIZE.height,
           alt: ogImageAlt,
         },
       ],
+    },
+    other: {
+      "og:image": ogImageUrl,
+      "og:image:secure_url": ogImageUrl,
+      "og:image:width": String(OG_IMAGE_SIZE.width),
+      "og:image:height": String(OG_IMAGE_SIZE.height),
+      "og:image:type": "image/png",
+      "og:image:alt": ogImageAlt,
     },
   };
 }

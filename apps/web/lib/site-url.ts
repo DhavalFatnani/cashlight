@@ -19,6 +19,11 @@ export function getSiteUrl(): URL {
   return new URL(CANONICAL_SITE_ORIGIN);
 }
 
+function isCashlightHost(hostname: string): boolean {
+  const host = hostname.toLowerCase();
+  return host === "cashlight.in" || host === "www.cashlight.in";
+}
+
 /** Index only the real production domain; keep previews and local dev out of Google. */
 export function shouldIndexSite(): boolean {
   if (process.env.NODE_ENV === "development") {
@@ -27,13 +32,23 @@ export function shouldIndexSite(): boolean {
   if (process.env.VERCEL_ENV !== "production") {
     return false;
   }
+
+  // Custom domain on Vercel — index even if NEXT_PUBLIC_SITE_URL still points at *.vercel.app
+  const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (productionHost && isCashlightHost(productionHost.replace(/^https?:\/\//, ""))) {
+    return true;
+  }
+
   const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
   if (!raw) {
     return true;
   }
   try {
     const host = new URL(raw).hostname;
-    return host === "cashlight.in" || host === "www.cashlight.in";
+    if (host.endsWith(".vercel.app")) {
+      return false;
+    }
+    return isCashlightHost(host);
   } catch {
     return true;
   }
