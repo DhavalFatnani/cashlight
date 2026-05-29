@@ -648,7 +648,7 @@ export function LandingPage() {
       <nav className={`top${scrolled ? " scrolled" : ""}`} id="topnav">
         <div className="inner">
           <div className="nav-brand">
-            <a href="#" className="logo">
+            <a href="/" className="logo">
               <span className="dot" />
               Cashlight
             </a>
@@ -1037,16 +1037,14 @@ export function LandingPage() {
         </div>
         <div className="wrap footer-meta">
           <div className="row">
-            <a href="#" className="logo" style={{ fontSize: 17 }}>
+            <a href="/" className="logo" style={{ fontSize: 17 }}>
               <span className="dot" />
               Cashlight
             </a>
             <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
               <a href="#how">How it works</a>
               <a href="#pricing">Pricing</a>
-              <a href="#">Privacy</a>
-              <a href="#">Security</a>
-              <a href="#">Contact</a>
+              <a href="/contact">Contact</a>
             </div>
             <div>© 2026 Cashlight · Built in India</div>
           </div>

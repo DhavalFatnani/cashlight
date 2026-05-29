@@ -1732,6 +1732,116 @@ footer .disclaimer {
   color: var(--ink-dim);
 }
 
+footer.site-footer--compact {
+  min-height: 0;
+  border-top: 1px solid var(--line);
+}
+footer.site-footer--compact::before {
+  display: none;
+}
+
+/* contact page */
+.contact-page {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  padding-top: 88px;
+  padding-bottom: 48px;
+}
+.contact-block {
+  padding-top: var(--section-padding-y-md);
+  padding-bottom: var(--section-padding-y-sm);
+}
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 40px;
+}
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px 22px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s, background 0.2s;
+}
+.contact-card:hover {
+  border-color: var(--line-2);
+  background: var(--card-2);
+}
+.contact-card-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.contact-card-label::before {
+  content: "// ";
+}
+.contact-card-value {
+  font-family: var(--display);
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  color: var(--gold);
+  font-weight: 500;
+}
+.contact-card-hint {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-dim);
+}
+.contact-note {
+  margin-top: 36px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(22, 19, 13, 0.6);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink-dim);
+}
+.contact-note p + p {
+  margin-top: 14px;
+}
+.contact-note a {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.contact-note a:hover {
+  color: var(--gold-soft);
+}
+.contact-back {
+  margin-top: 32px;
+  font-size: 14px;
+  color: var(--ink-dim);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.contact-back a:hover {
+  color: var(--gold);
+}
+.contact-back-sep {
+  color: var(--ink-mute);
+  user-select: none;
+}
+@media (max-width: 640px) {
+  .contact-page {
+    padding-top: 72px;
+  }
+  .contact-grid {
+    grid-template-columns: 1fr;
+    margin-top: 28px;
+  }
+}
+
 /* reveal */
 .reveal {
   opacity: 0;
