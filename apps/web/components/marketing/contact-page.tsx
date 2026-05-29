@@ -5,8 +5,7 @@ import {
   contactMailtoUrl,
   contactWhatsAppUrl,
 } from "@/lib/contact";
-import { MarketingFooter } from "@/components/marketing/marketing-footer";
-import { MarketingNav } from "@/components/marketing/marketing-nav";
+import { MarketingPageShell } from "@/components/marketing/marketing-page-shell";
 
 const WHATSAPP_DISPLAY = `+${CONTACT_WHATSAPP_E164.slice(0, 2)} ${CONTACT_WHATSAPP_E164.slice(2, 7)} ${CONTACT_WHATSAPP_E164.slice(7)}`;
 
@@ -18,69 +17,65 @@ export function ContactPage() {
   );
 
   return (
-    <>
-      <MarketingNav />
-      <div className="contact-page">
-        <section className="block contact-block">
-          <div className="wrap-narrow">
-            <div className="section-head">
-              <div className="left">
-                <div className="ses">{"// CONTACT"}</div>
-                <h2>
-                  Talk to the people building <em>Cashlight.</em>
-                </h2>
-                <p className="lede">
-                  Questions about the waitlist, early access, or how we read your
-                  numbers — reach out directly. No ticket queues, no chatbots.
-                </p>
-              </div>
-            </div>
-
-            <div className="contact-grid">
-              <a href={mailWaitlist} className="contact-card">
-                <span className="contact-card-label">Email</span>
-                <span className="contact-card-value">{CONTACT_EMAIL}</span>
-                <span className="contact-card-hint">
-                  Waitlist, founding tier, or early access
-                </span>
-              </a>
-
-              <a
-                href={waGeneral}
-                className="contact-card"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className="contact-card-label">WhatsApp</span>
-                <span className="contact-card-value">{WHATSAPP_DISPLAY}</span>
-                <span className="contact-card-hint">
-                  Quick questions — we reply when we can
-                </span>
-              </a>
-            </div>
-
-            <div className="contact-note">
-              <p>
-                We do not sell financial products and we do not give
-                stock-or-fund recommendations. If you are writing about your
-                account or statements, tell us which banks you use — we will
-                point you to what Cashlight can read today.
-              </p>
-              <p>
-                Prefer email for anything sensitive.{" "}
-                <a href={mailGeneral}>Send a message</a>.
+    <MarketingPageShell fitViewport className="contact-page contact-page-shell">
+      <section className="block contact-block contact-page-section" id="contact">
+        <div className="wrap-narrow">
+          <div className="section-head">
+            <div className="left">
+              <div className="ses">{"// CONTACT"}</div>
+              <h2>
+                Talk to the people building <em>Cashlight.</em>
+              </h2>
+              <p className="lede">
+                Questions about the waitlist, early access, or how we read your
+                numbers — reach out directly. No ticket queues, no chatbots.
               </p>
             </div>
+          </div>
 
-            <p className="contact-back">
-              <Link href="/">← Back to home</Link>
-              <span className="contact-back-sep">·</span>
-              <Link href="/#cta">Join the waitlist</Link>
+          <div className="contact-grid">
+            <a href={mailWaitlist} className="contact-card">
+              <span className="contact-card-label">Email</span>
+              <span className="contact-card-value">{CONTACT_EMAIL}</span>
+              <span className="contact-card-hint">
+                Waitlist, founding tier, or early access
+              </span>
+            </a>
+
+            <a
+              href={waGeneral}
+              className="contact-card"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="contact-card-label">WhatsApp</span>
+              <span className="contact-card-value">{WHATSAPP_DISPLAY}</span>
+              <span className="contact-card-hint">
+                Quick questions — we reply when we can
+              </span>
+            </a>
+          </div>
+
+          <div className="contact-note">
+            <p>
+              We do not sell financial products and we do not give
+              stock-or-fund recommendations. If you are writing about your
+              account or statements, tell us which banks you use — we will
+              point you to what Cashlight can read today.
+            </p>
+            <p>
+              Prefer email for anything sensitive.{" "}
+              <a href={mailGeneral}>Send a message</a>.
             </p>
           </div>
-        </section>
-      </div>
-      <MarketingFooter />
-    </>
+
+          <p className="contact-back">
+            <Link href="/">← Back to home</Link>
+            <span className="contact-back-sep">·</span>
+            <Link href="/#cta">Join the waitlist</Link>
+          </p>
+        </div>
+      </section>
+    </MarketingPageShell>
   );
 }

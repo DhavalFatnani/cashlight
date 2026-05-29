@@ -30,8 +30,8 @@ export function MarketingNav({ showCta = true }: MarketingNavProps) {
           </Link>
         </div>
         <div className="nav-links">
-          <Link href="/#how">How it works</Link>
-          <Link href="/#pricing">Pricing</Link>
+          <Link href="/how-it-works">How it works</Link>
+          <Link href="/pricing">Pricing</Link>
           <Link href="/contact">Contact</Link>
         </div>
         {showCta ? (

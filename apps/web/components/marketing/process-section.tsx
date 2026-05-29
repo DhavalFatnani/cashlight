@@ -7,6 +7,7 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
+import { HowItWorksIntroPanel } from "@/components/marketing/how-it-works-intro-panel";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 type ProcessStep = {
@@ -136,43 +137,50 @@ function ProcessCard({
 
 function ProcessStacked() {
   return (
-    <section className="block process-section">
+    <section
+      id="how"
+      className="block process-section"
+      aria-labelledby="how-it-works-intro-heading"
+    >
+      <HowItWorksIntroPanel />
       <div className="wrap">
         <div className="process-outer process-outer--static">
           <div className="process-sticky process-sticky--static">
-            <div className="process-left reveal">
-              <div id="how" className="process-label ses">{"// process"}</div>
-              <h2 className="process-headline">
-                You drop your statements. <em>We read every line.</em>
-              </h2>
-              <p className="process-description">
-                Three steps, in plain English. No magic, no &ldquo;patent-pending AI
-                engine.&rdquo; Just careful reading. And a little arithmetic.
-              </p>
-            </div>
-            <div className="process-right process-right--static">
-              <div className="process-cards-static reveal-stagger">
-                {PROCESS_STEPS.map((step) => (
-                  <article key={step.num} className="process-card step">
-                    <div className="copy">
-                      <div className="head">
-                        <div className="num">{step.num}</div>
-                        <h3 className="process-card-title">{step.title}</h3>
-                      </div>
-                      <p className="process-card-body">{step.body}</p>
-                      {step.banks && (
-                        <div className="bank-chips">
-                          {step.banks.map((bank) => (
-                            <span key={bank} className="bank-chip">
-                              {bank}
-                            </span>
-                          ))}
+            <div className="process-sticky-inner">
+              <div className="process-left reveal">
+                <div className="process-label ses">{"// process"}</div>
+                <h2 className="process-headline">
+                  You drop your statements. <em>We read every line.</em>
+                </h2>
+                <p className="process-description">
+                  Three steps, in plain English. No magic, no &ldquo;patent-pending AI
+                  engine.&rdquo; Just careful reading. And a little arithmetic.
+                </p>
+              </div>
+              <div className="process-right process-right--static">
+                <div className="process-cards-static reveal-stagger">
+                  {PROCESS_STEPS.map((step) => (
+                    <article key={step.num} className="process-card step">
+                      <div className="copy">
+                        <div className="head">
+                          <div className="num">{step.num}</div>
+                          <h3 className="process-card-title">{step.title}</h3>
                         </div>
-                      )}
-                    </div>
-                    <div className="process-terminal console">{step.terminal}</div>
-                  </article>
-                ))}
+                        <p className="process-card-body">{step.body}</p>
+                        {step.banks && (
+                          <div className="bank-chips">
+                            {step.banks.map((bank) => (
+                              <span key={bank} className="bank-chip">
+                                {bank}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <div className="process-terminal console">{step.terminal}</div>
+                    </article>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -226,14 +234,16 @@ function ProcessStickyScroll() {
 
   return (
     <section
+      id="how"
       className="block process-section"
-      aria-labelledby="process-heading"
+      aria-labelledby="how-it-works-intro-heading"
     >
+      <HowItWorksIntroPanel />
       <div ref={sectionRef} className="process-outer">
         <div className="process-sticky">
           <div className="wrap process-sticky-inner">
             <motion.div className="process-left" style={{ opacity: leftOpacity }}>
-              <div id="how" className="process-label ses">{"// process"}</div>
+              <div className="process-label ses">{"// process"}</div>
               <div className="process-step-counter" aria-live="polite">
                 {STEP_LABELS.map((label, i) => (
                   <span key={label} className={i === activeStep ? "is-active" : ""}>
@@ -302,7 +312,8 @@ export function ProcessSection() {
 
   if (mode === null) {
     return (
-      <section className="block process-section" aria-hidden>
+      <section id="how" className="block process-section" aria-hidden>
+        <HowItWorksIntroPanel />
         <div className="process-outer process-outer--static" />
       </section>
     );

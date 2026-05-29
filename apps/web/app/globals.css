@@ -738,27 +738,16 @@ section.block {
   padding-top: var(--section-padding-y);
   padding-bottom: var(--section-padding-y);
   position: relative;
-  min-height: 50dvh;
-}
-@media (max-width: 768px) {
-  section.block {
-    min-height: 40dvh;
-  }
 }
 #difference.block {
   padding-top: var(--section-padding-y-md);
   padding-bottom: var(--section-padding-y-md);
 }
 #who.block {
-  min-height: 100dvh;
   background: linear-gradient(180deg, rgba(232, 170, 80, .03), transparent 50%);
 }
 #pricing.block {
-  min-height: 100dvh;
   background: linear-gradient(180deg, rgba(232, 170, 80, .02), transparent 40%);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 #difference .section-head {
   margin-bottom: 28px;
@@ -806,9 +795,16 @@ section.block {
 
 /* Stacked section heads (no side meta) — same rhythm as #problems */
 #problems .section-head,
-#difference .section-head {
+#difference .section-head,
+.marketing-page .section-head:not(:has(.right)),
+.contact-page .section-head:not(:has(.right)) {
   display: block;
+  align-items: stretch;
   margin-bottom: 2.625rem;
+}
+.marketing-page .section-head:has(.right),
+.contact-page .section-head:has(.right) {
+  align-items: flex-end;
 }
 .section-head .right {
   font-family: var(--mono);
@@ -939,6 +935,32 @@ section.block {
     padding-bottom: 0;
     overflow: visible;
   }
+}
+
+/* /how-it-works intro — one viewport, centered in area below fixed nav */
+.how-it-works-page.marketing-page {
+  padding-top: 0;
+}
+.process-intro-panel {
+  min-height: 100dvh;
+  min-height: 100svh;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 66px 32px;
+}
+.process-intro-head {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 0;
+}
+.process-intro-head .ses {
+  margin-bottom: 0;
+}
+.process-intro-head .lede {
+  margin-top: 0;
 }
 
 .process-outer {
@@ -1084,6 +1106,28 @@ section.block {
   display: block;
   overflow: visible;
 }
+.process-sticky--static .process-sticky-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+}
+@media (min-width: 769px) {
+  .process-sticky--static .process-sticky-inner {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 48px;
+  }
+  .process-sticky--static .process-left {
+    width: 42%;
+    padding-right: 0;
+    flex-shrink: 0;
+  }
+  .process-sticky--static .process-right--static {
+    width: 58%;
+    flex: 1;
+  }
+}
 
 .process-right--static {
   width: 100%;
@@ -1114,6 +1158,11 @@ section.block {
   #how.process-section.block {
     padding-top: var(--section-padding-y-md);
     padding-bottom: var(--section-padding-y-md);
+  }
+
+  .process-intro-panel {
+    min-height: 0;
+    padding: 0 18px 2rem;
   }
 
   .process-outer,
@@ -1402,6 +1451,47 @@ section.block {
   font-size: 13px;
 }
 
+/* /how-it-works — dimensions grid (slightly compact) */
+#dimensions.block {
+  padding-top: 2.5rem;
+  padding-bottom: 2.75rem;
+}
+#dimensions .section-head {
+  margin-bottom: 2rem;
+}
+#dimensions .section-head .ses {
+  margin-bottom: 10px;
+  font-size: 11px;
+}
+#dimensions .section-head h2 {
+  font-size: clamp(1.625rem, 3vw, 2.375rem);
+}
+#dimensions .section-head .lede {
+  font-size: 1rem;
+  margin-top: 0.75rem;
+  line-height: 1.55;
+}
+#dimensions .health-grid {
+  gap: 12px;
+}
+#dimensions .health-card {
+  padding: 16px 18px;
+  gap: 6px;
+  border-radius: 10px;
+}
+#dimensions .health-card-name {
+  font-size: 11px;
+}
+#dimensions .health-card-desc {
+  font-size: 14px;
+  line-height: 1.45;
+}
+#dimensions .health-card-example,
+#dimensions .health-card-example-label {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 /* archetype grid */
 .archetype-grid {
   display: grid;
@@ -1654,11 +1744,14 @@ section.block {
 }
 
 /* footer + merged final CTA */
-footer.site-footer {
+footer.site-footer:not(.site-footer--compact) {
   border-top: 1px solid var(--line);
   position: relative;
   overflow: hidden;
-  min-height: 100dvh;
+}
+footer.site-footer {
+  border-top: 1px solid var(--line);
+  position: relative;
 }
 footer.site-footer::before {
   content: "";
@@ -1670,11 +1763,10 @@ footer.site-footer::before {
 .footer-cta {
   position: relative;
   text-align: center;
-  padding: var(--section-padding-y-md) 32px calc(var(--section-padding-y-sm) + 2rem);
+  padding: var(--section-padding-y-md) 32px var(--section-padding-y-sm);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: 100dvh;
+  justify-content: flex-start;
 }
 .footer-cta h2 {
   font-family: var(--display);
@@ -1768,16 +1860,715 @@ footer.site-footer--compact::before {
   display: none;
 }
 
-/* contact page */
+/* landing — hero CTA scroll + mobile report order */
+.hero-report-slot {
+  min-width: 0;
+  width: 100%;
+}
+.hero-grid--landing {
+  align-items: start;
+}
+@media (min-width: 1021px) {
+  .landing-page .hero-grid--landing {
+    align-items: stretch;
+  }
+  .landing-page .hero-report-slot {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  .landing-page .hero-report-slot .report {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .landing-page .hero-report-slot .report-head {
+    padding: 16px 20px;
+    flex-shrink: 0;
+  }
+  .landing-page .hero-report-slot .report-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 26px 24px 10px;
+  }
+  .landing-page .hero-report-slot .summary-row .name {
+    font-size: 26px;
+  }
+  .landing-page .hero-report-slot .summary-row .score {
+    font-size: 56px;
+  }
+  .landing-page .hero-report-slot .summary-row .score .of {
+    font-size: 20px;
+  }
+  .landing-page .hero-report-slot .metric-grid {
+    flex: 1;
+    margin-top: 20px;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    min-height: 15rem;
+  }
+  .landing-page .hero-report-slot .metric {
+    padding: 16px 20px;
+    gap: 8px;
+    justify-content: space-between;
+  }
+  .landing-page .hero-report-slot .metric .val {
+    font-size: 20px;
+  }
+  .landing-page .hero-report-slot .metric .nm {
+    font-size: 12px;
+  }
+  .landing-page .hero-report-slot .metric .bar {
+    height: 4px;
+    margin-top: auto;
+  }
+  .landing-page .hero-report-slot .report-footer {
+    padding: 14px 20px;
+    flex-shrink: 0;
+    font-size: 12px;
+  }
+  .hero-grid--landing {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+    gap: clamp(36px, 4vw, 60px);
+  }
+}
+.hero-eyebrow {
+  margin-bottom: 16px;
+}
+.landing-report-section {
+  padding-top: var(--section-padding-y-md);
+  padding-bottom: var(--section-padding-y-md);
+}
+.landing-report-card-wrap {
+  margin-top: 8px;
+}
+.report-sample-caption {
+  margin-top: 16px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-dim);
+  text-align: center;
+}
+.founding--pricing-teaser {
+  margin: 8px 0 0;
+  max-width: none;
+}
+.pricing-teaser-link {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 15px;
+}
+.pricing-teaser-link a {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.pricing-teaser-link a:hover {
+  color: var(--gold-soft);
+}
+.pricing-teaser-block .section-head {
+  margin-bottom: 2rem;
+}
+.form-note em {
+  font-style: italic;
+  color: var(--ink-dim);
+}
+.hero-cta-row {
+  margin-top: 22px;
+}
+.hero-cta-scroll {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.hero-cta-note {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--ink-dim);
+  line-height: 1.5;
+}
+@media (max-width: 1020px) {
+  .hero-grid--landing {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .hero-grid--landing .hero-left {
+    order: 1;
+  }
+  .hero-grid--landing .hero-report-slot {
+    order: 2;
+  }
+}
+.ticker--lite {
+  margin-top: 2rem;
+  padding: 12px 0;
+}
+.ticker--lite .ticker-label {
+  font-size: 10px;
+}
+.ticker--lite .pill {
+  font-size: 11px;
+  padding: 5px 12px;
+}
+
+/* combined explainer — desktop cards + mobile accordion */
+.gap-list-desktop {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 40px;
+}
+.gap-accordion-mobile {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+}
+.gap-card,
+.gap-accordion {
+  padding: 20px 22px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+.gap-card--err,
+.gap-accordion--err {
+  border-color: rgba(227, 120, 116, 0.35);
+}
+.gap-card--warn,
+.gap-accordion--warn {
+  border-color: rgba(232, 170, 80, 0.28);
+}
+.gap-card-headline,
+.gap-accordion-summary {
+  font-family: var(--display);
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--ink);
+  list-style: none;
+  cursor: pointer;
+}
+.gap-accordion-summary::-webkit-details-marker {
+  display: none;
+}
+.gap-card-body,
+.gap-accordion-body {
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-dim);
+}
+.gap-accordion-body {
+  padding-top: 2px;
+}
+@media (max-width: 768px) {
+  .gap-list-desktop {
+    display: none;
+  }
+  .gap-accordion-mobile {
+    display: flex;
+  }
+}
+
+.pricing-teaser-block {
+  border-top: 1px solid var(--line);
+}
+.pricing-teaser {
+  text-align: center;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink-dim);
+}
+.pricing-teaser-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.pricing-teaser b {
+  color: var(--ink);
+}
+.pricing-teaser a {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.pricing-teaser a:hover {
+  color: var(--gold-soft);
+}
+
+/* marketing subpages + landing */
+.marketing-page,
 .contact-page {
   position: relative;
   z-index: 1;
-  min-height: 100dvh;
-  padding-top: 88px;
-  padding-bottom: 48px;
+  padding-top: 5.5rem;
+  padding-bottom: 3rem;
+}
+.marketing-page > section.block,
+.contact-page > section.block,
+.marketing-page section.block,
+.contact-page section.block {
+  min-height: 0;
+  padding-top: var(--section-padding-y-md);
+  padding-bottom: var(--section-padding-y-md);
+}
+.marketing-page .subpage-hero {
+  padding-top: 1.25rem;
+  padding-bottom: 0.5rem;
+}
+.marketing-page #pricing.block {
+  min-height: 0;
+  display: block;
+  justify-content: unset;
+}
+.marketing-page #difference.block {
+  padding-top: var(--section-padding-y-md);
+  padding-bottom: var(--section-padding-y-md);
+}
+.marketing-page #personas.block {
+  padding-bottom: var(--section-padding-y);
+}
+/* landing — distinct sections (no full-viewport panel stacking) */
+.landing-page header.hero {
+  padding: 8.25rem 0 0;
+  border-bottom: none;
+}
+.landing-page header.hero .landing-ticker {
+  margin-top: 3.5rem;
+}
+.landing-page section.block#gaps {
+  min-height: 0;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  border-top: none;
+}
+.landing-page section.block#gaps .section-head {
+  margin-bottom: 2.25rem;
+}
+.landing-page section.block#gaps .gap-list-desktop {
+  margin-top: 0;
+}
+.landing-page section.block#gaps .gap-accordion-mobile {
+  margin-top: 0;
+}
+.landing-page section.pricing-teaser-block {
+  min-height: 0;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  border-top: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(232, 170, 80, .03), transparent 45%);
+}
+.landing-page section.pricing-teaser-block .section-head {
+  margin-bottom: 2rem;
+}
+.landing-page .founding--pricing-teaser {
+  margin-top: 0.5rem;
+}
+.landing-page footer.site-footer#cta {
+  min-height: 0;
+  border-top: 1px solid var(--line);
+}
+.landing-page footer.site-footer#cta .footer-cta {
+  padding: 5rem 32px 3.5rem;
+}
+.landing-page footer.site-footer#cta .footer-meta {
+  padding-top: 24px;
+  padding-bottom: 32px;
+}
+.landing-page .landing-report-section {
+  min-height: 0;
+}
+.archetype-oneline {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-dim);
+}
+/* /pricing — fit shell: relaxed spacing; light scroll ok on laptop+ */
+@media (min-width: 1024px) and (min-height: 720px) {
+  html:has(.marketing-page-fit-shell) {
+    overflow: hidden;
+  }
+  .marketing-page-fit-shell {
+    padding-bottom: 12px;
+  }
+}
+.marketing-page-fit-shell .marketing-page.pricing-page-shell > section.block,
+.marketing-page-fit-shell .marketing-page.contact-page-shell > section.block {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.marketing-page-fit-shell {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding-top: 66px;
+  box-sizing: border-box;
+}
+.marketing-page-fit-shell .pricing-page-shell,
+.marketing-page-fit-shell .contact-page-shell {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+.marketing-page-fit-shell .pricing-page-section.block,
+.marketing-page-fit-shell .contact-page-section.block {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0 1.25rem;
+  overflow: visible;
+}
+.marketing-page-fit-shell .pricing-page-section .wrap,
+.marketing-page-fit-shell .contact-page-section .wrap-narrow {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.marketing-page-fit-shell .pricing-page-section .section-head,
+.marketing-page-fit-shell .contact-page-section .section-head {
+  margin-bottom: 0;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+.marketing-page-fit-shell .pricing-page-section .section-head h2,
+.marketing-page-fit-shell .contact-page-section .section-head h2 {
+  font-size: clamp(1.5rem, 2.35vw, 2rem);
+  line-height: 1.1;
+}
+.marketing-page-fit-shell .pricing-page-section .section-head .lede,
+.marketing-page-fit-shell .contact-page-section .section-head .lede {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+.marketing-page-fit-shell .pricing-page-section .section-head .ses,
+.marketing-page-fit-shell .contact-page-section .section-head .ses {
+  margin-bottom: 0.5rem;
+  font-size: 11px;
+}
+.marketing-page-fit-shell .founding--pricing {
+  margin: 0;
+  padding: 16px 22px;
+  gap: 18px 24px;
+  flex-shrink: 0;
+}
+.marketing-page-fit-shell .founding--pricing .copy {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  text-decoration: none;
+}
+.marketing-page-fit-shell .founding--pricing .copy b {
+  text-decoration: none;
+}
+.marketing-page-fit-shell .pricing-waitlist-cta {
+  padding: 10px 18px;
+  font-size: 13px;
+}
+.marketing-page-fit-shell .founding--pricing .founding-stats {
+  gap: 10px;
+}
+.marketing-page-fit-shell .founding--pricing .founding-stats .count b {
+  font-size: 1rem;
+}
+.marketing-page-fit-shell .founding--pricing .founding-progress {
+  height: 5px;
+}
+.marketing-page-fit-shell .pricing-page-section .pricing {
+  flex: 0 0 auto;
+  min-height: auto;
+  gap: 14px;
+  align-items: stretch;
+  margin-bottom: 0.25rem;
+}
+.marketing-page-fit-shell .pricing-page-section .price {
+  padding: 18px 20px;
+  gap: 10px;
+  border-radius: 12px;
+  min-height: auto;
+}
+.marketing-page-fit-shell .pricing-page-section .price .tier {
+  font-size: 15px;
+}
+.marketing-page-fit-shell .pricing-page-section .price .amt {
+  font-size: 1.875rem;
+}
+.marketing-page-fit-shell .pricing-page-section .price .amt small {
+  font-size: 11px;
+}
+.marketing-page-fit-shell .pricing-page-section .price ul {
+  gap: 6px;
+  margin-top: 4px;
+  flex: 0 0 auto;
+}
+.marketing-page-fit-shell .pricing-page-section .price ul li {
+  font-size: 12px;
+  line-height: 1.45;
+  padding-left: 18px;
+}
+.marketing-page-fit-shell .pricing-page-section .price ul li::before {
+  font-size: 11px;
+}
+.marketing-page-fit-shell .pricing-page-section .price button {
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-top: 6px;
+}
+.marketing-page-fit-shell .pricing-page-section .price.popular::after {
+  top: -10px;
+  right: 16px;
+  font-size: 10px;
+  padding: 4px 10px;
+}
+.marketing-page-fit-shell .contact-page-section .contact-grid {
+  margin-top: 0;
+  gap: 14px;
+}
+.marketing-page-fit-shell .contact-page-section .contact-card {
+  padding: 18px 20px;
+  gap: 10px;
+  border-radius: 10px;
+}
+.marketing-page-fit-shell .contact-page-section .contact-card-value {
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+}
+.marketing-page-fit-shell .contact-page-section .contact-card-hint {
+  font-size: 13px;
+  line-height: 1.45;
+}
+.marketing-page-fit-shell .contact-page-section .contact-note {
+  margin-top: 0;
+  padding: 18px 20px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.marketing-page-fit-shell .contact-page-section .contact-note p + p {
+  margin-top: 10px;
+}
+.marketing-page-fit-shell .contact-page-section .contact-back {
+  margin-top: 0;
+  font-size: 13px;
+}
+.marketing-page-fit-shell .site-footer--compact {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+.marketing-page-fit-shell .site-footer--compact .footer-meta {
+  padding: 20px 40px 28px;
+}
+.marketing-page-fit-shell .site-footer--compact .footer-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}
+.marketing-page-fit-shell .site-footer--compact .footer-brand {
+  justify-self: start;
+  flex-shrink: 0;
+}
+.marketing-page-fit-shell .site-footer--compact .footer-links {
+  display: flex;
+  flex: none;
+  justify-content: center;
+  justify-self: center;
+  gap: 22px;
+  font-size: 14px;
+  min-width: 0;
+}
+.marketing-page-fit-shell .site-footer--compact .footer-end {
+  justify-self: end;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  width: auto;
+}
+.marketing-page-fit-shell .site-footer--compact .footer-copy,
+.marketing-page-fit-shell .site-footer--compact .footer-brand {
+  font-size: 14px;
+}
+.marketing-page-fit-shell .site-footer--compact .disclaimer {
+  margin-top: 16px;
+  font-size: 12px;
+  line-height: 1.55;
+  width: 100%;
+  max-width: none;
+}
+
+/* /pricing page — default (scrollable) scale + full-width founding bar */
+#pricing.pricing-page-section.block {
+  padding-top: 3rem;
+  padding-bottom: 4rem;
+}
+#pricing.pricing-page-section .section-head {
+  margin-bottom: 2rem;
+  gap: 1.25rem;
+}
+#pricing.pricing-page-section .section-head h2 {
+  font-size: clamp(1.625rem, 2.75vw, 2.5rem);
+}
+#pricing.pricing-page-section .section-head .lede {
+  font-size: 1.0625rem;
+  margin-top: 0.75rem;
+}
+#pricing.pricing-page-section .pricing {
+  gap: 16px;
+  margin-bottom: 0.5rem;
+}
+#pricing.pricing-page-section .price {
+  padding: 24px 22px;
+  gap: 14px;
+  border-radius: 12px;
+}
+#pricing.pricing-page-section .price .tier {
+  font-size: 16px;
+}
+#pricing.pricing-page-section .price .amt {
+  font-size: 2.25rem;
+}
+#pricing.pricing-page-section .price ul {
+  gap: 8px;
+}
+#pricing.pricing-page-section .price ul li {
+  font-size: 13px;
+}
+#pricing.pricing-page-section .price button {
+  padding: 11px 14px;
+  font-size: 13px;
+}
+
+.founding--pricing {
+  margin: 24px 0 32px;
+  max-width: none;
+  width: 100%;
+  padding: 20px 26px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 28px;
+  grid-template-columns: unset;
+}
+.founding-pricing-main {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+.founding--pricing .lbl {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.founding--pricing .copy {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.45;
+  min-width: 0;
+  text-decoration: none;
+}
+.founding--pricing .copy b {
+  text-decoration: none;
+}
+.pricing-waitlist-cta {
+  flex-shrink: 0;
+  padding: 10px 18px;
+  font-size: 13px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.founding--pricing .founding-stats {
+  flex: 0 0 auto;
+  min-width: 11rem;
+}
+.founding--pricing .founding-stats .count b {
+  font-size: 17px;
+  white-space: nowrap;
+}
+@media (max-width: 680px) {
+  .founding--pricing {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .founding-pricing-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .founding--pricing .founding-stats {
+    width: 100%;
+    min-width: 0;
+  }
+  .founding--pricing .founding-stats .count b {
+    white-space: normal;
+  }
+  .pricing-waitlist-cta {
+    width: 100%;
+    justify-content: center;
+  }
+}
+/* Allow scroll on short/narrow viewports where one-screen fit is not viable */
+@media (max-width: 1023px), (max-height: 719px) {
+  .marketing-page-fit-shell {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    min-height: 100dvh;
+  }
+  .marketing-page-fit-shell .pricing-page-shell,
+  .marketing-page-fit-shell .contact-page-shell,
+  .marketing-page-fit-shell .pricing-page-section.block,
+  .marketing-page-fit-shell .contact-page-section.block,
+  .marketing-page-fit-shell .pricing-page-section .wrap,
+  .marketing-page-fit-shell .contact-page-section .wrap-narrow,
+  .marketing-page-fit-shell .pricing-page-section .pricing {
+    overflow: visible;
+    flex: none;
+    min-height: 0;
+  }
+  .marketing-page-fit-shell .pricing-page-shell,
+  .marketing-page-fit-shell .contact-page-shell {
+    padding-top: 5.5rem;
+    padding-bottom: 2rem;
+  }
+}
+
+/* contact page */
+#contact.contact-page-section.block {
+  padding-top: 3rem;
+  padding-bottom: 4rem;
+}
+#contact.contact-page-section .section-head {
+  margin-bottom: 2rem;
+}
+#contact.contact-page-section .contact-grid {
+  margin-top: 2rem;
+  gap: 16px;
+}
+#contact.contact-page-section .contact-note {
+  margin-top: 2rem;
+}
+#contact.contact-page-section .contact-back {
+  margin-top: 1.75rem;
 }
 .contact-block {
-  padding-top: var(--section-padding-y-md);
+  padding-top: 0;
   padding-bottom: var(--section-padding-y-sm);
 }
 .contact-grid {
@@ -1861,8 +2652,9 @@ footer.site-footer--compact::before {
   user-select: none;
 }
 @media (max-width: 640px) {
+  .marketing-page,
   .contact-page {
-    padding-top: 72px;
+    padding-top: 4.75rem;
   }
   .contact-grid {
     grid-template-columns: 1fr;
@@ -1982,6 +2774,17 @@ footer.site-footer--compact::before {
   body { font-size: 15px; }
 
   .hero { padding: 6.875rem 0 4rem; }
+  .landing-page header.hero {
+    padding-bottom: 3.5rem;
+  }
+  .landing-page section.block#gaps,
+  .landing-page section.pricing-teaser-block {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+  .landing-page footer.site-footer#cta .footer-cta {
+    padding: 3.5rem 18px 2.25rem;
+  }
   .ticker { margin-top: 3.5rem; }
 
   .section-head {

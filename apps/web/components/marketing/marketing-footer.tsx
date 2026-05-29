@@ -1,19 +1,11 @@
 import Link from "next/link";
 
 type MarketingFooterProps = {
-  /** When true, in-page anchors use `#id` (home). Otherwise `/#id`. */
-  homeAnchors?: boolean;
   /** Omit outer `<footer>` when nested inside the home page footer. */
   embedded?: boolean;
 };
 
-export function MarketingFooter({
-  homeAnchors = false,
-  embedded = false,
-}: MarketingFooterProps) {
-  const howHref = homeAnchors ? "#how" : "/#how";
-  const pricingHref = homeAnchors ? "#pricing" : "/#pricing";
-
+export function MarketingFooter({ embedded = false }: MarketingFooterProps) {
   const meta = (
     <div className="wrap footer-meta">
       <div className="row footer-row">
@@ -22,8 +14,9 @@ export function MarketingFooter({
           Cashlight
         </Link>
         <nav className="footer-links" aria-label="Site">
-          <Link href={howHref}>How it works</Link>
-          <Link href={pricingHref}>Pricing</Link>
+          <Link href="/how-it-works">How it works</Link>
+          <Link href="/pricing">Pricing</Link>
+          <Link href="/why">Why</Link>
           <Link href="/contact">Contact</Link>
         </nav>
         <div className="footer-end">
@@ -32,7 +25,9 @@ export function MarketingFooter({
       </div>
       <div className="disclaimer">
         Cashlight is a financial health platform, not a SEBI-registered
-        investment advisor. Content is for informational purposes only.
+        investment advisor. We show you scenarios, not prescriptions. For
+        specific investment or tax decisions, we&apos;ll tell you when you need a
+        qualified professional.
       </div>
     </div>
   );
