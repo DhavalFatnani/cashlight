@@ -11,10 +11,11 @@ type RobotsRule = {
   disallow?: string | string[];
 };
 
+/** Facebook, Twitter, etc. — explicit allow before the catch-all rule. */
 function socialPreviewRules(): RobotsRule[] {
   return SOCIAL_PREVIEW_USER_AGENTS.map((userAgent) => ({
     userAgent,
-    allow: ["/api/og", "/"],
+    allow: "/",
   }));
 }
 
@@ -23,23 +24,24 @@ export default function robots(): MetadataRoute.Robots {
 
   if (shouldIndexSite()) {
     return {
-      rules: {
-        userAgent: "*",
-        allow: "/",
-      },
+      rules: [
+        ...socialPreviewRules(),
+        {
+          userAgent: "*",
+          allow: "/",
+        },
+      ],
       sitemap: new URL("/sitemap.xml", siteUrl).href,
-      host: siteUrl.host,
     };
   }
 
-  // Preview / misconfigured env: no broad indexing, but social crawlers must fetch OG images
-  const rules: RobotsRule[] = [
-    ...socialPreviewRules(),
-    {
-      userAgent: "*",
-      disallow: "/",
-    },
-  ];
-
-  return { rules };
+  return {
+    rules: [
+      ...socialPreviewRules(),
+      {
+        userAgent: "*",
+        disallow: "/",
+      },
+    ],
+  };
 }

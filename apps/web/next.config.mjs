@@ -8,16 +8,6 @@ const nextConfig = {
         destination: "/icon.svg",
         permanent: false,
       },
-      {
-        source: "/opengraph-image",
-        destination: "/api/og",
-        permanent: false,
-      },
-      {
-        source: "/opengraph-image.png",
-        destination: "/api/og",
-        permanent: false,
-      },
     ];
   },
 };
