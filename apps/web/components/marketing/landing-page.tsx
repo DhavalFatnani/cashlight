@@ -7,6 +7,7 @@ import { ComplexityVisualization } from "@/components/marketing/complexity-visua
 import { SurveyModal } from "@/components/marketing/survey-modal";
 import { ThankYouModal } from "@/components/marketing/thank-you-modal";
 import { isAnchorId, scrollToAnchor } from "@/lib/anchor-scroll";
+import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { useGlobalSound } from "@/lib/use-global-sound";
 import { useScrollingTabTitle } from "@/lib/use-scrolling-tab-title";
 
@@ -656,6 +657,7 @@ export function LandingPage() {
           <div className="nav-links">
             <a href="#how">How it works</a>
             <a href="#pricing">Pricing</a>
+            <a href="/contact">Contact</a>
           </div>
           <a href="#cta" className="nav-cta">
             Join waitlist
@@ -1035,24 +1037,7 @@ export function LandingPage() {
             onWaitlistSuccess={handleWaitlistSuccess}
           />
         </div>
-        <div className="wrap footer-meta">
-          <div className="row">
-            <a href="/" className="logo" style={{ fontSize: 17 }}>
-              <span className="dot" />
-              Cashlight
-            </a>
-            <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
-              <a href="#how">How it works</a>
-              <a href="#pricing">Pricing</a>
-              <a href="/contact">Contact</a>
-            </div>
-            <div>© 2026 Cashlight · Built in India</div>
-          </div>
-          <div className="disclaimer">
-            Cashlight is a financial health platform, not a SEBI-registered
-            investment advisor. Content is for informational purposes only.
-          </div>
-        </div>
+        <MarketingFooter homeAnchors embedded />
       </footer>
 
       {modal?.kind === "survey" && (
