@@ -15,8 +15,7 @@ export function PricingPage() {
                 Pay us. So <em>no one else can.</em>
               </h2>
               <p className="lede">
-                One revenue source: yours. No ads. No commissions. No conflicts
-                of interest.
+                Your subscription only. No ads, commissions, or conflicts.
               </p>
             </div>
             <div className="right">GST included · INR</div>

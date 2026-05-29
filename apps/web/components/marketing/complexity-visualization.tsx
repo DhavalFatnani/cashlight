@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Node {
   x: number;
@@ -46,6 +46,15 @@ export function ComplexityVisualization() {
   const mouseRef = useRef({ x: 0, y: 0 });
   const hoveredNodeRef = useRef<number | null>(null);
   const animationRef = useRef<number>();
+  const [ambientOnly, setAmbientOnly] = useState(false);
+
+  useEffect(() => {
+    const coarse = window.matchMedia("(pointer: coarse)");
+    const update = () => setAmbientOnly(coarse.matches);
+    update();
+    coarse.addEventListener("change", update);
+    return () => coarse.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -53,6 +62,8 @@ export function ComplexityVisualization() {
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    const interactive = !ambientOnly;
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -226,10 +237,12 @@ export function ComplexityVisualization() {
     };
 
     const handleMouseMove = (e: MouseEvent) => {
+      if (!interactive) return;
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
 
     const handleClick = (e: MouseEvent) => {
+      if (!interactive) return;
       const nodes = nodesRef.current;
       const parallaxX = (e.clientX - canvas.width / 2) * 0.02;
       const parallaxY = (e.clientY - canvas.height / 2) * 0.02;
@@ -255,8 +268,10 @@ export function ComplexityVisualization() {
     };
 
     window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("click", handleClick);
+    if (interactive) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("click", handleClick);
+    }
 
     resize();
     animate(0);
@@ -269,7 +284,7 @@ export function ComplexityVisualization() {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, []);
+  }, [ambientOnly]);
 
   return (
     <canvas
@@ -281,7 +296,7 @@ export function ComplexityVisualization() {
         width: "100%",
         height: "100vh",
         opacity: 0.35,
-        pointerEvents: "auto",
+        pointerEvents: ambientOnly ? "none" : "auto",
         zIndex: 0,
       }}
     />

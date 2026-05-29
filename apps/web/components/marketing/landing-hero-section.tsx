@@ -29,15 +29,10 @@ export function LandingHeroSection({
             <br />
             <em>more complicated than any app admits.</em>
           </h1>
-          <p className="hero-descriptor reveal">
-            Cashlight shows you where you stand, and what the financially sorted
-            do differently.
-          </p>
           <p className="hero-sub reveal">
-            You juggle multiple accounts, support family, get lumpy bonuses, and
-            pay EMIs across banks. Most tools show you charts. Cashlight reads
-            your actual statements and shows you where you really stand — and
-            what your options are.
+            Multiple accounts, family you support, lumpy bonuses, EMIs across
+            banks. Cashlight reads your actual statements and shows you where
+            you really stand.
           </p>
           <p className="hero-hint reveal">
             <em>Try clicking the nodes in the background to make payments</em>

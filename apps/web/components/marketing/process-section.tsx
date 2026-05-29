@@ -8,6 +8,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { HowItWorksIntroPanel } from "@/components/marketing/how-it-works-intro-panel";
+import { useMarketingReveal } from "@/lib/use-marketing-reveal";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 type ProcessStep = {
@@ -24,9 +25,8 @@ const PROCESS_STEPS: ProcessStep[] = [
     title: "You upload",
     body: (
       <>
-        Drop PDFs, XLS, or CSVs from{" "}
-        <b>HDFC, SBI, ICICI, IDFC, Kotak, Axis</b>. Full history, including years
-        before any aggregator existed.
+        PDFs, XLS, CSV — <b>HDFC, SBI, ICICI, IDFC, Kotak, Axis</b>. Full history,
+        pre-aggregator years included.
       </>
     ),
     terminal: (
@@ -50,9 +50,8 @@ const PROCESS_STEPS: ProcessStep[] = [
     title: "We read every line",
     body: (
       <>
-        Every UPI string, every standing instruction, every &ldquo;ZOMATOXX&rdquo;
-        narration. We separate <b>family transfers from discretionary</b>, EMIs from
-        rent.
+        Every UPI string, every SI, every &ldquo;ZOMATOXX&rdquo; narration.{" "}
+        <b>Family vs discretionary</b>, EMIs vs rent.
       </>
     ),
     terminal: (
@@ -76,9 +75,9 @@ const PROCESS_STEPS: ProcessStep[] = [
     title: "You explore. We don't prescribe.",
     body: (
       <>
-        Ask <b>&ldquo;what if I move ₹20k from my LIC to NPS?&rdquo;</b> Or{" "}
-        <b>&ldquo;what if my parents need ₹5k more next month?&rdquo;</b> A diagnosis.
-        Never a sales pitch.
+        <b>&ldquo;What if ₹20k moves from LIC to NPS?&rdquo;</b> Or{" "}
+        <b>&ldquo;parents need ₹5k more next month?&rdquo;</b> Scenarios, not sales
+        pitches.
       </>
     ),
     terminal: (
@@ -97,8 +96,6 @@ const PROCESS_STEPS: ProcessStep[] = [
     ),
   },
 ];
-
-const STEP_LABELS = ["step i of iii", "step ii of iii", "step iii of iii"] as const;
 
 function ProcessCard({
   step,
@@ -147,18 +144,14 @@ function ProcessStacked() {
         <div className="process-outer process-outer--static">
           <div className="process-sticky process-sticky--static">
             <div className="process-sticky-inner">
-              <div className="process-left reveal">
+              <div className="process-left">
                 <div className="process-label ses">{"// process"}</div>
                 <h2 className="process-headline">
                   You drop your statements. <em>We read every line.</em>
                 </h2>
-                <p className="process-description">
-                  Three steps, in plain English. No magic, no &ldquo;patent-pending AI
-                  engine.&rdquo; Just careful reading. And a little arithmetic.
-                </p>
               </div>
               <div className="process-right process-right--static">
-                <div className="process-cards-static reveal-stagger">
+                <div className="process-cards-static">
                   {PROCESS_STEPS.map((step) => (
                     <article key={step.num} className="process-card step">
                       <div className="copy">
@@ -244,20 +237,9 @@ function ProcessStickyScroll() {
           <div className="wrap process-sticky-inner">
             <motion.div className="process-left" style={{ opacity: leftOpacity }}>
               <div className="process-label ses">{"// process"}</div>
-              <div className="process-step-counter" aria-live="polite">
-                {STEP_LABELS.map((label, i) => (
-                  <span key={label} className={i === activeStep ? "is-active" : ""}>
-                    {label}
-                  </span>
-                ))}
-              </div>
               <h2 id="process-heading" className="process-headline">
                 You drop your statements. <em>We read every line.</em>
               </h2>
-              <p className="process-description">
-                Three steps, in plain English. No magic, no &ldquo;patent-pending AI
-                engine.&rdquo; Just careful reading. And a little arithmetic.
-              </p>
             </motion.div>
 
             <div className="process-right">
@@ -293,20 +275,18 @@ function ProcessStickyScroll() {
 export function ProcessSection() {
   const [mode, setMode] = useState<"desktop" | "static" | null>(null);
 
+  useMarketingReveal("how", mode !== null);
+
   useEffect(() => {
     function resolve() {
       const mobile = window.matchMedia("(max-width: 768px)").matches;
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      setMode(mobile || reduced ? "static" : "desktop");
+      setMode(mobile ? "static" : "desktop");
     }
     resolve();
     const mqMobile = window.matchMedia("(max-width: 768px)");
-    const mqReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     mqMobile.addEventListener("change", resolve);
-    mqReduced.addEventListener("change", resolve);
     return () => {
       mqMobile.removeEventListener("change", resolve);
-      mqReduced.removeEventListener("change", resolve);
     };
   }, []);
 

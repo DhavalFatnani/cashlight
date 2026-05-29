@@ -14,20 +14,12 @@ export function HowItWorksPage() {
             <h2>
               Eight dimensions. <em>One honest picture.</em>
             </h2>
-            <p className="lede">
-              The sample report on the home page is a slice of this. Your full
-              report scores each dimension from your actual narrations.
-            </p>
           </div>
           <div className="health-grid">
             {HEALTH_DIMENSIONS.map((dim) => (
               <div key={dim.name} className="health-card">
                 <div className="health-card-name">{dim.name}</div>
-                <div className="health-card-desc">{dim.description}</div>
-                <div className="health-card-example">
-                  <span className="health-card-example-label">Example:</span>{" "}
-                  {dim.example}
-                </div>
+                <p className="health-card-line">{dim.line}</p>
               </div>
             ))}
           </div>
@@ -47,8 +39,7 @@ export function HowItWorksPage() {
               <div key={archetype.name} className="archetype-card">
                 <div className="archetype-icon">{archetype.icon}</div>
                 <div className="archetype-name">{archetype.name}</div>
-                <div className="archetype-situation">{archetype.situation}</div>
-                <p className="archetype-oneline">{archetype.healthGap}</p>
+                <p className="archetype-line">{archetype.line}</p>
               </div>
             ))}
           </div>

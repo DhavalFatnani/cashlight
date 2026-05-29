@@ -9,8 +9,7 @@ export function HowItWorksIntroPanel() {
             From statements to a <em>real health picture.</em>
           </h2>
           <p className="lede">
-            Upload, we read every line, you explore scenarios. No product pitches
-            baked in.
+            Upload → we read every line → you explore scenarios. No pitches.
           </p>
         </div>
       </div>

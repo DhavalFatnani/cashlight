@@ -30,79 +30,65 @@ export type GapLevel = "err" | "warn";
 export type LandingGap = {
   id: string;
   level: GapLevel;
-  headline: string;
-  body: string;
+  line: string;
 };
 
-/** Landing combined explainer — max 4 items */
+/** Landing combined explainer — max 4 items, one line each */
 export const LANDING_GAPS: readonly LandingGap[] = [
   {
     id: "bonus",
     level: "err",
-    headline: "Your ₹2L bonus is already gone.",
-    body: "It landed in March. By September there's no trace of it. Nobody flagged that it should've been invested — so it quietly became dinners and a phone.",
+    line: "₹2L bonus in March. Gone by September. Nobody flagged investing it.",
   },
   {
     id: "lic",
     level: "warn",
-    headline: "You have two LIC policies and zero term cover.",
-    body: "Someone sold you \"insurance\" that's really a bad investment. Your family isn't actually protected. We say that out loud.",
+    line: "Two LIC policies, zero term cover. Family isn't actually protected.",
   },
   {
     id: "80c",
     level: "warn",
-    headline: "You're leaving ₹62,000 of tax savings on the table.",
-    body: "80C gives you ₹1.5L. You're using ₹88k. Same gap, every single year — and you're possibly on the wrong regime entirely.",
+    line: "₹62k of 80C headroom unused — every year. Maybe the wrong regime too.",
   },
   {
     id: "family",
     level: "warn",
-    headline: "The ₹25,000 you send home isn't \"optional spending.\"",
-    body: "It's a fixed commitment, and your real financial picture has to be built around it — not in spite of it. Most tools just call it an expense and move on.",
+    line: "₹25k home every month isn't discretionary. Your picture has to treat it that way.",
   },
 ];
 
 export const HEALTH_DIMENSIONS = [
   {
     name: "Coverage ratio",
-    description:
-      "What % of your income is already spoken for before you spend a rupee.",
-    example: "Your fixed obligations use 68% of income. Danger zone.",
+    line: "How much income is spoken for before you spend. Yours: 68% — danger zone.",
   },
   {
     name: "Real savings rate",
-    description: "What actually compounds — not what you think you save.",
-    example: "4.2% of take-home is compounding. Indian average. Not enough.",
+    line: "What actually compounds, not what you think you save. Yours: 4.2% — not enough.",
   },
   {
     name: "Emergency buffer",
-    description: "How many months you can survive on liquid savings alone.",
-    example: "1.3 months. Target: 6.",
+    line: "Months you survive on liquid savings alone. Yours: 1.3 — target 6.",
   },
   {
     name: "Insurance adequacy",
-    description: "Term cover as a multiple of your annual income.",
-    example: "You have ₹0 of term cover. Your family is unprotected.",
+    line: "Term cover vs annual income. Yours: ₹0 term — family unprotected.",
   },
   {
     name: "Equity exposure",
-    description: "What % of your wealth is in growth assets.",
-    example: "92% in gold and FD. Inflation is eroding it.",
+    line: "Wealth in growth assets. Yours: 92% gold and FD — inflation wins.",
   },
   {
     name: "Debt-to-income ratio",
-    description: "Total EMIs as a % of monthly take-home.",
-    example: "34%. Within range. Watch if it crosses 40%.",
+    line: "EMIs as % of take-home. Yours: 34% — watch above 40%.",
   },
   {
     name: "Irregular income rate",
-    description: "What % of your bonuses and reimbursements gets invested.",
-    example: "Last 3 bonuses: 0% invested. All spent within 60 days.",
+    line: "Bonuses actually invested. Last 3: 0% — spent within 60 days.",
   },
   {
     name: "Tax efficiency",
-    description: "80C utilisation + regime optimisation.",
-    example: "₹62,000 of 80C headroom unused. Old regime likely better for you.",
+    line: "80C + regime fit. ₹62k headroom unused — old regime likely better.",
   },
 ] as const;
 
@@ -110,29 +96,22 @@ export const ARCHETYPES = [
   {
     icon: "🏢",
     name: "Salaried professional",
-    situation: "HDFC salary, Kotak savings, ICICI joint account.",
-    healthGap:
-      "Real savings rate and gaps across all three accounts, in one view.",
+    line: "HDFC salary, Kotak savings, ICICI joint — real savings rate across all three, one view.",
   },
   {
     icon: "💼",
     name: "Freelancer / consultant",
-    situation: "Great months, rough months. TDS deducted everywhere.",
-    healthGap:
-      "Health picture that respects income volatility, not a fixed salary fantasy.",
+    line: "Lumpy income, TDS everywhere — health that respects volatility, not a salary fantasy.",
   },
   {
     icon: "👨‍👩‍👧",
     name: "Supporting family",
-    situation: "₹25,000 to parents every month. ₹10,000 for a sibling's fees.",
-    healthGap:
-      "Commitments treated as non-negotiable, not discretionary noise.",
+    line: "₹25k to parents, ₹10k for fees — commitments as fixed lines, not noise.",
   },
   {
     icon: "🏠",
     name: "Dual-income household",
-    situation: "Two salaries, shared EMIs, separate accounts.",
-    healthGap: "One household health view both partners can actually read.",
+    line: "Two salaries, shared EMIs, separate accounts — one household view you both read.",
   },
 ] as const;
 

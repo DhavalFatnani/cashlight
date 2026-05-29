@@ -12,10 +12,6 @@ export function WhyPage() {
             <h2>
               Why we&apos;ll always <em>tell you the truth.</em>
             </h2>
-            <p className="lede">
-              A second-visit read on how we make money, and why that changes
-              what you see.
-            </p>
           </div>
           <div className="memo">
             <div className="from">
@@ -30,10 +26,8 @@ export function WhyPage() {
               The <em>honest</em> part.
             </h3>
             <p className="intro">
-              Most free Indian money apps are paid by the products they push on
-              you. Every recommendation comes with a commission baked in. We
-              charge you a subscription instead. That means the only thing we get
-              paid for is being useful to you.
+              Free apps earn on what they sell you. We charge a subscription —
+              so we only win when you find us useful.
             </p>
 
             <div className="ledger">

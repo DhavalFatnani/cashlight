@@ -26,9 +26,7 @@ export function LandingCtaSection({
         <h2 className="reveal">
           Want to know where you <em>actually</em> stand?
         </h2>
-        <p className="ps reveal">
-          Get on the founding list. We&apos;ll tell you the moment it&apos;s ready.
-        </p>
+        <p className="ps reveal">Founding list · we&apos;ll tell you when it&apos;s ready.</p>
         <WaitlistForm
           source="cta"
           label="Get on the founding list"

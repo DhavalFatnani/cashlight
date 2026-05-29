@@ -27,8 +27,8 @@ export function ContactPage() {
                 Talk to the people building <em>Cashlight.</em>
               </h2>
               <p className="lede">
-                Questions about the waitlist, early access, or how we read your
-                numbers — reach out directly. No ticket queues, no chatbots.
+                Waitlist, early access, or how we read your numbers — email or
+                WhatsApp, no ticket queue.
               </p>
             </div>
           </div>
@@ -56,18 +56,11 @@ export function ContactPage() {
             </a>
           </div>
 
-          <div className="contact-note">
-            <p>
-              We do not sell financial products and we do not give
-              stock-or-fund recommendations. If you are writing about your
-              account or statements, tell us which banks you use — we will
-              point you to what Cashlight can read today.
-            </p>
-            <p>
-              Prefer email for anything sensitive.{" "}
-              <a href={mailGeneral}>Send a message</a>.
-            </p>
-          </div>
+          <p className="contact-note">
+            Not investment advice. Mention your banks if you ask about
+            statements. Sensitive topics:{" "}
+            <a href={mailGeneral}>email</a>.
+          </p>
 
           <p className="contact-back">
             <Link href="/">← Back to home</Link>

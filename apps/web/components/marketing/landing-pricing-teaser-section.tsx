@@ -12,10 +12,8 @@ export function LandingPricingTeaserSection() {
             Pay us. So <em>no one else does.</em>
           </h2>
           <p className="lede">
-            Free apps get paid by the products they push on you. We get paid by you
-            — which means the only thing we&apos;re ever optimizing for is being
-            useful. No ads. No commissions. No one whispering in our ear about
-            what to recommend.
+            Paid by you — not manufacturers. No ads, no commissions, no whispered
+            recommendations.
           </p>
         </div>
 

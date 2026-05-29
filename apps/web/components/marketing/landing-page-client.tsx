@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 import { CoinBurst } from "@/components/marketing/coin-burst";
 import { ComplexityVisualization } from "@/components/marketing/complexity-visualization";
 import { LandingCtaSection } from "@/components/marketing/landing-cta-section";
 import { LandingHeroSection } from "@/components/marketing/landing-hero-section";
+import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { SurveyModal } from "@/components/marketing/survey-modal";
 import { ThankYouModal } from "@/components/marketing/thank-you-modal";
 import type { WaitlistSuccessPayload } from "@/components/marketing/waitlist-form";
@@ -33,7 +33,6 @@ type LandingPageClientProps = {
 };
 
 export function LandingPageClient({ children }: LandingPageClientProps) {
-  const [scrolled, setScrolled] = useState(false);
   const [modal, setModal] = useState<PostSignupModal | null>(null);
   const [surveyState, setSurveyState] = useState<SurveyState>("default");
   const [clickBursts, setClickBursts] = useState<
@@ -63,18 +62,11 @@ export function LandingPageClient({ children }: LandingPageClientProps) {
   }
 
   useEffect(() => {
-    function onScroll() {
-      setScrolled(window.scrollY > 8);
-    }
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
     let burstId = 0;
+    const coarseMq = window.matchMedia("(pointer: coarse)");
 
     function handleClick(e: MouseEvent) {
+      if (coarseMq.matches) return;
       playChime();
       const cursorTipOffsetY = 12;
       const cursorTipOffsetX = 8;
@@ -234,31 +226,12 @@ export function LandingPageClient({ children }: LandingPageClientProps) {
   return (
     <div className="landing-page">
       <ComplexityVisualization />
-      <nav className={`top${scrolled ? " scrolled" : ""}`} id="topnav">
-        <div className="inner">
-          <div className="nav-brand">
-            <a href="/" className="logo">
-              <span className="dot" />
-              Cashlight
-            </a>
-          </div>
-          <div className="nav-links">
-            <Link href="/how-it-works">How it works</Link>
-            <Link href="/pricing">Pricing</Link>
-            <Link href="/contact">Contact</Link>
-          </div>
-          <a
-            href="#cta"
-            className="nav-cta"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToAnchor("cta");
-            }}
-          >
-            Join waitlist
-          </a>
-        </div>
-      </nav>
+      <MarketingNav
+        onJoinWaitlistClick={(e) => {
+          e.preventDefault();
+          scrollToAnchor("cta");
+        }}
+      />
 
       <LandingHeroSection
         surveyState={surveyState}
