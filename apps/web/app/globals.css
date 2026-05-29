@@ -904,6 +904,7 @@ section.block {
   text-transform: uppercase;
   margin-bottom: 14px;
 }
+.section-head h1,
 .section-head h2 {
   font-family: var(--display);
   font-weight: 500;
@@ -911,6 +912,7 @@ section.block {
   line-height: 1.1;
   letter-spacing: -.02em;
 }
+.section-head h1 em,
 .section-head h2 em {
   font-family: var(--serif);
   font-style: italic;
@@ -1370,6 +1372,7 @@ section.block {
     margin-top: 0;
   }
 
+  .how-it-works-page .process-intro-head h1,
   .how-it-works-page .process-intro-head h2 {
     font-size: clamp(1.75rem, 7.6vw, 2.25rem);
     line-height: 1.12;
@@ -1783,7 +1786,7 @@ section.block {
 }
 #dimensions .section-head .ses {
   margin-bottom: 10px;
-  font-size: 11px;
+  font-size: 12px;
 }
 #dimensions .section-head h2 {
   font-size: clamp(1.625rem, 3vw, 2.375rem);
@@ -2608,7 +2611,9 @@ footer.site-footer--compact::before {
   gap: 1rem;
   flex-shrink: 0;
 }
+.marketing-page-fit-shell .pricing-page-section .section-head h1,
 .marketing-page-fit-shell .pricing-page-section .section-head h2,
+.marketing-page-fit-shell .contact-page-section .section-head h1,
 .marketing-page-fit-shell .contact-page-section .section-head h2 {
   font-size: clamp(1.5rem, 2.35vw, 2rem);
   line-height: 1.1;
@@ -2622,7 +2627,7 @@ footer.site-footer--compact::before {
 .marketing-page-fit-shell .pricing-page-section .section-head .ses,
 .marketing-page-fit-shell .contact-page-section .section-head .ses {
   margin-bottom: 0.5rem;
-  font-size: 11px;
+  font-size: 12px;
 }
 .marketing-page-fit-shell .founding--pricing {
   margin: 0;
@@ -2784,6 +2789,7 @@ footer.site-footer--compact::before {
   margin-bottom: 2rem;
   gap: 1.25rem;
 }
+#pricing.pricing-page-section .section-head h1,
 #pricing.pricing-page-section .section-head h2 {
   font-size: clamp(1.625rem, 2.75vw, 2.5rem);
 }
@@ -3475,6 +3481,7 @@ footer.site-footer--compact::before {
 }
 
 @media (max-width: 480px) {
+  .how-it-works-page .process-intro-head h1,
   .how-it-works-page .process-intro-head h2 {
     font-size: clamp(1.625rem, 8.2vw, 2rem);
   }

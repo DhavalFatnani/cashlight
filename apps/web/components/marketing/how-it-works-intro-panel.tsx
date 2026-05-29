@@ -4,10 +4,10 @@ export function HowItWorksIntroPanel() {
     <div className="process-intro-panel">
       <div className="wrap-narrow">
         <div className="section-head process-intro-head">
-          <div className="ses">{"// HOW IT WORKS"}</div>
-          <h2 id="how-it-works-intro-heading">
+          <p className="ses">{"// HOW IT WORKS"}</p>
+          <h1 id="how-it-works-intro-heading">
             From statements to a <em>real health picture.</em>
-          </h2>
+          </h1>
           <p className="lede">
             Upload → we read every line → you explore scenarios. No pitches.
           </p>

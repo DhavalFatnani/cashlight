@@ -1,24 +1,28 @@
 import type { Metadata } from "next";
 import { dmSans, instrumentSerif } from "@/lib/fonts";
+import { rootRobotsMetadata } from "@/lib/seo/metadata";
 import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const siteUrl = getSiteUrl();
-const title = "Cashlight | Your money, finally understood.";
-const description =
+const defaultTitle = "Cashlight | Your money, finally understood.";
+const defaultDescription =
   "AI-powered financial health for Indians. Read your statements, see where you stand, explore scenarios. No commissions, no products to sell.";
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
-  title,
-  description,
+  title: {
+    default: defaultTitle,
+    template: "%s",
+  },
+  description: defaultDescription,
+  robots: rootRobotsMetadata(),
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "/",
     siteName: "Cashlight",
-    title,
-    description,
+    title: defaultTitle,
+    description: defaultDescription,
     images: [
       {
         url: "/api/og",
@@ -31,8 +35,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title,
-    description,
+    title: defaultTitle,
+    description: defaultDescription,
     images: [
       {
         url: "/api/og",

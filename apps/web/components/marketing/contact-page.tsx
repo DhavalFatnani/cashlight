@@ -22,10 +22,10 @@ export function ContactPage() {
         <div className="wrap-narrow">
           <div className="section-head">
             <div className="left">
-              <div className="ses">{"// CONTACT"}</div>
-              <h2>
+              <p className="ses">{"// CONTACT"}</p>
+              <h1>
                 Talk to the people building <em>Cashlight.</em>
-              </h2>
+              </h1>
               <p className="lede">
                 Waitlist, early access, or how we read your numbers — email or
                 WhatsApp, no ticket queue.

@@ -8,10 +8,10 @@ export function WhyPage() {
       <section className="block" id="difference">
         <div className="wrap-narrow">
           <div className="section-head">
-            <div className="ses">An open memo</div>
-            <h2>
+            <p className="ses">An open memo</p>
+            <h1>
               Why we&apos;ll always <em>tell you the truth.</em>
-            </h2>
+            </h1>
           </div>
           <div className="memo">
             <div className="from">

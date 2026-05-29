@@ -21,9 +21,9 @@ export function LandingHeroSection({
     <header className="hero">
       <div className="wrap hero-grid hero-grid--landing">
         <div className="hero-left">
-          <div className="ses hero-eyebrow reveal">
+          <p className="ses hero-eyebrow reveal">
             {"// YOUR MONEY, FINALLY UNDERSTOOD"}
-          </div>
+          </p>
           <h1 className="reveal">
             Your money is
             <br />

@@ -10,10 +10,10 @@ export function PricingPage() {
         <div className="wrap">
           <div className="section-head">
             <div className="left">
-              <div className="ses">Pricing</div>
-              <h2>
+              <p className="ses">Pricing</p>
+              <h1>
                 Pay us. So <em>no one else can.</em>
-              </h2>
+              </h1>
               <p className="lede">
                 Your subscription only. No ads, commissions, or conflicts.
               </p>

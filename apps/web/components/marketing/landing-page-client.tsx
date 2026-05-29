@@ -2,7 +2,15 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import { CoinBurst } from "@/components/marketing/coin-burst";
-import { ComplexityVisualization } from "@/components/marketing/complexity-visualization";
+import dynamic from "next/dynamic";
+
+const ComplexityVisualization = dynamic(
+  () =>
+    import("@/components/marketing/complexity-visualization").then(
+      (mod) => mod.ComplexityVisualization,
+    ),
+  { ssr: false },
+);
 import { LandingCtaSection } from "@/components/marketing/landing-cta-section";
 import { LandingHeroSection } from "@/components/marketing/landing-hero-section";
 import { MarketingNav } from "@/components/marketing/marketing-nav";

@@ -56,8 +56,13 @@ export function MarketingNav({
     <nav className={`top${scrolled ? " scrolled" : ""}${menuOpen ? " nav-menu-is-open" : ""}`} id="topnav">
       <div className="inner">
         <div className="nav-brand">
-          <Link href="/" className="logo" onClick={closeMenu}>
-            <span className="dot" />
+          <Link
+            href="/"
+            className="logo"
+            aria-label="Cashlight home"
+            onClick={closeMenu}
+          >
+            <span className="dot" aria-hidden="true" />
             Cashlight
           </Link>
         </div>
