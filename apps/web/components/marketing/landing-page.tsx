@@ -8,6 +8,7 @@ import { SurveyModal } from "@/components/marketing/survey-modal";
 import { ThankYouModal } from "@/components/marketing/thank-you-modal";
 import { isAnchorId, scrollToAnchor } from "@/lib/anchor-scroll";
 import { useGlobalSound } from "@/lib/use-global-sound";
+import { useScrollingTabTitle } from "@/lib/use-scrolling-tab-title";
 
 const TICKER_ITEMS = [
   "Multiple bank accounts",
@@ -412,6 +413,7 @@ export function LandingPage() {
   >({ hero: "default", footer: "default" });
   const [clickBursts, setClickBursts] = useState<Array<{ id: number; x: number; y: number }>>([]);
   const { isEnabled, toggleSound, playChime } = useGlobalSound();
+  useScrollingTabTitle();
 
   function handleWaitlistSuccess(payload: WaitlistSuccessPayload) {
     if (payload.surveyCompleted) {

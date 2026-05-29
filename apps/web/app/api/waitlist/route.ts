@@ -39,7 +39,18 @@ export async function POST(request: Request) {
       surveyCompleted: result.surveyCompleted,
     });
   } catch (error) {
-    console.error("[waitlist]", error);
+    const supabaseErr =
+      typeof error === "object" &&
+      error !== null &&
+      "message" in error &&
+      typeof (error as { message: unknown }).message === "string"
+        ? (error as { code?: string; message: string; details?: string })
+        : null;
+    console.error(
+      "[waitlist]",
+      supabaseErr?.message ?? (error instanceof Error ? error.message : error),
+      supabaseErr?.code ? { code: supabaseErr.code, details: supabaseErr.details } : "",
+    );
     return NextResponse.json(
       { error: "Unable to join waitlist" },
       { status: 500 },
