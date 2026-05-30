@@ -75,6 +75,13 @@ button:focus-visible {
 }
 ::selection { background: var(--gold); color: #0a0805; }
 
+/* Mobile tap behaviour: kill the 300ms double-tap-zoom delay on controls and
+   the default grey tap flash (we provide our own :focus-visible / :hover states). */
+button, a, summary, label, [role="button"], [role="checkbox"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* warm atmospheric layers */
 body::before {
   content: "";
@@ -333,7 +340,7 @@ nav.top.nav-menu-is-open .nav-menu-toggle-bar:nth-child(3) {
   font-size: 15px;
   padding: 12px 18px;
 }
-@media (max-width: 780px) {
+@media (max-width: 768px) {
   .nav-desktop-only { display: none !important; }
   .nav-menu-toggle.nav-mobile-only {
     display: inline-flex;
@@ -910,6 +917,40 @@ nav.top.nav-menu-is-open .nav-menu-toggle-bar:nth-child(3) {
   font-size: 13px;
   line-height: 1.5;
   color: rgba(240, 237, 232, .55);
+}
+
+/* Narrow cards: absolute % positioning bunches India/Global labels together
+   and pushes Global past the right edge. Lay the nodes out as an evenly
+   spaced legend so labels never overlap (order still reads You → India → Global). */
+@media (max-width: 640px) {
+  .savings-benchmark-rail {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: auto;
+    gap: 8px;
+  }
+  .savings-benchmark-rail-line {
+    display: none;
+  }
+  .savings-benchmark-node,
+  .savings-benchmark-node--align-center,
+  .savings-benchmark-node--align-end,
+  .savings-benchmark-node--align-start {
+    position: static;
+    left: auto !important;
+    transform: none;
+    flex: 1 1 0;
+    min-width: 0;
+    align-items: center;
+    text-align: center;
+  }
+  .savings-benchmark-node--you { align-items: flex-start; text-align: left; }
+  .savings-benchmark-node--global { align-items: flex-end; text-align: right; }
+  .savings-benchmark-node-label {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
 }
 
 .report-footer {
@@ -2751,7 +2792,9 @@ footer.site-footer--compact::before {
     max-height: 100%;
     min-height: 0;
     align-items: stretch;
-    transform: scale(clamp(1.05, 0.55vw + 0.98, 1.1));
+    /* Keep scale modest: scaling the full-width grid from center overflows
+       each side by (scale-1)/2 and the hero clips it (overflow: hidden). */
+    transform: scale(clamp(1.0, 0.3vw + 0.97, 1.03));
     transform-origin: center center;
   }
   .landing-page .hero-left h1 {
@@ -2919,8 +2962,11 @@ footer.site-footer--compact::before {
   line-height: 1.55;
   color: var(--ink-dim);
 }
-/* /pricing — fit shell: relaxed spacing; light scroll ok on laptop+ */
-@media (min-width: 1024px) and (min-height: 720px) {
+/* /pricing — fit shell: relaxed spacing; light scroll ok on laptop+.
+   Gate at min-height 768 (not 720) so the one-screen lock only engages with
+   real vertical room — short laptops, browser zoom, and large OS font sizes
+   fall through to the normal-scroll fallback below instead of being clipped. */
+@media (min-width: 1024px) and (min-height: 768px) {
   html:has(.marketing-page-fit-shell) {
     overflow: hidden;
   }
@@ -3357,8 +3403,9 @@ footer.site-footer--compact::before {
     flex: 0 0 auto;
   }
 }
-/* Allow scroll on short/narrow viewports where one-screen fit is not viable */
-@media (max-width: 1023px), (max-height: 719px) {
+/* Allow scroll on short/narrow viewports where one-screen fit is not viable.
+   Upper bound is 767px to dovetail with the 768px activation gate above. */
+@media (max-width: 1023px), (max-height: 767px) {
   html:has(.marketing-page-fit-shell) {
     overflow: auto;
   }
@@ -3738,7 +3785,7 @@ footer.site-footer--compact::before {
   }
 
   .landing-page .hero-grid--landing {
-    transform: scale(clamp(1.04, 0.45vw + 0.96, 1.08));
+    transform: scale(clamp(1.0, 0.3vw + 0.97, 1.03));
     transform-origin: center center;
   }
 
@@ -4242,6 +4289,7 @@ footer.site-footer--compact::before {
   max-width: 32rem;
   max-height: min(90dvh, 720px);
   overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--card);
   border: 1px solid var(--line-2);
   border-radius: 14px;
