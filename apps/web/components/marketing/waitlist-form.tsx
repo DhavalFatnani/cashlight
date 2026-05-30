@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { WAITLIST_DISPLAY_POSITION } from "@/lib/marketing-content";
 
 type FormState = "idle" | "loading" | "done" | "error";
 
@@ -21,7 +20,6 @@ type WaitlistFormProps = {
   label: string;
   submitLabel?: string;
   eyebrow?: string;
-  listPosition?: number;
   surveyState: SurveyState;
   onSignup?: () => void;
   onWaitlistSuccess: (payload: WaitlistSuccessPayload) => void;
@@ -32,7 +30,6 @@ export function WaitlistForm({
   label,
   submitLabel = "Join the waitlist",
   eyebrow = "// waitlist",
-  listPosition = WAITLIST_DISPLAY_POSITION,
   surveyState,
   onSignup,
   onWaitlistSuccess,
@@ -72,6 +69,7 @@ export function WaitlistForm({
         position?: number;
         isNew?: boolean;
         surveyCompleted?: boolean;
+        claimed?: number;
         error?: string;
       };
       if (!res.ok || !data.success) {
@@ -126,8 +124,7 @@ export function WaitlistForm({
         </button>
       </div>
       <div className="form-note">
-        No credit card. No payment now.{" "}
-        <em>You&apos;re #{listPosition} on the list — we&apos;ll email when it&apos;s ready.</em>
+        No credit card. No payment now. We&apos;ll email when it&apos;s ready.
       </div>
       {errorMessage ? (
         <div className="form-error" role="alert">
@@ -137,10 +134,12 @@ export function WaitlistForm({
       <div className="form-success" role="status" aria-live="polite">
         {surveyState === "submitted" ? (
           <>Thanks. Your input shapes what we build.</>
-        ) : (
+        ) : position !== null ? (
           <>
-            You&apos;re <b>#{position ?? listPosition}</b> on the list. We&apos;ll be in touch.
+            You&apos;re <b>#{position}</b> on the list. We&apos;ll be in touch.
           </>
+        ) : (
+          <>You&apos;re on the list. We&apos;ll be in touch.</>
         )}
       </div>
     </form>

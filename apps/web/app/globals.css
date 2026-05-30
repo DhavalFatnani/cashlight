@@ -2286,6 +2286,9 @@ footer.site-footer--compact::before {
   font-style: italic;
   color: var(--ink-dim);
 }
+.founding-stats--loading .count b {
+  color: var(--ink-dim);
+}
 .hero-cta-row {
   margin-top: 22px;
 }
@@ -3833,6 +3836,117 @@ footer.site-footer--compact::before {
   width: 100%;
   max-width: 12rem;
   margin-top: 8px;
+}
+
+/* Pricing tier interest */
+.pricing-intent-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pricing-intent-kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0;
+}
+
+.pricing-intent-title {
+  font-family: var(--display);
+  font-size: clamp(22px, 4vw, 28px);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -.02em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.pricing-intent-body {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-dim);
+}
+
+.pricing-intent-body strong {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.pricing-intent-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.pricing-intent-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.pricing-intent-form input[type="email"] {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: 1px solid var(--line-2);
+  background: rgba(0, 0, 0, .35);
+  color: var(--ink);
+}
+
+.pricing-intent-form input[type="email"]:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.pricing-intent-error {
+  margin: 0;
+  font-size: 13px;
+  color: #e85d5d;
+}
+
+.pricing-intent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.pricing-intent-cancel {
+  padding: 11px 16px;
+  font-family: var(--display);
+  font-size: 13px;
+  color: var(--ink-dim);
+  background: transparent;
+  border: 1px solid var(--line-2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color .2s, color .2s;
+}
+
+.pricing-intent-cancel:hover {
+  color: var(--ink);
+  border-color: var(--ink-mute);
+}
+
+.pricing-intent-cancel:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.pricing-intent-done {
+  width: 100%;
+  max-width: 12rem;
+  margin-top: 8px;
+  align-self: center;
 }
 
 @media (max-width: 640px) {

@@ -6,8 +6,6 @@ import {
   type SurveyState,
   type WaitlistSuccessPayload,
 } from "@/components/marketing/waitlist-form";
-import { WAITLIST_DISPLAY_POSITION } from "@/lib/marketing-content";
-
 type LandingCtaSectionProps = {
   surveyState: SurveyState;
   onWaitlistSuccess: (payload: WaitlistSuccessPayload) => void;
@@ -28,7 +26,6 @@ export function LandingCtaSection({
           source="cta"
           label="Join the waitlist"
           submitLabel="Join the waitlist"
-          listPosition={WAITLIST_DISPLAY_POSITION}
           surveyState={surveyState}
           onWaitlistSuccess={onWaitlistSuccess}
         />

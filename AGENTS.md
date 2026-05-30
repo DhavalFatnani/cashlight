@@ -32,7 +32,7 @@ Copy `.env.example` → `apps/web/.env.local`. Required for waitlist API:
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (client / RLS)
 - `SUPABASE_SECRET_KEY` (server only — API routes via `@cashlight/db`)
 
-Run `packages/db/migrations/000_waitlist.sql` in Supabase before testing signups.
+Run Supabase migrations in `packages/db/migrations/` (at minimum `000_waitlist.sql`, `001_survey_responses.sql`, `003_pricing_intents.sql`) before testing signups and pricing intent.
 
 ## Landing page implementation
 

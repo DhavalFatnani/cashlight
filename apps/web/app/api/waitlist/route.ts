@@ -1,7 +1,29 @@
-import { addToWaitlist } from "@cashlight/db";
+import { addToWaitlist, getWaitlistCount } from "@cashlight/db";
 import { NextResponse } from "next/server";
+import { TOTAL_FOUNDING_SPOTS } from "@/lib/marketing-content";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export const dynamic = "force-dynamic";
+
+export async function GET() {
+  try {
+    const claimed = await getWaitlistCount();
+    return NextResponse.json({
+      claimed,
+      total: TOTAL_FOUNDING_SPOTS,
+    });
+  } catch (error) {
+    console.error(
+      "[waitlist] GET",
+      error instanceof Error ? error.message : error,
+    );
+    return NextResponse.json(
+      { error: "Unable to load waitlist stats" },
+      { status: 500 },
+    );
+  }
+}
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -32,11 +54,14 @@ export async function POST(request: Request) {
 
   try {
     const result = await addToWaitlist(email, source);
+    const claimed = await getWaitlistCount();
     return NextResponse.json({
       success: true,
       position: result.position,
       isNew: result.isNew,
       surveyCompleted: result.surveyCompleted,
+      claimed,
+      total: TOTAL_FOUNDING_SPOTS,
     });
   } catch (error) {
     const supabaseErr =

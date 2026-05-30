@@ -1,44 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { SPOTS_CLAIMED, TOTAL_FOUNDING_SPOTS } from "@/lib/marketing-content";
+import { WaitlistProgress } from "@/components/marketing/waitlist-progress";
+import { useWaitlistStats } from "@/lib/use-waitlist-stats";
 
-export function FoundingCounter() {
-  const [progressPct, setProgressPct] = useState(0);
-  const targetPct = (SPOTS_CLAIMED / TOTAL_FOUNDING_SPOTS) * 100;
+type FoundingCounterProps = {
+  /** Server-rendered count — avoids loading flash when provided */
+  initialClaimed?: number;
+  initialTotal?: number;
+};
 
-  useEffect(() => {
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (reduced) {
-      setProgressPct(targetPct);
-      return;
-    }
-    const id = requestAnimationFrame(() => setProgressPct(targetPct));
-    return () => cancelAnimationFrame(id);
-  }, [targetPct]);
+export function FoundingCounter({
+  initialClaimed,
+  initialTotal,
+}: FoundingCounterProps = {}) {
+  const { stats, loading } = useWaitlistStats({
+    claimed: initialClaimed,
+    total: initialTotal,
+  });
 
-  return (
-    <div className="founding-stats">
-      <div className="count">
-        <b>
-          {SPOTS_CLAIMED} / {TOTAL_FOUNDING_SPOTS} spots claimed
-        </b>
+  if (loading) {
+    return (
+      <div className="founding-stats founding-stats--loading" aria-busy="true">
+        <div className="count">
+          <b>Loading waitlist…</b>
+        </div>
+        <div className="founding-progress" aria-hidden>
+          <div className="founding-progress-fill" style={{ width: "0%" }} />
+        </div>
       </div>
-      <div
-        className="founding-progress"
-        role="progressbar"
-        aria-valuenow={SPOTS_CLAIMED}
-        aria-valuemin={0}
-        aria-valuemax={TOTAL_FOUNDING_SPOTS}
-        aria-label="Founding spots claimed"
-      >
-        <div
-          className="founding-progress-fill"
-          style={{ width: `${progressPct}%` }}
-        />
-      </div>
-    </div>
-  );
+    );
+  }
+
+  return <WaitlistProgress claimed={stats.claimed} total={stats.total} />;
 }

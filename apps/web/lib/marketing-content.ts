@@ -4,9 +4,6 @@ export const FOUNDING_PRICE_MONTHLY = 49;
 export const FOUNDING_PRICE_LABEL = "₹49/mo";
 export const FOUNDING_PRICE_LONG = "₹49/month";
 export const TOTAL_FOUNDING_SPOTS = 200;
-export const SPOTS_CLAIMED = 64;
-/** Shown in hero/CTA microcopy before signup */
-export const WAITLIST_DISPLAY_POSITION = 64;
 
 export const TICKER_ITEMS = [
   "Multiple bank accounts",
@@ -129,8 +126,22 @@ export const LEDGER = [
   },
 ] as const;
 
-export const PRICING = [
+export const PRICING_TIER_IDS = ["free", "pro", "premium"] as const;
+export type PricingTierId = (typeof PRICING_TIER_IDS)[number];
+
+export type PricingTier = {
+  id: PricingTierId;
+  tier: string;
+  amount: string;
+  period: string;
+  features: readonly string[];
+  cta: string;
+  popular: boolean;
+};
+
+export const PRICING: readonly PricingTier[] = [
   {
+    id: "free",
     tier: "Free",
     amount: "₹0",
     period: " / forever",
@@ -139,6 +150,7 @@ export const PRICING = [
     popular: false,
   },
   {
+    id: "pro",
     tier: "Pro",
     amount: "₹299",
     period: " / month",
@@ -152,6 +164,7 @@ export const PRICING = [
     popular: true,
   },
   {
+    id: "premium",
     tier: "Premium",
     amount: "₹999",
     period: " / month",
