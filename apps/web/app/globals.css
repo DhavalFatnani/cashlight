@@ -3359,12 +3359,22 @@ footer.site-footer--compact::before {
 }
 /* Allow scroll on short/narrow viewports where one-screen fit is not viable */
 @media (max-width: 1023px), (max-height: 719px) {
+  html:has(.marketing-page-fit-shell) {
+    overflow: auto;
+  }
+
   .marketing-page-fit-shell {
     height: auto;
     max-height: none;
     overflow: visible;
-    min-height: 100dvh;
+    min-height: 0;
+    padding-top: 0;
   }
+
+  .marketing-page-fit-shell:has(.why-page-shell) {
+    overflow-y: visible;
+  }
+
   .marketing-page-fit-shell .pricing-page-shell,
   .marketing-page-fit-shell .contact-page-shell,
   .marketing-page-fit-shell .why-page-shell,
@@ -3379,11 +3389,79 @@ footer.site-footer--compact::before {
     flex: none;
     min-height: 0;
   }
+
+  .marketing-page-fit-shell .why-page-shell {
+    overflow: visible;
+  }
+
+  .marketing-page-fit-shell .why-page-section.block {
+    overflow: visible;
+    min-height: auto;
+  }
+
+  .marketing-page-fit-shell .why-page-section .wrap-narrow {
+    min-height: auto;
+  }
+
+  .marketing-page-fit-shell .why-page-section .memo {
+    flex: none;
+    min-height: auto;
+    max-height: none;
+    overflow: visible;
+    overscroll-behavior: auto;
+    scrollbar-gutter: auto;
+  }
+
   .marketing-page-fit-shell .pricing-page-shell,
   .marketing-page-fit-shell .contact-page-shell,
   .marketing-page-fit-shell .why-page-shell {
-    padding-top: 5.5rem;
+    padding-top: calc(66px + env(safe-area-inset-top, 0px));
     padding-bottom: 2rem;
+  }
+
+  /* Compact footer — stack on narrow viewports (overrides desktop fit-shell grid) */
+  .marketing-page-fit-shell .site-footer--compact {
+    margin-top: 0;
+    flex-shrink: 0;
+  }
+
+  .marketing-page-fit-shell .site-footer--compact .footer-meta {
+    padding: 24px 20px 28px;
+    padding-bottom: max(28px, env(safe-area-inset-bottom, 0px));
+  }
+
+  .marketing-page-fit-shell .site-footer--compact .footer-row {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 18px;
+  }
+
+  .marketing-page-fit-shell .site-footer--compact .footer-brand {
+    justify-self: start;
+  }
+
+  .marketing-page-fit-shell .site-footer--compact .footer-links {
+    justify-self: start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 14px 18px;
+    width: 100%;
+  }
+
+  .marketing-page-fit-shell .site-footer--compact .footer-end {
+    justify-self: start;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .marketing-page-fit-shell .site-footer--compact .footer-copy {
+    white-space: normal;
+  }
+
+  .marketing-page-fit-shell .site-footer--compact .disclaimer {
+    margin-top: 14px;
+    font-size: 12.5px;
+    line-height: 1.55;
   }
 
   .how-it-works-page.marketing-page {
@@ -3393,6 +3471,39 @@ footer.site-footer--compact::before {
 
   .process-intro-panel {
     padding-top: calc(66px + env(safe-area-inset-top, 0px) + 2rem);
+  }
+}
+
+/* Marketing compact footer — stack on mobile/tablet (how-it-works + subpages) */
+@media (max-width: 1023px) {
+  footer.site-footer--compact .footer-row {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 18px;
+  }
+
+  footer.site-footer--compact .footer-links {
+    justify-self: start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 14px 18px;
+    width: 100%;
+  }
+
+  footer.site-footer--compact .footer-end {
+    justify-self: start;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  footer.site-footer--compact .footer-copy {
+    white-space: normal;
+  }
+
+  footer.site-footer--compact .footer-meta {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: max(28px, env(safe-area-inset-bottom, 0px));
   }
 }
 
