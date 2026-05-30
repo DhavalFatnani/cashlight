@@ -294,7 +294,7 @@ export function ComplexityVisualization() {
         top: 0,
         left: 0,
         width: "100%",
-        height: "100vh",
+        height: "100dvh",
         opacity: 0.35,
         pointerEvents: ambientOnly ? "none" : "auto",
         zIndex: 0,
