@@ -1,5 +1,6 @@
 import {
   addToWaitlist,
+  getLatestPricingIntentTier,
   isPricingTierId,
   recordPricingIntent,
 } from "@cashlight/db";
@@ -8,6 +9,26 @@ import { NextResponse } from "next/server";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const dynamic = "force-dynamic";
+
+export async function GET(request: Request) {
+  const email = new URL(request.url).searchParams.get("email")?.trim().toLowerCase();
+  if (!email || !EMAIL_RE.test(email)) {
+    return NextResponse.json({ error: "Invalid email" }, { status: 400 });
+  }
+  try {
+    const tier = await getLatestPricingIntentTier(email);
+    return NextResponse.json({ tier });
+  } catch (error) {
+    console.error(
+      "[pricing-intent] GET",
+      error instanceof Error ? error.message : error,
+    );
+    return NextResponse.json(
+      { error: "Unable to load pricing intent" },
+      { status: 500 },
+    );
+  }
+}
 
 export async function POST(request: Request) {
   let body: unknown;

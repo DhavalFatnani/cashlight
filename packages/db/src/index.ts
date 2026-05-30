@@ -8,6 +8,7 @@ export {
   type SurveyPayload,
 } from "./survey";
 export {
+  getLatestPricingIntentTier,
   isPricingTierId,
   recordPricingIntent,
   PRICING_TIER_IDS,

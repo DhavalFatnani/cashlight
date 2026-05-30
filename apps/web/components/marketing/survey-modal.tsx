@@ -13,6 +13,11 @@ import {
   type SurveyResponse,
   type SurveyStep,
 } from "@/lib/survey-questions";
+import {
+  isSurveyPricingTierId,
+  SURVEY_PRICING_TIER_OPTIONS,
+  surveyPricingTierOption,
+} from "@/lib/survey-pricing-tier";
 
 type SurveyModalProps = {
   open: boolean;
@@ -69,8 +74,11 @@ function stepIsValid(step: SurveyStep, answers: SurveyAnswers): boolean {
         return answers.pain_gap_other.trim().length > 0;
       }
       return true;
-    case "wtp_band":
-      return answers.wtp_band !== null;
+    case "pricing_tier":
+      return (
+        answers.pricing_tier !== null &&
+        isSurveyPricingTierId(answers.pricing_tier)
+      );
     case "feature_priorities":
       return answers.feature_priorities.length > 0;
     case "feedback":
@@ -119,10 +127,28 @@ export function SurveyModal({
   }, [onSkipped, onClose]);
 
   useEffect(() => {
-    if (open) {
-      reset();
-    }
-  }, [open, reset]);
+    if (!open) return;
+    reset();
+    let cancelled = false;
+    void (async () => {
+      try {
+        const res = await fetch(
+          `/api/pricing-intent?email=${encodeURIComponent(email)}`,
+          { cache: "no-store" },
+        );
+        if (!res.ok || cancelled) return;
+        const data = (await res.json()) as { tier?: string };
+        if (data.tier && isSurveyPricingTierId(data.tier) && !cancelled) {
+          setAnswers((a) => ({ ...a, pricing_tier: data.tier ?? null }));
+        }
+      } catch {
+        /* prefill optional */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [open, email, reset]);
 
   useEffect(() => {
     if (!open) return;
@@ -180,6 +206,19 @@ export function SurveyModal({
     setSubmitting(true);
     setError(null);
 
+    const pricingTier = answers.pricing_tier;
+    if (!pricingTier || !isSurveyPricingTierId(pricingTier)) {
+      setError("Pick a plan.");
+      setSubmitting(false);
+      return;
+    }
+    const pricingChoice = surveyPricingTierOption(pricingTier);
+    if (!pricingChoice) {
+      setError("Pick a plan.");
+      setSubmitting(false);
+      return;
+    }
+
     const payload: SurveyResponse = {
       email,
       source,
@@ -190,7 +229,8 @@ export function SurveyModal({
       pain_gap_other: answers.pain_gap.includes("Other")
         ? answers.pain_gap_other.trim()
         : null,
-      wtp_band: answers.wtp_band as SurveyResponse["wtp_band"],
+      wtp_band: pricingChoice.wtpBand,
+      pricing_tier: pricingTier,
       feature_priorities:
         answers.feature_priorities as SurveyResponse["feature_priorities"],
       feedback:
@@ -241,6 +281,9 @@ export function SurveyModal({
     if (step.type === "text" && step.hint) {
       return step.hint;
     }
+    if (step.id === "pricing_tier" && step.hint) {
+      return step.hint;
+    }
     if (step.type === "multi" || step.type === "multi_with_other") {
       return "Select all that apply";
     }
@@ -270,15 +313,32 @@ export function SurveyModal({
           </div>
         );
       case "single":
+        if (step.id === "pricing_tier") {
+          return (
+            <div
+              className={chipRowClass(step.type)}
+              role="group"
+              aria-labelledby="survey-q"
+            >
+              {SURVEY_PRICING_TIER_OPTIONS.map((opt) => (
+                <Chip
+                  key={opt.id}
+                  label={opt.label}
+                  selected={answers.pricing_tier === opt.id}
+                  onClick={() => {
+                    setAnswers((a) => ({ ...a, pricing_tier: opt.id }));
+                    scheduleAutoAdvance();
+                  }}
+                />
+              ))}
+            </div>
+          );
+        }
         return (
           <div className={chipRowClass(step.type)} role="group" aria-labelledby="survey-q">
             {step.options.map((opt) => {
               const field =
-                step.id === "current_tool"
-                  ? "current_tool"
-                  : step.id === "pain_hours"
-                    ? "pain_hours"
-                    : "wtp_band";
+                step.id === "current_tool" ? "current_tool" : "pain_hours";
               return (
                 <Chip
                   key={opt}

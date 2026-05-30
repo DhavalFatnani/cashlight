@@ -11,6 +11,10 @@ import {
   type SurveyResponse,
   WTP_OPTIONS,
 } from "@/lib/survey-questions";
+import {
+  isSurveyPricingTierId,
+  surveyPricingTierOption,
+} from "@/lib/survey-pricing-tier";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -89,8 +93,18 @@ export function validateSurveyPayload(input: unknown): ValidateResult {
     painGapOther = trimmed;
   }
 
-  if (!isStringFrom(body.wtp_band, WTP_OPTIONS)) {
-    return { ok: false, error: "Invalid wtp_band" };
+  if (
+    typeof body.pricing_tier !== "string" ||
+    !isSurveyPricingTierId(body.pricing_tier)
+  ) {
+    return { ok: false, error: "Pick a plan" };
+  }
+  const pricingChoice = surveyPricingTierOption(body.pricing_tier);
+  if (!pricingChoice) {
+    return { ok: false, error: "Invalid plan" };
+  }
+  if (!isStringFrom(pricingChoice.wtpBand, WTP_OPTIONS)) {
+    return { ok: false, error: "Invalid wtp_band mapping" };
   }
 
   if (
@@ -126,7 +140,8 @@ export function validateSurveyPayload(input: unknown): ValidateResult {
       pain_hours: body.pain_hours,
       pain_gap: body.pain_gap,
       pain_gap_other: painGapOther,
-      wtp_band: body.wtp_band,
+      wtp_band: pricingChoice.wtpBand,
+      pricing_tier: body.pricing_tier,
       feature_priorities: body.feature_priorities,
       feedback,
     },

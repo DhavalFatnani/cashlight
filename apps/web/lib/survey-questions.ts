@@ -72,9 +72,9 @@ export type SurveyStepId =
   | "current_tool"
   | "pain_hours"
   | "pain_gap"
-  | "wtp_band"
   | "feature_priorities"
-  | "feedback";
+  | "feedback"
+  | "pricing_tier";
 
 type SurveyStepBase = {
   id: SurveyStepId;
@@ -156,15 +156,6 @@ export const SURVEY_STEPS: SurveyStep[] = [
     required: true,
   },
   {
-    id: "wtp_band",
-    type: "single",
-    question:
-      "If Cashlight delivered what we describe, what feels fair to pay monthly?",
-    options: WTP_OPTIONS,
-    required: true,
-    autoAdvance: true,
-  },
-  {
     id: "feature_priorities",
     type: "multi_cap",
     question: "Pick the 3 most valuable features for you.",
@@ -181,6 +172,16 @@ export const SURVEY_STEPS: SurveyStep[] = [
     required: false,
     maxLength: FEEDBACK_MAX,
   },
+  {
+    id: "pricing_tier",
+    type: "single",
+    question:
+      "If we launched tomorrow, which plan would you actually start on?",
+    hint: "Same plans as our pricing page — pick what you’d actually use.",
+    options: ["Free", "Pro", "Premium", "Founding", "None"] as const,
+    required: true,
+    autoAdvance: true,
+  },
 ];
 
 export type SurveyAnswers = {
@@ -189,7 +190,7 @@ export type SurveyAnswers = {
   pain_hours: string | null;
   pain_gap: string[];
   pain_gap_other: string;
-  wtp_band: string | null;
+  pricing_tier: string | null;
   feature_priorities: string[];
   feedback: string;
 };
@@ -200,7 +201,7 @@ export const EMPTY_SURVEY_ANSWERS: SurveyAnswers = {
   pain_hours: null,
   pain_gap: [],
   pain_gap_other: "",
-  wtp_band: null,
+  pricing_tier: null,
   feature_priorities: [],
   feedback: "",
 };
@@ -214,6 +215,8 @@ export type SurveyResponse = {
   pain_gap: Array<(typeof PAIN_GAP_OPTIONS)[number]>;
   pain_gap_other: string | null;
   wtp_band: (typeof WTP_OPTIONS)[number];
+  /** Survey plan pick — persisted to `pricing_intents` on submit */
+  pricing_tier: string;
   feature_priorities: Array<(typeof FEATURE_OPTIONS)[number]>;
   feedback: string | null;
 };
