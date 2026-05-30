@@ -1,4 +1,37 @@
 /** Sample health report card (Arjun K. · 51/100) — hero asset. */
+
+const BENCHMARK_MAX_PCT = 30;
+const BENCHMARK_YOU_PCT = 9.2;
+
+type BenchmarkNode = {
+  id: string;
+  label: string;
+  align: "center" | "end" | "start";
+  /** Visual position on the rail (may differ slightly from raw % for label clearance). */
+  positionPct: number;
+};
+
+const BENCHMARK_NODES: readonly BenchmarkNode[] = [
+  {
+    id: "you",
+    label: "You · 9.2%",
+    align: "center",
+    positionPct: (BENCHMARK_YOU_PCT / BENCHMARK_MAX_PCT) * 100,
+  },
+  {
+    id: "india",
+    label: "India · 18%",
+    align: "center",
+    positionPct: 56,
+  },
+  {
+    id: "global",
+    label: "Global · 22%",
+    align: "center",
+    positionPct: 76,
+  },
+];
+
 export function HealthReportCard() {
   return (
     <div className="report reveal">
@@ -41,20 +74,6 @@ export function HealthReportCard() {
             </div>
             <div className="bar">
               <i data-w="73" data-delay="0" className="metric-bar-fill--danger" />
-            </div>
-          </div>
-          <div className="metric err">
-            <div className="row">
-              <div className="nm">Real savings rate</div>
-              <div className="st">✕ LOW</div>
-            </div>
-            <div className="row">
-              <div className="val" data-count="9.2" data-suffix="%">
-                9.2%
-              </div>
-            </div>
-            <div className="bar">
-              <i data-w="46" data-delay="0.1" className="metric-bar-fill--danger" />
             </div>
           </div>
           <div className="metric warn">
@@ -109,6 +128,37 @@ export function HealthReportCard() {
               <i data-w="40" data-delay="0.5" className="metric-bar-fill--amber" />
             </div>
           </div>
+        </div>
+
+        <div
+          className="savings-benchmark"
+          aria-label="Real savings rate compared to India and global medians"
+        >
+          <div className="savings-benchmark-label">REAL SAVINGS RATE</div>
+          <div className="savings-benchmark-rail">
+            <div className="savings-benchmark-rail-line" aria-hidden />
+            {BENCHMARK_NODES.map((node) => (
+              <div
+                key={node.id}
+                className={`savings-benchmark-node savings-benchmark-node--${node.id} savings-benchmark-node--align-${node.align}`}
+                style={{ left: `${node.positionPct}%` }}
+              >
+                <span className="savings-benchmark-node-dot" />
+                <span
+                  className={
+                    node.id === "you"
+                      ? "savings-benchmark-node-label savings-benchmark-node-label--you"
+                      : "savings-benchmark-node-label"
+                  }
+                >
+                  {node.label}
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="savings-benchmark-caption">
+            You&apos;re saving about half of what the median Indian does.
+          </p>
         </div>
       </div>
       <div className="report-footer">

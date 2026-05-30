@@ -35,7 +35,7 @@ export const LANDING_GAPS: readonly LandingGap[] = [
   {
     id: "bonus",
     level: "err",
-    line: "₹2L bonus in March. Gone by September. Nobody flagged investing it.",
+    line: "₹2L bonus in March. Gone by September. Nobody surfaced it in a report.",
   },
   {
     id: "lic",
@@ -45,7 +45,7 @@ export const LANDING_GAPS: readonly LandingGap[] = [
   {
     id: "80c",
     level: "warn",
-    line: "₹62k of 80C headroom unused — every year. Maybe the wrong regime too.",
+    line: "₹62k of 80C headroom unused every year. Regime fit shown in your report, not guessed.",
   },
   {
     id: "family",
@@ -65,7 +65,7 @@ export const HEALTH_DIMENSIONS = [
   },
   {
     name: "Emergency buffer",
-    line: "Months you survive on liquid savings alone. Yours: 1.3 — target 6.",
+    line: "Months you survive on liquid savings alone. Yours: 1.3 mo. A common benchmark is ~6 mo.",
   },
   {
     name: "Insurance adequacy",
@@ -73,11 +73,11 @@ export const HEALTH_DIMENSIONS = [
   },
   {
     name: "Equity exposure",
-    line: "Wealth in growth assets. Yours: 92% gold and FD — inflation wins.",
+    line: "Wealth in growth assets. Yours: 92% gold and FD. Benchmark context for inflation, not a product pick.",
   },
   {
     name: "Debt-to-income ratio",
-    line: "EMIs as % of take-home. Yours: 34% — watch above 40%.",
+    line: "EMIs as % of take-home. Yours: 34%. Many frameworks flag stress above 40%.",
   },
   {
     name: "Irregular income rate",
@@ -85,7 +85,7 @@ export const HEALTH_DIMENSIONS = [
   },
   {
     name: "Tax efficiency",
-    line: "80C + regime fit. ₹62k headroom unused — old regime likely better.",
+    line: "80C + regime fit. ₹62k headroom unused. We show regime scenarios, not a filing prescription.",
   },
 ] as const;
 
@@ -170,7 +170,7 @@ export const PRICING: readonly PricingTier[] = [
     period: " / month",
     features: [
       "Everything in Pro",
-      "Annual human review session",
+      "Option to book a CA session (limited slots)",
       "Family / couple linking",
       "Estate & nominee mapping",
     ],

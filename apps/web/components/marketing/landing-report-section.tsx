@@ -20,7 +20,8 @@ export function LandingReportSection() {
           <HealthReportCard />
         </div>
         <p className="report-sample-caption reveal">
-          Sample report. Yours takes about 90 seconds.
+          Sample report. Yours is built from your own statements. Upload them and
+          this is what you get back.
         </p>
       </div>
     </section>

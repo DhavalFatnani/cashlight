@@ -2,6 +2,7 @@
 
 import { HealthReportCard } from "@/components/marketing/health-report-card";
 import { LandingTicker } from "@/components/marketing/landing-ticker";
+import { WaitlistFormNote } from "@/components/marketing/waitlist-form-note";
 import {
   WaitlistForm,
   type SurveyState,
@@ -21,33 +22,52 @@ export function LandingHeroSection({
     <header className="hero">
       <div className="wrap hero-grid hero-grid--landing">
         <div className="hero-left">
-          <p className="ses hero-eyebrow reveal">
-            {"// YOUR MONEY, FINALLY UNDERSTOOD"}
-          </p>
-          <h1 className="reveal">
-            Your money is
-            <br />
-            <em>more complicated than any app admits.</em>
-          </h1>
-          <p className="hero-sub reveal">
-            Multiple accounts, family you support, lumpy bonuses, EMIs across
-            banks. Cashlight reads your actual statements and shows you where
-            you really stand.
-          </p>
-          <p className="hero-hint reveal">
-            <em>Try clicking the nodes in the background to make payments</em>
-          </p>
+          <div className="hero-left-main">
+            <p className="ses hero-eyebrow reveal">
+              {"// YOUR MONEY, FINALLY UNDERSTOOD"}
+            </p>
+            <h1 className="reveal">
+              You earn well.{" "}
+              <em>So why does money still feel like guesswork?</em>
+            </h1>
+            <ul className="hero-sub-list reveal">
+              <li>Money spread across three accounts.</li>
+              <li>Half of it going to family.</li>
+              <li>A ₹2 lakh bonus that vanished by September.</li>
+              <li>EMIs you&apos;ve quietly stopped tracking.</li>
+              <li>
+                Earning more was supposed to make this simpler. It didn&apos;t.
+              </li>
+            </ul>
+            <p className="hero-hint reveal">
+              <em>Try clicking the nodes in the background to make payments</em>
+            </p>
+          </div>
 
-          <WaitlistForm
-            source="hero"
-            label="Want to know where you actually stand?"
-            surveyState={surveyState}
-            onWaitlistSuccess={onWaitlistSuccess}
-          />
+          <div className="hero-left-cta reveal">
+            <p className="hero-sub-payoff hero-sub-payoff--highlight">
+              Cashlight reads your actual statements and shows you exactly where
+              you stand, and what people earning what you earn do differently.
+            </p>
+            <WaitlistForm
+              source="hero"
+              label="Join the founding waitlist"
+              submitLabel="Join the waitlist"
+              formNote={<WaitlistFormNote />}
+              surveyState={surveyState}
+              onWaitlistSuccess={onWaitlistSuccess}
+            />
+          </div>
         </div>
 
         <div className="hero-report-slot reveal">
-          <HealthReportCard />
+          <div className="hero-report-card-wrap">
+            <HealthReportCard />
+          </div>
+          <p className="report-sample-caption hero-report-caption">
+            Sample report. Yours is built from your own statements. Upload them
+            and this is what you get back.
+          </p>
         </div>
       </div>
 

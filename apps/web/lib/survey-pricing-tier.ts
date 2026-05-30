@@ -73,7 +73,7 @@ export const SURVEY_PRICING_TIER_OPTIONS: SurveyPricingTierOption[] = [
     amountInr: 0,
     billingPeriod: "none",
     wtpBand: "I wouldn't pay",
-    ctaLabel: "No paid plan",
+    ctaLabel: "No paid tier",
   },
 ];
 

@@ -94,7 +94,7 @@ export const HOW_IT_WORKS_METADATA = buildPageMetadata({
   path: "/how-it-works",
   title: "How Cashlight Works — 8 Dimensions of Financial Health",
   description:
-    "See how Cashlight ingests your statements, scores eight dimensions of financial health, and surfaces scenarios—built for Indian salaries, EMIs, bonuses, and family support.",
+    "See how Cashlight links accounts via Account Aggregator (with statement upload as fallback), scores eight dimensions of financial health, and surfaces scenarios for Indian salaries, EMIs, bonuses, and family support.",
   ogImageAlt: "How Cashlight works — eight dimensions of financial health.",
 });
 
@@ -102,7 +102,7 @@ export const PRICING_METADATA = buildPageMetadata({
   path: "/pricing",
   title: "Cashlight Pricing — No Ads, No Commissions",
   description:
-    "Subscription-only pricing: founding tier at ₹49/mo (first 200), plus Free, Pro, and Premium plans. No ads, no commissions, no product pitches—just your financial health report.",
+    "Subscription-only pricing: founding tier at ₹49/mo (first 200), plus Free, Pro, and Premium tiers. No ads, no commissions, no product pitches. Just your financial health report and scenarios.",
   ogImageAlt: "Cashlight pricing — founding tier and subscription plans.",
 });
 

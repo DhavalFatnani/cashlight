@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 
 type FormState = "idle" | "loading" | "done" | "error";
 
@@ -19,6 +19,7 @@ type WaitlistFormProps = {
   source: WaitlistSource;
   label: string;
   submitLabel?: string;
+  formNote?: ReactNode;
   eyebrow?: string;
   surveyState: SurveyState;
   onSignup?: () => void;
@@ -29,6 +30,7 @@ export function WaitlistForm({
   source,
   label,
   submitLabel = "Join the waitlist",
+  formNote,
   eyebrow = "// waitlist",
   surveyState,
   onSignup,
@@ -124,7 +126,11 @@ export function WaitlistForm({
         </button>
       </div>
       <div className="form-note">
-        No credit card. No payment now. We&apos;ll email when it&apos;s ready.
+        {formNote ?? (
+          <>
+            No credit card. No payment now. We&apos;ll email when it&apos;s ready.
+          </>
+        )}
       </div>
       {errorMessage ? (
         <div className="form-error" role="alert">

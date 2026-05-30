@@ -11,6 +11,7 @@ type MarketingNavProps = {
 
 const NAV_LINKS = [
   { href: "/how-it-works", label: "How it works" },
+  { href: "/why", label: "Why" },
   { href: "/pricing", label: "Pricing" },
   { href: "/contact", label: "Contact" },
 ] as const;

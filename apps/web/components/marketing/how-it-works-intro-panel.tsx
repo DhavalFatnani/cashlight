@@ -6,10 +6,12 @@ export function HowItWorksIntroPanel() {
         <div className="section-head process-intro-head">
           <p className="ses">{"// HOW IT WORKS"}</p>
           <h1 id="how-it-works-intro-heading">
-            From statements to a <em>real health picture.</em>
+            From linked accounts to a <em>real health picture.</em>
           </h1>
           <p className="lede">
-            Upload → we read every line → you explore scenarios. No pitches.
+            Connect via Account Aggregator (default). We read every line. You
+            explore scenarios. Statement upload is there when you need it. No
+            pitches.
           </p>
         </div>
       </div>

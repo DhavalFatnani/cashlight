@@ -52,11 +52,11 @@ export const FEATURE_OPTIONS = [
   "8-dimension health report",
   '"What-if" scenario simulator',
   "Tax optimization (80C + regime)",
-  "Bonus / irregular income planning",
+  "Bonus / irregular income scenarios",
   "Family / household view",
-  "Quarterly human CA review",
+  "Optional CA session (limited slots)",
   "Insurance adequacy check",
-  "Investment portfolio analysis",
+  "Holdings snapshot in your report",
 ] as const;
 
 export const SOURCE_OPTIONS = ["hero", "footer"] as const;
@@ -142,7 +142,7 @@ export const SURVEY_STEPS: SurveyStep[] = [
     id: "pain_hours",
     type: "single",
     question:
-      "In a typical month, how much time do you lose to financial confusion or planning friction?",
+      "In a typical month, how much time do you lose to financial confusion or money-admin friction?",
     options: PAIN_HOURS_OPTIONS,
     required: true,
     autoAdvance: true,
@@ -176,8 +176,8 @@ export const SURVEY_STEPS: SurveyStep[] = [
     id: "pricing_tier",
     type: "single",
     question:
-      "If we launched tomorrow, which plan would you actually start on?",
-    hint: "Same plans as our pricing page — pick what you’d actually use.",
+      "If we launched tomorrow, which tier would you actually start on?",
+    hint: "Same tiers as our pricing page. Signals willingness to pay, not advice.",
     options: ["Free", "Pro", "Premium", "Founding", "None"] as const,
     required: true,
     autoAdvance: true,
@@ -215,7 +215,7 @@ export type SurveyResponse = {
   pain_gap: Array<(typeof PAIN_GAP_OPTIONS)[number]>;
   pain_gap_other: string | null;
   wtp_band: (typeof WTP_OPTIONS)[number];
-  /** Survey plan pick — persisted to `pricing_intents` on submit */
+  /** Survey tier pick — persisted to `pricing_intents` on submit */
   pricing_tier: string;
   feature_priorities: Array<(typeof FEATURE_OPTIONS)[number]>;
   feedback: string | null;

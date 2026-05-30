@@ -208,13 +208,13 @@ export function SurveyModal({
 
     const pricingTier = answers.pricing_tier;
     if (!pricingTier || !isSurveyPricingTierId(pricingTier)) {
-      setError("Pick a plan.");
+      setError("Pick a tier.");
       setSubmitting(false);
       return;
     }
     const pricingChoice = surveyPricingTierOption(pricingTier);
     if (!pricingChoice) {
-      setError("Pick a plan.");
+      setError("Pick a tier.");
       setSubmitting(false);
       return;
     }

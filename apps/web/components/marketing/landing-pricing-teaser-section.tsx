@@ -13,7 +13,7 @@ export function LandingPricingTeaserSection() {
           </h2>
           <p className="lede">
             Paid by you — not manufacturers. No ads, no commissions, no whispered
-            recommendations.
+            product pitches.
           </p>
         </div>
 

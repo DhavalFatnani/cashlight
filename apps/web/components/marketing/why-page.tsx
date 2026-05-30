@@ -1,11 +1,10 @@
-import Link from "next/link";
 import { MarketingPageShell } from "@/components/marketing/marketing-page-shell";
 import { LEDGER } from "@/lib/marketing-content";
 
 export function WhyPage() {
   return (
-    <MarketingPageShell>
-      <section className="block" id="difference">
+    <MarketingPageShell fitViewport className="why-page why-page-shell">
+      <section className="block why-page-section" id="difference">
         <div className="wrap-narrow">
           <div className="section-head">
             <p className="ses">An open memo</p>
@@ -44,9 +43,6 @@ export function WhyPage() {
               — <b>The Cashlight team</b>
             </div>
           </div>
-          <p className="contact-back">
-            <Link href="/">← Back to home</Link>
-          </p>
         </div>
       </section>
     </MarketingPageShell>

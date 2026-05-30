@@ -19,28 +19,45 @@ type ProcessStep = {
   banks?: string[];
 };
 
+const PROCESS_HEADLINE = {
+  lead: "You connect your banks.",
+  em: "We read every line.",
+} as const;
+
 const PROCESS_STEPS: ProcessStep[] = [
   {
     num: "i.",
-    title: "You upload",
+    title: "You connect",
     body: (
       <>
-        PDFs, XLS, CSV — <b>HDFC, SBI, ICICI, IDFC, Kotak, Axis</b>. Full history,
-        pre-aggregator years included.
+        <b>Account Aggregator</b> is the default: one consent, read-only sync across{" "}
+        <b>HDFC, SBI, ICICI, IDFC, Kotak, Axis</b>, and more.{" "}
+        <b>Upload PDF, XLS, or CSV</b> only as a fallback when AA does not cover a
+        bank or you want older history.
       </>
     ),
     terminal: (
       <>
-        <div>
-          <span className="prompt">$</span> ingest hdfc_oct.pdf
+        <div className="console-line">
+          <span className="prompt">$</span> connect --account-aggregator
         </div>
-        <div>
-          <span className="prompt">$</span> ingest icici_oct.xls
+        <div className="console-line">
+          consent <span className="ok">granted</span> ·{" "}
+          <span className="muted">read-only</span>
         </div>
-        <div>
-          <span className="prompt">$</span> ingest kotak_oct.csv
+        <div className="console-line">
+          <span className="prompt">$</span> sync --banks
         </div>
-        <div className="ok">✓ 3 files · 1,284 rows</div>
+        <div className="console-line console-line--nowrap ok">
+          ✓ HDFC · ICICI · Kotak · 1,284 transactions
+        </div>
+        <div className="console-line">
+          <span className="prompt">$</span> upload --fallback{" "}
+          <span className="muted">statement.pdf</span>
+        </div>
+        <div className="console-line console-comment muted">
+          # pre-AA history only
+        </div>
       </>
     ),
     banks: ["HDFC", "SBI", "ICICI", "Kotak", "IDFC", "Axis", "Yes Bank"],
@@ -50,14 +67,15 @@ const PROCESS_STEPS: ProcessStep[] = [
     title: "We read every line",
     body: (
       <>
-        Every UPI string, every SI, every &ldquo;ZOMATOXX&rdquo; narration.{" "}
-        <b>Family vs discretionary</b>, EMIs vs rent.
+        Synced AA data plus any fallback uploads. Every UPI string, every SI,
+        every &ldquo;ZOMATOXX&rdquo; narration. <b>Family vs discretionary</b>,
+        EMIs vs rent.
       </>
     ),
     terminal: (
       <>
         <div>
-          <span className="prompt">$</span> classify --narrations
+          <span className="prompt">$</span> classify --sources aa+upload
         </div>
         <div>
           matched <span className="ok">1,217 / 1,284</span>{" "}
@@ -72,18 +90,18 @@ const PROCESS_STEPS: ProcessStep[] = [
   },
   {
     num: "iii.",
-    title: "You explore. We don't prescribe.",
+    title: "You explore scenarios. We show, not prescribe.",
     body: (
       <>
-        <b>&ldquo;What if ₹20k moves from LIC to NPS?&rdquo;</b> Or{" "}
-        <b>&ldquo;parents need ₹5k more next month?&rdquo;</b> Scenarios, not sales
-        pitches.
+        <b>&ldquo;What if ₹20k/month looked different on paper?&rdquo;</b> Or{" "}
+        <b>&ldquo;parents need ₹5k more next month?&rdquo;</b> Side-by-side
+        scenarios to consider, not orders.
       </>
     ),
     terminal: (
       <>
         <div>
-          <span className="prompt">$</span> simulate --lic→nps
+          <span className="prompt">$</span> simulate --scenario
         </div>
         <div>
           coverage: 4.2 → <span className="ok">5.1 mo</span>
@@ -147,7 +165,7 @@ function ProcessStacked() {
               <div className="process-left">
                 <div className="process-label ses">{"// process"}</div>
                 <h2 className="process-headline">
-                  You drop your statements. <em>We read every line.</em>
+                  {PROCESS_HEADLINE.lead} <em>{PROCESS_HEADLINE.em}</em>
                 </h2>
               </div>
               <div className="process-right process-right--static">
@@ -238,7 +256,7 @@ function ProcessStickyScroll() {
             <motion.div className="process-left" style={{ opacity: leftOpacity }}>
               <div className="process-label ses">{"// process"}</div>
               <h2 id="process-heading" className="process-headline">
-                You drop your statements. <em>We read every line.</em>
+                {PROCESS_HEADLINE.lead} <em>{PROCESS_HEADLINE.em}</em>
               </h2>
             </motion.div>
 

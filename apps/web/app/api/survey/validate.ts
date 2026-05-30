@@ -97,11 +97,11 @@ export function validateSurveyPayload(input: unknown): ValidateResult {
     typeof body.pricing_tier !== "string" ||
     !isSurveyPricingTierId(body.pricing_tier)
   ) {
-    return { ok: false, error: "Pick a plan" };
+    return { ok: false, error: "Pick a tier" };
   }
   const pricingChoice = surveyPricingTierOption(body.pricing_tier);
   if (!pricingChoice) {
-    return { ok: false, error: "Invalid plan" };
+    return { ok: false, error: "Invalid tier" };
   }
   if (!isStringFrom(pricingChoice.wtpBand, WTP_OPTIONS)) {
     return { ok: false, error: "Invalid wtp_band mapping" };
